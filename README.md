@@ -3,6 +3,14 @@
 
 ## 1. Install Required Software
 
+Before starting, install the following:
+
+- **Python** (>=3.8)
+- **Node.js** (>=18) and npm (>=9)
+- **MySQL** (>=8.0)
+- **Git**
+- **WSL** (if using Windows) with Ubuntu 22.04
+
 ### **1.1 Install WSL (if using Windows)**
 If you're on Windows, install **Windows Subsystem for Linux (WSL)**:
 ```sh
@@ -67,6 +75,21 @@ pip install django djangorestframework mysqlclient Pillow
 ```
 
 ### **3.2 Create Django Project and Apps**
+```
+server/
+    manage.py
+    server/
+        settings.py
+        urls.py
+        wsgi.py
+    chapter/
+    manga/
+    novel/
+    audio/
+    genres/
+    users/
+```
+
 ```sh
 django-admin startproject server .
 python manage.py startapp chapter
