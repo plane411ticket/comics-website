@@ -116,7 +116,18 @@ DATABASES = {
 ```
 Ensure MySQL is running before proceeding.
 
-### **3.4 Fix Errors When Running Migrations**
+
+### **3.4.1 Fix Errors where correct password is mistakenly rejected due to incorrect attempt detection.
+Verify if MySQL is running:
+```sh
+sudo service mysql status
+```
+If it is not running, start the device
+```sh
+sudo service mysql start
+```
+
+### **3.4.2 Fix Errors When Running Migrations**
 If you get an **access denied error**:
 ```sh
 sudo mysql -u root -p
