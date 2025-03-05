@@ -13,7 +13,7 @@ venv/
 *.sql
 *.db
 *.bak
-
+database/mysql_data
 # VSCode & System Files
 .vscode/
 .DS_Store
@@ -42,3 +42,6 @@ static/
 .coverage
 htmlcov/
 pytest_cache/
+
+# Linux
+*.Identifier
