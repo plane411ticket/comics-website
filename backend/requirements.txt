@@ -3,3 +3,4 @@ djangorestframework
 mysqlclient
 gunicorn
 Pillow
+django-cors-headers
