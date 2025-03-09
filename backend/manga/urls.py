@@ -6,6 +6,7 @@ router = DefaultRouter()
 router.register(r'manga', MangaViewSet)  # /api/manga/
 router.register(r'pages', PageViewSet)
 router.register(r'chapters', ChapterViewSet)
+
 urlpatterns = [
     path('', include(router.urls)),
 ]

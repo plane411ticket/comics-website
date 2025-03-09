@@ -21,12 +21,8 @@ class PageViewSet(viewsets.ModelViewSet):
     parser_classes = (MultiPartParser, FormParser)
 
 @api_view(['GET'])
-def manga_list(request):
-    sample_data = [
-        {"id": 1, "title": "One Piece", "author": "Eiichiro Oda"},
-        {"id": 2, "title": "Naruto", "author": "Masashi Kishimoto"},
-    ]
-    return Response(sample_data)
+def manga_request(request):
+    return HttpResponse('Manga request')
 
 
 def home(request):

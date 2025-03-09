@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "<5.0,>=4.0"
+djangorestframework = "*"
+mysqlclient = "*"
+gunicorn = "*"
+pillow = "*"
+asgiref = "*"
+django-cors-headers = "*"
+djangorestframework-simplejwt = "*"
+pyjwt = "*"
+pytz = "*"
+sqlparse = "*"
+psycopg2-binary = "*"
+python-dotenv = "*"
+django-debug-toolbar = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"

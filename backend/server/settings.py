@@ -32,7 +32,8 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        'rest_framework.permissions.AllowAny',
+        # "rest_framework.permissions.IsAuthenticated",
     ],
 }
 
@@ -51,6 +52,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # Third-party apps
+    # 'rest_framework_simplejwt',
+    # 'rest_framework.authtoken',
+    # 'rest_framework_simplejwt.token_blacklist',
+    # 'django_filters',
+    'debug_toolbar',
     'rest_framework',
     'corsheaders',
     # Custom apps
@@ -65,13 +71,22 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",  # Vite frontend URL
     "http://localhost:5173",
@@ -147,17 +162,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'staticfiles/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #print(STATIC_ROOT)
 # Additional static files (For frontend build)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'backend','staticfiles'),
-    os.path.join(BASE_DIR, "frontend", "dist"),
+    os.path.join(BASE_DIR, 'staticfiles'),
+    os.path.join(BASE_DIR.parent, "frontend", "dist"),
 ]
 # Media files (Uploaded images, documents, etc.)
-MEDIA_URL = '/backend/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'backend', 'media')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 TEMPLATES = [
     {

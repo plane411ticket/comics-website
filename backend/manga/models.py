@@ -4,7 +4,7 @@ class Manga(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     description = models.TextField()
-    cover_image = models.ImageField(upload_to='manga_covers/')
+    cover_image = models.ImageField(upload_to='manga_covers/',default='manga_covers/default.jpg',blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -15,7 +15,6 @@ class Chapter(models.Model):
     title = models.CharField(max_length=255)
     number = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-
     def __str__(self):
         return f"{self.manga.title} - Chapter {self.number}"
 

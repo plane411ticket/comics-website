@@ -7,6 +7,7 @@ import HomePage from './screens/Home/HomePage'
 import Profiles from './screens/User/UserProfiles'
 import Error from './screens/Error'
 import UserProfilePage from './screens/User/UserProfilePage'
+import MangaList from './screens/Manga/MangaList'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
           element: <UserProfilePage/>,
       }
     ]
+  },
+  { 
+    path: '/manga',
+    element: <MangaList />,
   },
   
 
