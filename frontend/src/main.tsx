@@ -9,6 +9,8 @@ import Error from './screens/Error'
 import UserProfilePage from './screens/Auth/ProfileScreen.tsx'
 import MangaList from './screens/Manga/MangaList'
 import AuthRoutes from './router/AuthRoutes.tsx'
+//import { navbarItems } from "./components/Navbarapi";
+
 const router = createBrowserRouter([
   {
     path: '/',
