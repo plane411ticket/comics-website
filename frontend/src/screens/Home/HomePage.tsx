@@ -1,5 +1,4 @@
-import Navbar from "../../components/Navbar";
-
+import Navbar from "../../components/Navbar.tsx";
 const HomePage = () => {
   return (
     <div className="min-h-screen bg-gray-100">
