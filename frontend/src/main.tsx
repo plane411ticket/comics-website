@@ -4,15 +4,16 @@ import {RouterProvider,createBrowserRouter} from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import HomePage from './screens/Home/HomePage'
-import Profiles from './screens/User/UserProfiles'
+import Profiles from './screens/Auth/ListProfiles.tsx'
 import Error from './screens/Error'
-import UserProfilePage from './screens/User/UserProfilePage'
+import UserProfilePage from './screens/Auth/ProfileScreen.tsx'
 import MangaList from './screens/Manga/MangaList'
+import AuthRoutes from './router/AuthRoutes.tsx'
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <Error/>
+    errorElement: <Error/>,
   },
   {
     path: '/home',
@@ -32,7 +33,10 @@ const router = createBrowserRouter([
     path: '/manga',
     element: <MangaList />,
   },
-  
+  {
+    path: '/auth/*',
+    element:<AuthRoutes/>
+  }
 
 ])
 

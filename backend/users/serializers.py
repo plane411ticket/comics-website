@@ -8,13 +8,20 @@ from .models import Favorite
 
 
 class UserSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField(read_only=True)
-    _id = serializers.SerializerMethodField(read_only=True)
     isAdmin = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', '_id', 'username', 'email', 'name', 'isAdmin']
+        fields = ['id', 'username', "password" ,'email', 'isAdmin']
+        extra_kwargs = {'password': {'write_only': True}}    
+
+    def create(self,validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+        return user
 
     def get__id(self, obj):
         return obj.id
@@ -28,32 +35,12 @@ class UserSerializer(serializers.ModelSerializer):
             name = obj.email
 
         return name
-
-
-class UserSerializerWithToken(UserSerializer):
-    token = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = User
-        fields = ['id', '_id', 'username', 'email', 'name', 'isAdmin', 'token']
-
-    def get_token(self, obj):
-        token = RefreshToken.for_user(obj)
-        return str(token.access_token)
-
-
 class FavoriteSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField(read_only=True)
     manga = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Favorite
         fields = '__all__'
-
-    def get_user(self, obj):
-        user = obj.user
-        serializer = UserSerializer(user, many=False)
-        return serializer.data
 
     def get_manga(self, obj):
         manga = obj.manga
