@@ -162,6 +162,7 @@ npx create-vite@latest frontend --template react-ts
 cd frontend
 npm install
 npm install axios react-router-dom
+npm install react-icons
 ```
 
 ### **4.2 Create Directory Structure**
