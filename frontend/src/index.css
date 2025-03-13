@@ -1,12 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 @import "tailwindcss/preflight";
 @import "tailwindcss/theme";
 @import "tailwindcss/utilities";
+
 
 /* Cấu hình mặc định */
 :root {
   color: white;
   background-color: #171717; /* bg-neutral-900 */
-  font-family: sans-serif;
+  font-family: "Nunito Sans", sans-serif;
   font-weight: 400;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -27,12 +29,22 @@ a:hover {
 
 /* Body */
 body {
+  width: 100%;
+  min-width: 1200px; /* Ngăn trang bị co lại như mobile */
+  margin: 0;
+  padding: 0;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+/* Định dạng container chính */
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+  padding: 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-width: 320px;
-  min-height: 100vh;
-  margin: 0;
+  text-align: center;
 }
 
 /* Tiêu đề */
@@ -52,12 +64,21 @@ button {
   background-color: #262626; /* bg-neutral-800 */
   transition: border-color 0.2s;
 }
-button:hover {
-  border-color: #3b82f6; /* hover:border-blue-500 */
-}
 button:focus {
   outline: none;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3); /* focus:ring-4 focus:ring-blue-300 */
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  body {
+    min-width: unset;
+    font-family: "Nunito Sans", sans-serif;
+  }
+  .container {
+    max-width: 100%;
+    padding: 10px;
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -72,3 +93,32 @@ button:focus {
     background-color: #f3f4f6; /* bg-gray-100 */
   }
 }
+
+.dark {
+  background-color: #262626;
+  color: white;
+}
+
+.dark input {
+  background-color: #222;
+  color: white;
+}
+
+.dark body {
+  background-color: #222 !important;
+  color: white;
+}
+
+.dark #navtop {
+  background-color: #4d4d4d !important;
+  color: white;
+}
+
+.dark #navbottom {
+  background-color: #262626;
+  color: white;
+}
+
+
+
+

@@ -44,3 +44,5 @@ export const fetchManga = async (): Promise<Manga[]> => {
         return [];
     }
 };
+
+

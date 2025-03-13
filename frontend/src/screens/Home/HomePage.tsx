@@ -1,8 +1,8 @@
-import Navbar from "../../components/Navbarapi.ts";
+//import Navbar from "../../screens/Navbar/Navbar.tsx"; // Import đúng file Navbar
+
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar />
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto text-center py-10">
         <h2 className="text-3xl font-bold text-gray-800">Welcome to My Manga</h2>
         <p className="text-gray-600 mt-4">Explore thousands of manga now!</p>
@@ -12,4 +12,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-

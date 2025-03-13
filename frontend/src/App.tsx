@@ -1,17 +1,13 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Navbar from "./screens//Navbar/Navbar.tsx";
 import "./index.css";
-import HomePage from "./screens/Home/HomePage";
-import Navbar from "./components/Navbarapi";
 
 const App = () => {
   return (
-    <Router>
-      {/* Hiển thị Navbar trên mọi trang */}
-      <Navbar />  
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
-    </Router>
+    <div>
+      <Navbar />  {/* Navbar luôn hiển thị */}
+      <Outlet />   {/* Nội dung trang sẽ thay đổi ở đây */}
+    </div>
   );
 };
 
