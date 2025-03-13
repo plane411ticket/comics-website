@@ -6,10 +6,9 @@ export interface NavbarItem {
   export const navbarItems = [
     { name: "Home", path: "/" },
     { name: "Manga", path: "/manga" },
-    { name: "Profiles", path: "/profiles" },
-    { name: "Login", path: "/auth/login" },
     { name: "Forum", path: "/forum" },
     { name: "Genre", path: "/genre" },
+    { name: "Novel", path: "/novel" },
     { name: "Leaderboard", path: "/leaderboard" },
-    { name: "Search", path: "/search" },
+    { name: "Advanced Search", path: "/search" },
   ];

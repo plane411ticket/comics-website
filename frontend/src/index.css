@@ -104,9 +104,14 @@ button:focus {
   color: white;
 }
 
-.dark body {
-  background-color: #222 !important;
-  color: white;
+.dark #Homepage {
+  background-color: #4d4d4d !important;
+  color: white !important;
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
+.dark p, .dark span, .dark a, .dark div {
+  color: white !important;
 }
 
 .dark #navtop {
@@ -115,8 +120,11 @@ button:focus {
 }
 
 .dark #navbottom {
-  background-color: #262626;
-  color: white;
+  background-color: #262626 !important;
+}
+
+.dark #navbottom a {
+  color: white !important;
 }
 
 

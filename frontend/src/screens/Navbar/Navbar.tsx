@@ -26,7 +26,7 @@ const Navbar = () => {
         <div className="flex w-full max-w-md left relative">
           <input 
             type="text" 
-            placeholder="Hôm nay người đẹp muốn đọc gì..." 
+            placeholder="Hôm nay Người đẹp muốn đọc gì..." 
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
           />
           <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
@@ -51,13 +51,13 @@ const Navbar = () => {
       </div>
 
 
-      <div className="bg-gray-100 m-0 p-0 min-h-0" id="navbottom">
+      <div className="bg-gray-100 dark:bg-gray-800 m-0 p-0 min-h-0" id="navbottom">
         <ul className="container mx-auto flex justify-between items-center py-0 h-full">
           {navbarItems.map((item, index) => (
             <li key={index} className="h-full flex-1 p-0">
               <Link
                 to={item.path}
-                className="h-full flex items-center text-black justify-center px-4 py-1 min-w-[90px] hover:text-white hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
+                className="h-full flex items-center text-black dark:text-white justify-center px-4 py-1 min-w-[90px] hover:text-white hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
               >
                 {item.name}
               </Link>
@@ -65,6 +65,7 @@ const Navbar = () => {
           ))}
         </ul>
       </div>
+
 
 
     </nav>
