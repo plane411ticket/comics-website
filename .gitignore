@@ -32,11 +32,11 @@ pnpm-lock.yaml
 staticfiles/
 media/
 static/
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
+# *.png
+# *.jpg
+# *.jpeg
+# *.gif
+# *.svg
 
 # Coverage & Testing
 .coverage
