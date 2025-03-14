@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { navbarItems } from "../../components/Navbarapi";
 import { FiSearch, FiSun, FiMoon } from "react-icons/fi";
+import LogoWeb from "@/assets/logo.png";
 
 const Navbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -19,7 +20,7 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center w-[92%] py-3 relative left font-Nurito">
         {/* Logo */}
         <div className="flex items-center gap-x-4">
-          <img src="src/screens/Navbar/logo.png" alt="Logo" className="h-10 w-auto" />
+          <img src={LogoWeb} alt="Logo" className="h-10 w-auto" />
         </div>
 
         {/* Ô tìm kiếm */}
