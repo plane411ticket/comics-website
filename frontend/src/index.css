@@ -127,6 +127,11 @@ button:focus {
   color: white !important;
 }
 
+.loginchange{
+  background-color: #262626;
+  color: white;
+}
+
 
 
 

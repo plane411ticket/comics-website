@@ -42,10 +42,10 @@ const Navbar = () => {
         {/* Đăng nhập / Đăng ký */}
         <div className="flex items-center gap-x-4">
           <Link to="/auth/login">
-            <button className="px-4 py-2 bg-yellow-800 text-white rounded-lg hover:bg-yellow-400 transition duration-300">Đăng nhập</button>
+            <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-yellow-400 transition duration-300">Đăng nhập</button>
           </Link>
-          <Link to="/register">
-            <button className="px-4 py-2 bg-yellow-800 text-white rounded-lg hover:bg-yellow-400 transition duration-300 border-0 border-amber-50">Đăng ký</button>
+          <Link to="/auth/register">
+            <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-yellow-400 transition duration-300 border-0 border-amber-50">Đăng ký</button>
           </Link>
         </div>
 
