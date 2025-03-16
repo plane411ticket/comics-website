@@ -1,11 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, FavoriteViewSet
-
-router = DefaultRouter()
-router.register(r'user/register', UserViewSet,basename="user")  # /api/user/register/
-router.register(r'user/favorites', FavoriteViewSet,basename="favorites")  # /api/user/favorites/
+from .views import *
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('login/', MyTokenObtainView.as_view(),name='token_obtain_pair'),
+    path('register/',registerUser ,name='register'),
+    path('profile/',getUserProfile ,name='user-profile'),
+    path('profile/update/',updateUserProfile,name='user-update-profile'),
+    # to be continued
 ]

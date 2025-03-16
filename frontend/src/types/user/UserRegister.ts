@@ -1,0 +1,39 @@
+import { TokenUser } from './User'
+
+export interface UserRegisterState {
+	userInfo?: TokenUser
+	loading?: boolean
+	error?: any
+}
+
+/**
+ * Enum representing the different action types for user registration.
+ * 
+ * - `USER_REGISTER_REQUEST`: Indicates that a user registration request has been initiated.
+ * - `USER_REGISTER_SUCCESS`: Indicates that a user registration request has been successfully completed.
+ * - `USER_REGISTER_FAILURE`: Indicates that a user registration request has failed.
+ */
+export enum UserRegisterActionTypes {
+	USER_REGISTER_REQUEST = 'USER_REGISTER_REQUEST',
+	USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS',
+	USER_REGISTER_FAILURE = 'USER_REGISTER_FAILURE'
+}
+
+export interface UserRegisterRequestAction {
+	type: UserRegisterActionTypes.USER_REGISTER_REQUEST
+}
+
+export interface UserRegisterSuccessAction {
+	type: UserRegisterActionTypes.USER_REGISTER_SUCCESS
+	payload: TokenUser
+}
+
+export interface UserRegisterFailureAction {
+	type: UserRegisterActionTypes.USER_REGISTER_FAILURE
+	payload: any
+}
+
+export type UserRegisterAction =
+	| UserRegisterRequestAction
+	| UserRegisterSuccessAction
+	| UserRegisterFailureAction
