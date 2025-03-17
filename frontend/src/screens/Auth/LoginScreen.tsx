@@ -1,5 +1,6 @@
 // import { Link, Outlet } from "react-router-dom";
 import bglogin from "@/assets/backlogin.png";
+import LogoWeb from "@/assets/logo.png";
 import { Link } from "react-router-dom";
 
 export default function LoginScreen() {
@@ -11,7 +12,11 @@ export default function LoginScreen() {
         </div>
 
         {/* Cột bên phải (Form đăng nhập) */}
+        
         <div className="w-9/20 p-8 rounded-lg shadow-lg mr-20">
+            <div className="w-11/20 h-full flex items-center justify-center ml-30">
+                <Link to="/"><img src={LogoWeb} alt="loginbackground" className="max-w-full h-auto" /></Link>
+            </div>
             <div className="bg-gray-800 w-5/5 mr-10 border-t-orange-500 border-t-5">
                 <div className="h-4 "></div>
                 <form className="bg-gray-800 ml-10 mr-10 ">
