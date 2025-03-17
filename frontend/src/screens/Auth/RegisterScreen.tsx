@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import bglogin from "@/assets/backlogin.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 //import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { registerUser } from "../../actions/userActions";
 import LogoWeb from "@/assets/logo.png";
