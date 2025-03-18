@@ -75,21 +75,21 @@ const Navbar = () => {
 
       {isOpen && (
 
-        <div className="lg:hidden absolute top-15 right-0 left-0 w-full bg-gray-100 dark:bg-gray-800 z-50 shadow-md text-sm text-left pl-5 px-4 py-2">
-          <div className="flex w-full items-center pl-10 relative text-left py-3">
+        <div className="lg:hidden absolute top-15 right-0 left-0 w-full bg-gray-100 dark:bg-gray-800 z-50 shadow-md text-sm text-left pl-3">
+          <div className="flex w-full items-center pl-1 relative text-left py-3 pr-3 ">
             <input 
               type="text" 
               placeholder="Hôm nay Người đẹp muốn đọc gì..." 
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
             />
-            <FiSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500" size={10} />
+            <FiSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500" size={15} />
           </div>
           <ul className="flex flex-col text-white text-left">
             {navbarItems.map((item, index) => (
               <li key={index}>
                 <Link
                   to={item.path}
-                  className="block py-3 text-black dark:text-white hover:text-white hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
+                  className="block py-3 text-black dark:text-white pl-3 hover:text-white hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}
@@ -97,19 +97,13 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
-          <div className="flex flex-col items-start w-full py-3 gap-y-2">
-              {/* <Link to="/auth/login">
-                <button className="px-4 py-2 text-sm text-black rounded-lg hover:bg-yellow-400 transition duration-300">Đăng nhập</button>
-              </Link>
-              <Link to="/auth/register">
-                <button className="px-4 py-2 text-sm text-black rounded-lg hover:bg-yellow-400 transition duration-300 border-0 border-amber-50">Đăng ký</button>
-              </Link> */}
+          <div className="flex flex-col text-white text-left">
                 <Link to="/auth/login"
-                    className="block py-3 text-black dark:text-white hover:text-white hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
+                    className="block py-3 text-black pl-3 dark:text-white hover:text-white hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
                     onClick={() => setIsOpen(false)}
                 >Đăng nhập</Link>
-                <Link to="/auth/login"
-                    className="block py-3 text-black dark:text-white hover:text-white hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
+                <Link to="/auth/register"
+                    className="block py-3 text-black pl-3 dark:text-white hover:text-white hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
                     onClick={() => setIsOpen(false)}
                 >Đăng ký</Link>
           </div>
