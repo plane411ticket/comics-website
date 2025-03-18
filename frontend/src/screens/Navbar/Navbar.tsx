@@ -98,12 +98,20 @@ const Navbar = () => {
             ))}
           </ul>
           <div className="flex flex-col items-start w-full py-3 gap-y-2">
-              <Link to="/auth/login">
+              {/* <Link to="/auth/login">
                 <button className="px-4 py-2 text-sm text-black rounded-lg hover:bg-yellow-400 transition duration-300">Đăng nhập</button>
               </Link>
               <Link to="/auth/register">
                 <button className="px-4 py-2 text-sm text-black rounded-lg hover:bg-yellow-400 transition duration-300 border-0 border-amber-50">Đăng ký</button>
-              </Link>
+              </Link> */}
+                <Link to="/auth/login"
+                    className="block py-3 text-black dark:text-white hover:text-white hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
+                    onClick={() => setIsOpen(false)}
+                >Đăng nhập</Link>
+                <Link to="/auth/login"
+                    className="block py-3 text-black dark:text-white hover:text-white hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
+                    onClick={() => setIsOpen(false)}
+                >Đăng ký</Link>
           </div>
           
         </div>
