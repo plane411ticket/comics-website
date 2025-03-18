@@ -23,7 +23,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center gap-x-4">
           <img src={LogoWeb} alt="Logo" className="h-10 w-auto hidden sm:block" />
-          <img src={MobileLogo} alt="Mobile Logo" className="h-10 w-auto block sm:hidden" />
+          <img src={MobileLogo} alt="Mobile Logo" className="h-16 w-auto block sm:hidden mt-6.5" />
         </div>
 
         {/* Ô tìm kiếm */}
@@ -36,9 +36,12 @@ const Navbar = () => {
           <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
         </div>
 
-        <div className="flex items-center gap-x-4">
-            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-700 transition duration-300">
-              {isDarkMode ? <FiSun size={24} className="text-yellow-400" /> : <FiMoon size={24} className="text-gray-800" />}
+         {/* Darkmode */}
+        <div className="flex items-end gap-x-4 mt-4">
+            <button onClick={() => setIsDarkMode(!isDarkMode)} className={`p-4 rounded-full transition duration-300 
+            ${isDarkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-amber-200 hover:bg-stone-400"}`} >
+
+              {isDarkMode ? <FiSun size={28} className="text-yellow-400" /> : <FiMoon size={24} className="text-slate-700" />}
             </button>
 
             {/* Đăng nhập / Đăng ký */}
@@ -57,7 +60,7 @@ const Navbar = () => {
 
       </div>
 
-
+       {/* Menu (dấu 3 gạch) */}
       <div className="hidden lg:block bg-gray-100 dark:bg-gray-800 m-0 p-0 min-h-0" id="navbottom">
         <ul className="container mx-auto flex justify-between items-center py-0 h-full">
           {navbarItems.map((item, index) => (
@@ -75,14 +78,13 @@ const Navbar = () => {
 
       {isOpen && (
 
-        <div className="lg:hidden absolute top-15 right-0 left-0 w-full bg-gray-100 dark:bg-gray-800 z-50 shadow-md text-sm text-left pl-3">
-          <div className="flex w-full items-center pl-1 relative text-left py-3 pr-3 ">
+        <div className="lg:hidden absolute top-15 right-0 left-0 w-full bg-red dark:bg-gray-800 z-50 shadow-md text-sm text-left pl-3 mt-12">
+          <div className="flex w-full items-center px-2 sm:px-3 py-2 sm:py-3 text-left relative">
             <input 
               type="text" 
               placeholder="Hôm nay Người đẹp muốn đọc gì..." 
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none text-white"
             />
-            <FiSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500" size={15} />
           </div>
           <ul className="flex flex-col text-white text-left">
             {navbarItems.map((item, index) => (
