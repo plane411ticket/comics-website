@@ -8,7 +8,6 @@ import Error from "./screens/Error";
 import UserProfilePage from "./screens/Auth/ProfileScreen";
 import MangaList from "./screens/Manga/MangaList";
 import AuthRoutes from "./router/AuthRoutes";
-
 const router = createBrowserRouter([
   {
     path: "/",

@@ -1,9 +1,9 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
 from .views import *
-
+from rest_framework_simplejwt.views import TokenObtainPairView
 urlpatterns = [
-    path('login/', MyTokenObtainView.as_view(),name='token_obtain_pair'),
+    path('refresh/',refreshTokenView,name='token_refresh'),
+    path('login/', loginUser,name='token_obtain_pair'),
     path('register/',registerUser ,name='register'),
     path('profile/',getUserProfile ,name='user-profile'),
     path('profile/update/',updateUserProfile,name='user-update-profile'),
