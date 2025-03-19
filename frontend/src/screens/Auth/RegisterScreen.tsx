@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import bglogin from "@/assets/backlogin.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-//import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import {faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { registerUser } from "../../actions/userActions";
 import LogoWeb from "@/assets/logo.png";
 
@@ -41,8 +40,10 @@ export default function RegisterScreen() {
     useEffect(() => {
         const result = PWD_REGEX.test(pwd);
         setValidPwd(result);
+        console.log(result);
         const match = pwd === matchPwd;
         setValidMatch(match);
+        console.log(match);
     }, [pwd, matchPwd]);
 
     useEffect(() => {
@@ -58,11 +59,11 @@ export default function RegisterScreen() {
             return;
         }
         try {
-            await registerUser(user, `${user}@example.com`, pwd);
+            const response = await registerUser(user, `${user}@example.com`, pwd);
+            console.log(response) //dev only
             setSuccess(true);
             setUser('');
             setPwd('');
-            setMatchPwd('');
         } catch (err: any) {
             if (!err?.response) {
                 setErrMsg('No Server Response');
@@ -78,7 +79,7 @@ export default function RegisterScreen() {
     };
 
     return (
-        <div className="bg-black text-white font-Nurito flex flex-col md:flex-row items-center justify-center min-h-screen px-4">
+        <div className="bg-black text-white font-Nurito flex items-center justify-center h-screen">
             {success ? (
                 <section>
                     <h1>Success!</h1>
@@ -89,19 +90,20 @@ export default function RegisterScreen() {
             ) : (
                 <>
                     {/* Left Column (Image) */}
-                    <div className="hidden md:flex w-1/2 h-auto items-center justify-center">
+                    <div className="w-11/20 h-full flex items-center justify-center">
                         <img src={bglogin} alt="loginbackground" className="max-w-full h-auto" />
                     </div>
 
                     {/* Right Column (Form) */}
-                    <div className="w-full md:w-1/2 p-6 md:p-8 rounded-lg shadow-lg md:mr-10">
-                            <div className="flex justify-center mb-4">
+                    <div className="w-9/20 p-8 rounded-lg shadow-lg mr-20">
+                        <div className="w-11/20 h-full flex items-center justify-center ml-30">
                             <Link to="/"><img src={LogoWeb} alt="loginbackground" className="max-w-full h-auto" /></Link>
                         </div>
+                        
                         <div className="bg-gray-800 w-5/5 mr-10 border-t-orange-500 border-t-5">
                             <div className="h-4"></div>
                             <form className="bg-gray-800 ml-10 mr-10" onSubmit={handleSubmit}>
-                                <h1 className="text-2xl font-bold mb-4 flex items-center justify-center">Đăng ký</h1>
+                                <h1 className="text-2xl font-bold mb-4 flex items-center justify-center">Đăng ký tài khoản mới</h1>
                                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                                 <div className="mb-4 w-full">
                                     <label htmlFor="username" className="block font-medium w-full">User Name</label>
@@ -117,7 +119,7 @@ export default function RegisterScreen() {
                                         aria-describedby="uidnote"
                                         onFocus={() => setUserFocus(true)}
                                         onBlur={() => setUserFocus(false)}
-                                        className="p-2 border rounded w-37"
+                                        className="p-2 border rounded w-full"
                                         placeholder="Nhập user name"
                                     />
                                     <p id="uidnote" className={userFocus && !validName ? "instructions" : "offscreen"}>
@@ -139,7 +141,7 @@ export default function RegisterScreen() {
                                         aria-describedby="pwdnote"
                                         onFocus={() => setPwdFocus(true)}
                                         onBlur={() => setPwdFocus(false)}
-                                        className="p-2 border rounded w-37"
+                                        className="p-2 border rounded w-full"
                                         placeholder="Nhập mật khẩu"
                                     />
                                     <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
@@ -161,7 +163,7 @@ export default function RegisterScreen() {
                                         aria-describedby="confirmnote"
                                         onFocus={() => setMatchFocus(true)}
                                         onBlur={() => setMatchFocus(false)}
-                                        className="p-2 border rounded w-37"
+                                        className="p-2 border rounded w-full"
                                         placeholder="Nhập lại mật khẩu"
                                     />
                                     <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
@@ -169,14 +171,12 @@ export default function RegisterScreen() {
                                          Must match the first password input field.
                                     </p>
                                 </div>
-
-                                <div className="flex items-center space-x-2 whitespace-nowrap">
-                                    <input type="checkbox" id="remember" className="w-5 h-5 bg-gray-600" />
-                                    <label htmlFor="remember" className="test-10">Remember Account</label>
+                                <div className="flex justify-between">
+                                    <div className="flex items-center">
+                                        <input type="checkbox" id="remember" className="w-5 h-5 bg-gray-600" />
+                                        <label htmlFor="remember" className="ml-2">Remember Account</label>
+                                    </div>
                                 </div>
-
-
-
                                 <div className="h-4"></div>
                                 <button
                                     type="submit"
