@@ -89,6 +89,7 @@ def logoutUser(request):
 @permission_classes([AllowAny])
 def refreshTokenView(request):
     refresh_token = request.COOKIES.get("refresh_token")  # Lấy refresh token từ cookie
+    
     if not refresh_token:
         return Response({"error": "Không có refresh token!"}, status=status.HTTP_401_UNAUTHORIZED)
     try:
