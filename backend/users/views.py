@@ -40,7 +40,7 @@ def registerUser(request):
         serializer =  UserSerializerWithToken(user,many=False) 
         # use customize token-function to create obtain pair token with new data
         
-        message = {'detail': 'Success!'}
+        message = {'detail': 'Register Successfully!'}
         return Response (message,status=status.HTTP_200_OK) 
     except:
         message = {'detail': 'User with this email already exists'}
@@ -75,7 +75,17 @@ def loginUser(request):
 
     except Exception as e:
         return Response({"error": f"Lỗi: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def logoutUser(request):
+    response = HttpResponse({"message": "Đăng xuất thành công!"})
+    response.delete_cookie("access_token", path="/",domain="localhost")
+    response.delete_cookie("refresh_token", path="/",domain="localhost")
+    return response
+
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def refreshTokenView(request):
     refresh_token = request.COOKIES.get("refresh_token")  # Lấy refresh token từ cookie
     if not refresh_token:
@@ -96,6 +106,7 @@ def refreshTokenView(request):
 
     except Exception:
         return Response({"error": "Refresh token không hợp lệ!"}, status=status.HTTP_401_UNAUTHORIZED)   
+
 
     
 @api_view(['PUT'])
@@ -120,7 +131,7 @@ def updateUserProfile(request):
 def getUserProfile(request):
     user = request.user
     try:
-        return Response({"user": request.user.username})
+        return Response({"user": request.user.username},status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'detail':f'{e}'},status=status.HTTP_204_NO_CONTENT)
 
