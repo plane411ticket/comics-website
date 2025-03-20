@@ -13,6 +13,9 @@ import Genre from "./screens/Genre/Genre";
 import Leaderboard from "./screens/Leaderboard/Leaderboard";
 import AdvanceSearch from "./screens/Search/Avsearch";
 import AuthRoutes from "./router/AuthRoutes";
+// redux 
+import {store} from './store'
+import { Provider } from "react-redux";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -36,6 +39,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    {/* warp the app with the provider, now store is global state */}
+    <Provider store={store}> 
     <RouterProvider router={router} />
+    </Provider>
   </StrictMode>
 );
+
