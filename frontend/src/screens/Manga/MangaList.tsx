@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import {Manga} from "../../types/manga/mangaDetail";  // Import API function
-import {loadAllManga} from "../../actions/mangaActions";
+import {fetchManga} from "../../actions/mangaActions";
 const MangaList = () => {
     const [mangas, setMangas] = useState<Manga[]>([]);
 
     useEffect(() => {
         const loadMangas = async () => {
-            const data = await loadAllManga();
+            const data = await fetchManga();
             setMangas(data);
         };
 

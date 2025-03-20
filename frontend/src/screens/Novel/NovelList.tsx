@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchManga, Manga } from "../../components/api.ts";  // Import API function
+import {Manga} from "../../types/manga/mangaDetail";  // Import API function
+import {fetchManga} from "../../actions/mangaActions"; // Import API function
 
 const NovelList = () => {
     const [mangas, setMangas] = useState<Manga[]>([]);
