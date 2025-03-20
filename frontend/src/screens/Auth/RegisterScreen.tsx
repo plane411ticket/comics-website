@@ -79,7 +79,7 @@ export default function RegisterScreen() {
     };
 
     return (
-        <div className="bg-black text-white font-Nurito flex items-center justify-center h-screen">
+        <div className="bg-black text-white font-Nurito flex flex-col md:flex-row items-center justify-center min-h-screen px-4">
             {success ? (
                 <section>
                     <h1>Success!</h1>
@@ -90,23 +90,25 @@ export default function RegisterScreen() {
             ) : (
                 <>
                     {/* Left Column (Image) */}
-                    <div className="w-11/20 h-full flex items-center justify-center">
+                    <div className="hidden md:flex w-1/2 h-auto items-center justify-center">
                         <img src={bglogin} alt="loginbackground" className="max-w-full h-auto" />
                     </div>
 
                     {/* Right Column (Form) */}
-                    <div className="w-9/20 p-8 rounded-lg shadow-lg mr-20">
-                        <div className="w-11/20 h-full flex items-center justify-center ml-30">
+                    <div className="w-80 md:w-1/2 p-6 md:p-8 rounded-lg shadow-lg md:mr-10">
+                    <div className="flex justify-center mb-4">
+
                             <Link to="/"><img src={LogoWeb} alt="loginbackground" className="max-w-full h-auto" /></Link>
                         </div>
                         
                         <div className="bg-gray-800 w-5/5 mr-10 border-t-orange-500 border-t-5">
                             <div className="h-4"></div>
                             <form className="bg-gray-800 ml-10 mr-10" onSubmit={handleSubmit}>
-                                <h1 className="text-2xl font-bold mb-4 flex items-center justify-center">Đăng ký tài khoản mới</h1>
+                                <h1 className="text-2xl font-bold mb-4 flex items-center justify-center">Đăng ký</h1>
                                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+
                                 <div className="mb-4 w-full">
-                                    <label htmlFor="username" className="block font-medium w-full">User Name</label>
+                                    <label htmlFor="username" className="font-medium whitespace-nowrap">User Name</label>
                                     <input
                                         type="text"
                                         id="username"
@@ -128,6 +130,7 @@ export default function RegisterScreen() {
                                         Must begin with a letter.<br />
                                         Letters, numbers, underscores, hyphens allowed.
                                     </p>
+
                                 </div>
                                 <div className="mb-4 w-full">
                                     <label htmlFor="password" className="block font-medium w-full">Password</label>
@@ -171,12 +174,14 @@ export default function RegisterScreen() {
                                          Must match the first password input field.
                                     </p>
                                 </div>
-                                <div className="flex justify-between">
+
+                                <div className="flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0">
                                     <div className="flex items-center">
                                         <input type="checkbox" id="remember" className="w-5 h-5 bg-gray-600" />
                                         <label htmlFor="remember" className="ml-2">Remember Account</label>
                                     </div>
                                 </div>
+
                                 <div className="h-4"></div>
                                 <button
                                     type="submit"
@@ -185,8 +190,9 @@ export default function RegisterScreen() {
                                 >
                                     Đăng ký
                                 </button>
+
                                 <div className="h-4"></div>
-                                <div className="flex items-center justify-center gap-2">
+                                <div className="flex flex-row justify-center items-center mt-6 space-x-2 whitespace-nowrap pb-4">
                                     <h2>Old user?</h2>
                                     <Link to="/auth/login" className="text-orange-500 hover:text-yellow-400">Login</Link>
                                 </div>
