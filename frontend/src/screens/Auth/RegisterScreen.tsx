@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { registerUser } from "../../actions/userActions";
 import LogoWeb from "@/assets/logo.png";
+import { login } from "../../types/user/userSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$]).{8,24}$/;
@@ -27,6 +30,7 @@ export default function RegisterScreen() {
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
 
+    const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
         userRef.current?.focus();
     }, []);
@@ -60,12 +64,19 @@ export default function RegisterScreen() {
         }
         try {
             const response = await registerUser(user, `${user}@example.com`, pwd);
+            dispatch(login({
+                        _id:response._id,
+                        email:`${user}@example.com`,
+                        username:user,
+                        isLogin:true,}))
             console.log(response) //dev only
             setSuccess(true);
             setUser('');
             setPwd('');
         } catch (err: any) {
+            console.log(err)
             if (!err?.response) {
+
                 setErrMsg('No Server Response');
             } else if (err.response?.status === 409) {
                 setErrMsg('Username Taken');

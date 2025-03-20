@@ -4,6 +4,10 @@ import LogoWeb from "@/assets/logo.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { loginUser } from "../../actions/userActions";
+import { AppDispatch } from "../../store";
+import { UseDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import { login } from "../../types/user/userSlice";
 export default function LoginScreen() {
     const userRef = useRef<HTMLInputElement | null>(null);
     const errRef = useRef<HTMLInputElement | null>(null);
@@ -13,6 +17,9 @@ export default function LoginScreen() {
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
+    
+    const dispatch = useDispatch<AppDispatch>();
+
     useEffect(()=>{
         userRef.current?.focus();
     },[]);
@@ -22,8 +29,14 @@ export default function LoginScreen() {
     },[pwd,email]);
     const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
+        
         try{
-            await loginUser(email,pwd);
+            const response = await loginUser(email,pwd);
+            dispatch(login({
+                _id:response._id,
+                email:email,
+                username:response.username,
+                isLogin:true,}))
             setSuccess(true);
             setEmail('');
             setPwd('');

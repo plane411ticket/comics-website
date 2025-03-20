@@ -41,7 +41,8 @@ def registerUser(request):
         # use customize token-function to create obtain pair token with new data
         
         message = {'detail': 'Register Successfully!'}
-        return Response (message,status=status.HTTP_200_OK) 
+        info = {"user":({"username":user.username},{"_id":user.id})}
+        return Response (message,info,status=status.HTTP_200_OK) 
     except:
         message = {'detail': 'User with this email already exists'}
         return Response (message,status=status.HTTP_400_BAD_REQUEST)
@@ -60,8 +61,8 @@ def loginUser(request):
         if user is not None:
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
-
-            response = HttpResponse({"message": "Đăng nhập thành công!"})
+            info = {"user":({"username":user.username},{"_id":user.id})}
+            response = HttpResponse({"message": "Đăng nhập thành công!"}, info)
             response.set_cookie(
                 key="access_token", value=access_token, httponly=True, secure=True, samesite="Lax"
             )

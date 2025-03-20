@@ -11,15 +11,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('manga.urls')),  # API starts with /api/
     path('api/', include('users.urls')),
-    # auth login
-    # path('api-auth/', include('rest_framework.urls')),
-    # path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    # path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', home),
-    # path("", TemplateView.as_view(template_name="index.html")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += debug_toolbar_urls()

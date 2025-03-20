@@ -4,10 +4,16 @@ import { navbarItems } from "../../components/Navbarapi";
 import { FiSearch, FiSun, FiMoon, FiX, FiMenu } from "react-icons/fi";
 import LogoWeb from "@/assets/logo.png";
 import MobileLogo from "@/assets/mobilelogo.png";
-
+import { useDispatch,useSelector } from "react-redux";
+import { logout, selectUser} from "../../types/user/userSlice";
+import { logoutUser } from "../../actions/userActions";
+import { AppDispatch } from "../../store";
 const Navbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  
+  const userInfo = useSelector(selectUser);
+
   useEffect(() => {
     if (isDarkMode) {
       document.body.classList.add("dark");
@@ -15,7 +21,13 @@ const Navbar = () => {
       document.body.classList.remove("dark");
     }
   }, [isDarkMode]);
-  
+
+  const dispatch = useDispatch<AppDispatch>();
+  const handleLogout= async()=>{
+    const response = await logoutUser();
+    dispatch(logout())
+    console.log(response);
+  }
   return (
     <nav className="bg-white text-black font-Nurito" id="navtop">
       {/* Div 1: Chứa logo, ô tìm kiếm, và đăng nhập */}
@@ -46,18 +58,26 @@ const Navbar = () => {
 
             {/* Đăng nhập / Đăng ký */}
             <div className="hidden lg:flex items-center gap-x-4">
-              <Link to="/auth/login">
-                <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-yellow-400 transition duration-300">Đăng nhập</button>
-              </Link>
-              <Link to="/auth/register">
-                <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-yellow-400 transition duration-300 border-0 border-amber-50">Đăng ký</button>
-              </Link>
+              {!userInfo ? (
+                <>
+                  <Link to="/auth/login">
+                    <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-yellow-400 transition duration-300">
+                      Đăng nhập
+                    </button>
+                  </Link>
+                  <Link to="/auth/register">
+                    <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-yellow-400 transition duration-300">
+                      Đăng ký
+                    </button>
+                  </Link>
+                </>
+              ) : (
+                  <button onClick={handleLogout} className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-yellow-400 transition duration-300">
+                    Đăng xuất
+                  </button>
+              )}
             </div>
-            <button className="lg:hidden" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <FiX size={28} className="text-black" /> : <FiMenu size={28} className="text-yellow-500" />}
-            </button>
-        </div>
-
+          </div>
       </div>
 
        {/* Menu (dấu 3 gạch) */}

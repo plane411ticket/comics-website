@@ -1,7 +1,7 @@
-import { TokenUser } from './User'
+import { isValidToken } from './User'
 
 export interface UserRegisterState {
-	userInfo?: TokenUser
+	userInfo?: isValidToken
 	loading?: boolean
 	error?: any
 }
@@ -25,7 +25,7 @@ export interface UserRegisterRequestAction {
 
 export interface UserRegisterSuccessAction {
 	type: UserRegisterActionTypes.USER_REGISTER_SUCCESS
-	payload: TokenUser
+	payload: isValidToken
 }
 
 export interface UserRegisterFailureAction {
