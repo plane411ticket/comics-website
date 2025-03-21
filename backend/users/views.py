@@ -31,21 +31,22 @@ class MyTokenObtainView(TokenObtainPairView):
 def registerUser(request):
     data = request.data
     try:
+        if User.objects.filter(email=data["email"]).exists():
+            return Response({"detail": "User with this email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        if not data['name'] or not data['password']:
+            return Response({"detail": "Email and password are required"}, status=status.HTTP_400_BAD_REQUEST)
         user = User.objects.create(
             first_name = data['name'],
             username = data['email'],
             email = data['email'],
             password = make_password(data['password']) # hash password for security
         )
-        serializer =  UserSerializerWithToken(user,many=False) 
-        # use customize token-function to create obtain pair token with new data
-        
+        print("Received data:", request.data) 
         message = {'detail': 'Register Successfully!'}
-        info = {"user":({"username":user.username},{"_id":user.id})}
-        return Response (message,info,status=status.HTTP_200_OK) 
-    except:
-        message = {'detail': 'User with this email already exists'}
-        return Response (message,status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response (({"message": message},{'_id':user.id}),status=status.HTTP_200_OK) 
+    except Exception as e:
+        return Response({"error": f"Lỗi: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
