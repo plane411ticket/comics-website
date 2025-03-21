@@ -8,7 +8,8 @@ const baseURL = 'http://localhost:8000'
 export const registerUser = async (name: string, email: string, password: string) => {
     try {
         const config = {
-            headers: { 'Content-Type': 'Application/json' }
+            headers: { 'Content-Type': 'Application/json' },
+            withCredentials:true,
         }
         const response = await axios.post(
             `${baseURL}/api/register/`, 

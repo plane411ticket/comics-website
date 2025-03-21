@@ -40,14 +40,15 @@ export default function LoginScreen() {
             setSuccess(true);
             setEmail('');
             setPwd('');
+            
         }
         catch (err: any) {
             setErrMsg('Login Failed');
             if (errRef.current) {
                 errRef.current.focus();
             }
+            setSuccess(false);
         }  
-        setSuccess(true);
     }
     return (
         <div className="bg-black text-white font-Nurito flex items-center justify-center h-screen">

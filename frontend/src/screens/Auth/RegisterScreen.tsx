@@ -64,19 +64,20 @@ export default function RegisterScreen() {
         }
         try {
             const response = await registerUser(user, `${user}@example.com`, pwd);
+            setSuccess(true);
+            console.log(response)
             dispatch(login({
                         _id:response._id,
                         email:`${user}@example.com`,
                         username:user,
                         isLogin:true,}))
             console.log(response) //dev only
-            setSuccess(true);
             setUser('');
             setPwd('');
         } catch (err: any) {
             console.log(err)
+            setSuccess(false);
             if (!err?.response) {
-
                 setErrMsg('No Server Response');
             } else if (err.response?.status === 409) {
                 setErrMsg('Username Taken');

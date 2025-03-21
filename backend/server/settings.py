@@ -115,9 +115,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://\w+\.example\.com$",
-]
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
@@ -149,12 +146,8 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'website_comics_storage',
-        'USER': 'root',
-        'PASSWORD': 'BiggestGroup',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # Tệp SQLite sẽ được lưu trong thư mục gốc của dự án
     }
 }
 
