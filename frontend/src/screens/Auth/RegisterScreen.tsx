@@ -11,7 +11,7 @@ import { AppDispatch } from "../../store";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$]).{8,24}$/;
-
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export default function RegisterScreen() {
     const userRef = useRef<HTMLInputElement | null>(null);
     const errRef = useRef<HTMLInputElement | null>(null);
@@ -27,6 +27,11 @@ export default function RegisterScreen() {
     const [validMatch, setValidMatch] = useState(false);
     const [matchFocus, setMatchFocus] = useState(false);
 
+    const [email, setEmail] = useState('');
+    const [validEmail, setValidEmail] = useState(false);
+    const [emailFocus, setEmailFocus] = useState(false);
+
+
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
 
@@ -38,8 +43,15 @@ export default function RegisterScreen() {
     useEffect(() => {
         const result = USER_REGEX.test(user);
         setValidName(result);
-        console.log("User:", user, "Valid Name:", result);
+        console.log("Email:", user, "Valid Name:", result);
     }, [user]);
+
+    useEffect(() => {
+        const result = EMAIL_REGEX.test(email);
+        setValidEmail(result);
+        console.log("Email:", email, "Valid Email:", result);
+    }, [email]);
+
 
     useEffect(() => {
         const result = PWD_REGEX.test(pwd);
@@ -62,13 +74,13 @@ export default function RegisterScreen() {
             setErrMsg("Invalid Entry");
             return;
         }
-        try {
-            const response = await registerUser(user, `${user}@example.com`, pwd);
+        try { 
+            const response = await registerUser(user, email, pwd);
             setSuccess(true);
             console.log(response)
             dispatch(login({
                         _id:response._id,
-                        email:`${user}@example.com`,
+                        email:email,
                         username:user,
                         isLogin:true,}))
             console.log(response) //dev only
@@ -81,7 +93,11 @@ export default function RegisterScreen() {
                 setErrMsg('No Server Response');
             } else if (err.response?.status === 409) {
                 setErrMsg('Username Taken');
-            } else {
+            } 
+            else if (err.response?.status === 400) {
+                setErrMsg('Email Taken');
+            } 
+            else {
                 setErrMsg('Registration Failed');
             }
             if (errRef.current) {
@@ -144,6 +160,30 @@ export default function RegisterScreen() {
                                     </p>
 
                                 </div>
+
+                                <div className="mb-4 w-full">
+                                    <label htmlFor="email" className="font-medium whitespace-nowrap">Email</label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        ref={userRef}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={email}
+                                        required
+                                        aria-invalid={validEmail ? "false" : "true"}
+                                        aria-describedby="uidnote"
+                                        onFocus={() => setEmailFocus(true)}
+                                        onBlur={() => setEmailFocus(false)}
+                                        className="p-2 border rounded w-full"
+                                        placeholder="Nhập Email"
+                                    />
+                                    <p id="uidnote" className={emailFocus && !validEmail ? "instructions" : "offscreen"}>
+                                        <FontAwesomeIcon icon={faInfoCircle} />
+                                         Please enter an valid email.<br />
+                                    </p>
+
+                                </div>
+
                                 <div className="mb-4 w-full">
                                     <label htmlFor="password" className="block font-medium w-full">Password</label>
                                     <input

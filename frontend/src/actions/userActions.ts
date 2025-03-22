@@ -32,7 +32,7 @@ export const loginUser = async (email: string, password: string) => {
             withCredentials:true,
         }
         const response = await axios.post(`${baseURL}/api/login/`, 
-            {email, password }, 
+            {email, password}, 
             config
         );
         return response.data
