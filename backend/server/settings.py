@@ -121,6 +121,9 @@ INTERNAL_IPS = [
     # ...
 ]
 ROOT_URLCONF = 'server.urls'
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  # Backend mặc định
+)
 
 TEMPLATES = [
     {

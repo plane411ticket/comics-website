@@ -43,7 +43,7 @@ export default function RegisterScreen() {
     useEffect(() => {
         const result = USER_REGEX.test(user);
         setValidName(result);
-        console.log("Email:", user, "Valid Name:", result);
+        console.log("User:", user, "Valid Name:", result);
     }, [user]);
 
     useEffect(() => {
@@ -76,14 +76,14 @@ export default function RegisterScreen() {
         }
         try { 
             const response = await registerUser(user, email, pwd);
+            console.log(response.status)
+            if(response?.status!==200) throw new Error("Registration failed");
             setSuccess(true);
-            console.log(response)
             dispatch(login({
-                        _id:response._id,
+                        _id:response.data.id,
                         email:email,
                         username:user,
                         isLogin:true,}))
-            console.log(response) //dev only
             setUser('');
             setPwd('');
         } catch (err: any) {

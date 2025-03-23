@@ -17,8 +17,8 @@ export const registerUser = async (name: string, email: string, password: string
             config
         );
 
-        console.log(response.data); // Debug kết quả
-        return response.data;
+        console.log(response); // Debug kết quả
+        return response;
     } catch (error) {
         console.error("Lỗi đăng ký:", error);
             throw error;
@@ -35,8 +35,8 @@ export const loginUser = async (email: string, password: string) => {
             {email, password}, 
             config
         );
-        return response.data
         console.log(response); // Debug kết quả
+        return response
     } catch (error) {
         console.error("Lỗi đăng nhập:", error);
     }
@@ -84,8 +84,7 @@ const useAutoLogin = () => {
         const refreshToken = async () => {
             const config = {
                 headers: { 'Content-Type': 'Application/json' },
-                withCredentials:true,
-            }
+                withCredentials:true,}
             try {
                 await axios.post(
                     `${baseURL}/api/refresh/`,
@@ -93,10 +92,8 @@ const useAutoLogin = () => {
                     config);
                 dispatch(login({Islogin:true}));
             } catch (error) {
-                console.log("Không thể refresh token", error);
-            }
+                console.log("Không thể refresh token", error);}
         };
-
         refreshToken();
     }, [dispatch]);
 };

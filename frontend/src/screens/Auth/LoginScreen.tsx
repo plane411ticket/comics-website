@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { loginUser } from "../../actions/userActions";
 import { AppDispatch } from "../../store";
-import { UseDispatch } from "react-redux";
 import { useDispatch } from "react-redux";
 import { login } from "../../types/user/userSlice";
 export default function LoginScreen() {
@@ -32,22 +31,19 @@ export default function LoginScreen() {
         
         try{
             const response = await loginUser(email, pwd);
-            dispatch(login({
-                _id:response._id,
-                email:email,
-                username:response.username,
-                isLogin:true,}))
+            if(response?.status!==200) throw Error;
+            dispatch(login({isLogin:true}))
             setSuccess(true);
             setEmail('');
             setPwd('');
-            
         }
         catch (err: any) {
-            console.log(err)
+            console.log("run")
             setErrMsg('Login Failed');
             if (errRef.current) {
                 errRef.current.focus();
             }
+            setSuccess(false);
         }  
     }
     return (

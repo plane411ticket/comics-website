@@ -44,7 +44,8 @@ def registerUser(request):
         print("Received data:", request.data) 
         message = {'detail': 'Register Successfully!'}
         
-        return Response (({"message": message},{'_id':user.id}),status=status.HTTP_200_OK) 
+        return Response({"message": message, "id": user.id}, status=status.HTTP_200_OK)
+
     except Exception as e:
         return Response({"error": f"Lỗi: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -73,7 +74,7 @@ def loginUser(request):
 
             return response
 
-        return Response({"error": "Thông tin đăng nhập không chính xác!"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": password}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
         return Response({"error": f"Lỗi: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
