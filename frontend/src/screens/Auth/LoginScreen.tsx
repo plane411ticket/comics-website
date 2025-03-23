@@ -31,7 +31,7 @@ export default function LoginScreen() {
         e.preventDefault();
         
         try{
-            const response = await loginUser(email,pwd);
+            const response = await loginUser(email, pwd);
             dispatch(login({
                 _id:response._id,
                 email:email,
@@ -43,11 +43,11 @@ export default function LoginScreen() {
             
         }
         catch (err: any) {
+            console.log(err)
             setErrMsg('Login Failed');
             if (errRef.current) {
                 errRef.current.focus();
             }
-            setSuccess(false);
         }  
     }
     return (
@@ -81,7 +81,7 @@ export default function LoginScreen() {
                                         <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
 
                                         <div className="mb-4 w-full">
-                                        <label className="font-medium whitespace-nowrap">User Name or Email</label>
+                                        <label className="font-medium whitespace-nowrap">Email</label>
                                             <input 
                                             type="email" 
                                             id="email"

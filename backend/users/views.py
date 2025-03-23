@@ -133,8 +133,12 @@ def updateUserProfile(request):
 @permission_classes([IsAuthenticated])
 def getUserProfile(request):
     user = request.user
+    username = user.get['username']
+    id = user.get['id'] 
+    email = user.get['email']
+    info = {"user":({"username":username},{"id":id},{"email":email})}
     try:
-        return Response({"user": request.user.username},status=status.HTTP_200_OK)
+        return Response(info,status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'detail':f'{e}'},status=status.HTTP_204_NO_CONTENT)
 
