@@ -33,9 +33,9 @@ export default function LoginScreen() {
         try{
             const response = await loginUser(email, pwd);
             dispatch(login({
-                _id:response.get('_id'),
+                _id:response._id,
                 email:email,
-                username:response.get('username'),
+                username:response.username,
                 isLogin:true,}))
             setSuccess(true);
             setEmail('');
@@ -43,11 +43,11 @@ export default function LoginScreen() {
             
         }
         catch (err: any) {
+            console.log(err)
             setErrMsg('Login Failed');
             if (errRef.current) {
                 errRef.current.focus();
             }
-            setSuccess(false);
         }  
     }
     return (
