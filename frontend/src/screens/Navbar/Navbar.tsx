@@ -40,7 +40,7 @@ const Navbar = () => {
         </div>
 
         {/* Ô tìm kiếm */}
-        <div className="hidden sm:block w-full max-w-md h-full items-center justify-center space-x-10">
+        <div className="hidden lg:block w-full max-w-md h-full items-center justify-center space-x-10">
           <input 
             type="text" 
             placeholder="Hôm nay Người đẹp muốn đọc gì..." 
@@ -81,7 +81,7 @@ const Navbar = () => {
           )}
         </div>
         <button onClick={() => setIsOpen(!isOpen)} 
-          className="lg:hidden block text-lg " 
+          className="lg:hidden block text-lg md: pl-2 " 
           style={{
                   fontSize: "clamp(1.2rem, 2vw, 2.5rem)", 
           }}><FiMenu></FiMenu>
@@ -90,7 +90,8 @@ const Navbar = () => {
       </div>
 
        {/* Menu (dấu 3 gạch) */}
-      <div className=" lg:block bg-gray-100 dark:text-black dark:bg-white m-0 p-0 min-h-0" id="navbottom">
+      
+      <div className=" lg:block bg-gray-100 dark:text-black dark:bg-white m-0 p-0 min-h-0 hidden " id="navbottom" >
         <ul className="container mx-auto flex justify-between items-center py-0 h-full">
           {navbarItems.map((item, index) => (
             <li key={index} className="h-full flex-1 p-0">
@@ -107,7 +108,7 @@ const Navbar = () => {
       
 
       {isOpen && (
-        <div className="lg:hidden fixed inset-0 overflow-y-auto w-full dark:bg-gray-800 z-50 shadow-md text-sm text-left pl-3 mt-12"
+        <div className="lg:hidden fixed inset-0 overflow-y-auto w-full dark:bg-gray-800 z-50 shadow-md text-sm text-left pl-2 mt-12"
               style={{marginTop: "clamp(6rem, 4vh, 3rem)"}}>
           <div className="flex w-full items-center px-2 sm:px-3 py-2 sm:py-3 text-left relative">
             <input 
