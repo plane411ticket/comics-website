@@ -90,7 +90,7 @@ const Navbar = () => {
       </div>
 
        {/* Menu (dấu 3 gạch) */}
-      <div className="hidden lg:block bg-gray-100 dark:text-black dark:bg-white m-0 p-0 min-h-0" id="navbottom">
+      <div className=" lg:block bg-gray-100 dark:text-black dark:bg-white m-0 p-0 min-h-0" id="navbottom">
         <ul className="container mx-auto flex justify-between items-center py-0 h-full">
           {navbarItems.map((item, index) => (
             <li key={index} className="h-full flex-1 p-0">

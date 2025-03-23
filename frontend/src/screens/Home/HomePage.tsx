@@ -17,18 +17,25 @@ import homeMobile from "../../assets/home_mobile.jpg";
 import kid from "../../assets/kid.jpg";
 import book from "../../assets/book.jpg";
 import magazine from "../../assets/magazine.jpg";
-
-const text = "Trải nghiệm đa dạng các thể loại về Shin-chan";
+import video from "../../assets/trailer_web.mp4";
+{/*}
+import japan from "../../assets/japan.png";
+import hanquoc from "../../assets/HQ_charater.png";
+import vietnam from "../../assets/VN_character.png";
+import trungquoc from "../../assets/TQ_chrater.png";
+*/}
+const text = "Trải nghiệm đa dạng các thể loại về Comic";
 const words = text.split(" ");
 
 const main_title = "Welcome to my website";
 const title = main_title.split(" ");
 
-const community = "Tham gia cộng đồng \"nghiện\" Shin-chan tại đây";
+const community = "Tham gia cộng đồng \"nghiện\" Comic tại đây";
 const set_community = community.split(" ");
 
 const aboutme = "Về chúng mình";
 const set_aboutme = aboutme.split(" ");
+
 
 const HomePage = () => {
   /// Điều khiển animation cho phần "Trải nghiệm đa dạng..."
@@ -47,7 +54,7 @@ const HomePage = () => {
     if (inView2) controls2.start("visible");
   }, [inView2, controls2]);
 
-    const [shake, setShake] = useState(false);
+    //const [shake, setShake] = useState(false);
 
 
     // Điều khiển animation xuất hiện khi cuộn đến
@@ -65,10 +72,10 @@ const HomePage = () => {
 
   // Danh sách nội dung
   const aboutData = [
-    { title: "Tâm huyết", description: "Mình chọn đi ngủ thay vì làm web." },
-    { title: "Kinh nghiệm", description: "Có kinh nghiệm viết prompt." },
+    { title: "Tâm huyết", description: "Thức khuya hơn cú đêm." },
+    { title: "Kinh nghiệm", description: "Tay trái code, tay phải viết prompt." },
     { title: "Sáng tạo", description: "Cũng có nhưng không đáng kể." },
-    { title: "Đam mê", description: "Thẩy ép chứ ai rảnh đâu mà làm." },
+    { title: "Đam mê", description: "Làm là phải cháy hết mình." },
   ];
 
 
@@ -112,7 +119,7 @@ const HomePage = () => {
    
 
           <p className="text-lg text-gray-300">
-            Là món ăn tinh thần không thể bỏ lỡ cho các fan chân chính của KLH-chan!!!!
+            Là món ăn tinh thần không thể bỏ lỡ cho các fan chân chính của comic-chan!!!!
           </p>
 
           <a href="#" className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:opacity-80 transition">
@@ -183,7 +190,7 @@ const HomePage = () => {
                 visible: { opacity: 1, x: 0 },
               }}
               transition={{ duration: 0.5, delay: 0.3 }}
-            > Khám phá các thể loại phong phú, từ Kinh Dị, Ẩm thực đến những khoảnh khắc đời thường ấm áp.
+            > Khám phá các thể loại phong phú, từ Kinh Dị, Trinh Thám đến những khoảnh khắc đời thường ấm áp.
             </motion.p>
 
             {/* Nút CTA - Hiệu ứng slide-up */}
@@ -212,10 +219,10 @@ const HomePage = () => {
             </motion.div>
 
             </div>
-                <div className="relative w-[690px] h-[520px] flex items-center justify-center md:mt-0 pt-10">
+                <div className="relative w-[790px] h-[520px] flex items-center justify-center md:mt-0 pt-10">
                     <motion.div 
-                        className="relative w-[690px] h-[450px] rounded-[40px] border-[10px] border-gray-800 shadow-xl overflow-hidden bg-black flex flex-col"
-                        animate={shake ? { rotate: [0, -5, 5, -5, 5, 0] } : {} }
+                        className="relative w-[690px] h-[450px] rounded-[40px] border-[10px] border-gray-800 shadow-xl bg-black flex flex-col"
+                        //animate={shake ? { rotate: [0, -5, 5, -5, 5, 0] } : {} }
                         transition={{ duration: 0.5 }}
                     >
                         <div className="absolute top-0 left-0 right-0 h-[40px] bg-gray-900 flex items-center px-4 rounded-t-[30px]">
@@ -225,25 +232,27 @@ const HomePage = () => {
                         </div>
                         <video 
                             className="w-full h-full object-cover"
-                            src="VIDEO_URL_HERE"
+                            src={video}
                             autoPlay 
                             loop 
-                            muted={false}
+                            muted={true}
                             controls={false} 
                             playsInline
                         />
-                        <div className="absolute top-0 left-0 w-12 h-12 cursor-pointer" onClick={() => setShake(true)}>
-                            <img src="ICON_URL_HERE" alt="icon" />
+                        { /*
+                        <div className="absolute top-[-70px] left-[-150px] w-54 h-54 cursor-pointer z-[9999]" onClick={() => setShake(true)}>
+                            <img src={vietnam} alt="icon" />
                         </div>
-                        <div className="absolute top-0 right-0 w-12 h-12 cursor-pointer" onClick={() => setShake(true)}>
-                            <img src="ICON_URL_HERE" alt="icon" />
+                        <div className="absolute top-[-50px] right-[-150px] w-50 h-52 cursor-pointer z-[9999]" onClick={() => setShake(true)}>
+                            <img src={japan} alt="icon" />
                         </div>
-                        <div className="absolute bottom-0 left-0 w-12 h-12 cursor-pointer" onClick={() => setShake(true)}>
-                            <img src="ICON_URL_HERE" alt="icon" />
+                        <div className="absolute bottom-[-120px] left-[-150px] w-56 h-56 cursor-pointer z-[9999]" onClick={() => setShake(true)}>
+                            <img src={hanquoc} alt="icon" />
                         </div>
-                        <div className="absolute bottom-0 right-0 w-12 h-12 cursor-pointer" onClick={() => setShake(true)}>
-                            <img src="ICON_URL_HERE" alt="icon" />
+                        <div className="absolute bottom-[-50px] right-[-130px] w-42 h-42 cursor-pointer z-[9999]" onClick={() => setShake(true)}>
+                            <img src={trungquoc} alt="icon" />
                         </div>
+                        */}
                     </motion.div>
                 </div>
 
@@ -284,7 +293,7 @@ const HomePage = () => {
             </h2>
 
             <p className="text-lg text-gray-300">
-              Với hơn 15,5k thành viên và đa dạng nội dung về Shin-chan, cùng chúng mình nhập hội nhé!
+              Với hàng nghìn thành viên và đa dạng nội dung về Comic, cùng chúng mình nhập hội nhé!
             </p>
 
             <div className="flex space-x-4">
@@ -309,7 +318,7 @@ const HomePage = () => {
           <div className="md:w-1/2 flex justify-center mt-6 md:mt-0">
            <img 
               src={magazine}
-              alt="Shin-chan Community"
+              alt="Comic Community"
              ></img> 
            
           </div>
@@ -356,7 +365,7 @@ const HomePage = () => {
                 visible: { opacity: 1, x: 0 },
               }}
               transition={{ duration: 0.5, delay: 0.3 }}
-            > Chắc ăn ở ác lắm mới fix bug 2 ngày duma :v:
+            > Luôn nỗ lực hết mình để có trang web hoàn hảo nhất cho các bạn.
             </motion.p>
 
 
@@ -426,7 +435,7 @@ const HomePage = () => {
 
             <div className="ml-20 p-6 rounded-lg shadow-lg w-full">
               <h3 className="text-3xl font-bold mb-2">{event.title}</h3>
-              <p className="text-gray-300 mb-4">{event.description}</p>
+              <p className="text-black-900 mb-4">{event.description}</p>
               <img src={event.image} alt={event.title} className="w-full rounded-lg" />
             </div>
 
