@@ -9,7 +9,7 @@ import UserProfilePage from "./screens/Auth/ProfileScreen";
 import MangaList from "./screens/Manga/MangaPage";
 import NovelList from "./screens/Novel/NovelList";
 import Forum from "./screens/Forum/Forum";
-import Genre from "./screens/Genre/Genre";
+import Genre from "./screens/Genre/Genre.tsx";
 import Leaderboard from "./screens/Leaderboard/Leaderboard";
 import AdvanceSearch from "./screens/Search/Avsearch";
 import AuthRoutes from "./router/AuthRoutes";
