@@ -19,7 +19,7 @@ const Navbar = () => {
   const userInfo = useSelector(selectUser);
 
   return (
-    <nav className="bg-white text-black font-Nurito">
+    <nav className="bg-white text-black font-Nurito" id="navtop">
       {/* Nav Top */}
       <div className="max-w-screen-lg w-full mx-auto px-4 py-4 flex justify-between items-center">
         <Logo />
