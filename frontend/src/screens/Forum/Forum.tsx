@@ -15,7 +15,7 @@ const Forum = () => {
     }, []);
 
     return (
-        <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+        <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }} id="forum">
             <h1 style={{ textAlign: "center", color: "#333" }}>Hello. I'm Forum.</h1>
             <ul style={{ listStyleType: "none", padding: 0 }}>
                 {mangas.map(manga => (

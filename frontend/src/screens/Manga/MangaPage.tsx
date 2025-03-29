@@ -19,44 +19,44 @@ import { Provider } from "react-redux";
 
 
 const slides = [
-    "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/04/naruto.jpg",
+    "https://images2.thanhnien.vn/528068263637045248/2025/1/21/game-173748237921538004969.png",
     "https://images.fbox.fpt.vn/wordpress-blog/2023/10/phim-hoat-hinh-doraemon.jpg",
-    "https://minhtuanmobile.com/uploads/blog/lich-chieu-shin-cau-be-but-chi-ban-movie-2024-240815120320.jpg",
-    "https://genk.mediacdn.vn/2018/8/17/anh-1-15344831714111731747940.jpg",
+    "https://img.jakpost.net/c/2017/04/26/2017_04_26_25887_1493204278._large.jpg",
+    "https://vcdn1-giaitri.vnecdn.net/2023/09/23/myneighbortotorostill1e1571270-5423-8155-1695440507.png?w=1200&h=0&q=100&dpr=1&fit=crop&s=T79mzKGhGsftTkNfGcE2RA",
     "https://kilala.vn/data/uploads/2023/141120231050-1699933810-kingom-vuot-moc-tram-trieu-ban.jpg",
-    "https://static.lag.vn/upload/news/24/11/07/sword-art-online-pddb3chbaddm7bh3_QNFK.jpg?w=1200&h=800&crop=pad&scale=both&encoder=wic&subsampling=444"
+    "https://www.iamag.co/wp-content/uploads/2017/07/cover-yourname.jpg"
 ];
 
-const names = [
-    "Naruto",
-    "Doraemon",
-    "Crayon Shin",
-    "Dragon Ball",
-    "Kingom",
-    "Sword Art"
-];
+// const names = [
+//     "Naruto",
+//     "Doraemon",
+//     "Crayon Shin",
+//     "Dragon Ball",
+//     "Kingom",
+//     "Sword Art"
+// ];
 
-const description = [
-    "Hành trình của Naruto Uzumaki, một cậu bé xa lánh nhưng luôn mơ ước trở thành Hokage để bảo vệ làng Lá.",
-    "Mèo máy Doraemon từ tương lai giúp Nobita vượt qua những rắc rối bằng các bảo bối thần kỳ.",
-    "Câu chuyện hài hước về cậu bé Shin-chan nghịch ngợm với những trò quậy phá bá đạo.",  
-    "Hành trình của Goku từ nhỏ đến khi trở thành chiến binh mạnh nhất vũ trụ, bảo vệ Trái Đất khỏi kẻ xấu",
-    "Câu chuyện về Tín, một cậu bé mồ côi, quyết tâm trở thành vị tướng vĩ đại trong thời kỳ Chiến Quốc Trung Hoa",
-    "Một nhóm game thủ bị mắc kẹt trong thế giới thực tế ảo, nơi cái chết trong game đồng nghĩa với cái chết ngoài đời thực"
-];
+// const description = [
+//     "Hành trình của Naruto Uzumaki, một cậu bé xa lánh nhưng luôn mơ ước trở thành Hokage để bảo vệ làng Lá.",
+//     "Mèo máy Doraemon từ tương lai giúp Nobita vượt qua những rắc rối bằng các bảo bối thần kỳ.",
+//     "Câu chuyện hài hước về cậu bé Shin-chan nghịch ngợm với những trò quậy phá bá đạo.",  
+//     "Hành trình của Goku từ nhỏ đến khi trở thành chiến binh mạnh nhất vũ trụ, bảo vệ Trái Đất khỏi kẻ xấu",
+//     "Câu chuyện về Tín, một cậu bé mồ côi, quyết tâm trở thành vị tướng vĩ đại trong thời kỳ Chiến Quốc Trung Hoa",
+//     "Một nhóm game thủ bị mắc kẹt trong thế giới thực tế ảo, nơi cái chết trong game đồng nghĩa với cái chết ngoài đời thực"
+// ];
 
 const mangaData = [
     {
       title: "The Namgung Clan’s Great Sage",
       chapter: "C.11",
       time: "14 phút trước",
-      image: "https://mangadex.org/covers/d53f53b5-f97e-4121-b79e-60e07afe0d9b/f260c9ef-9a65-4573-9bd9-9765dd4003cc.jpg.512.jpg",
+      image: "https://cdn.novelupdates.com/images/2024/09/Namgung-Clans-Great-Sage-Heavens-Equal.jpeg",
     },
     {
       title: "The Villain Wants to Live",
       chapter: "C.26",
       time: "9 ngày trước",
-      image: "https://mangadex.org/covers/384308ae-cf17-490c-9a9e-8bb0db90c3e6/a4cb39ff-ce52-4a51-849e-ee3d0235ca26.jpg.512.jpg",
+      image: "https://media.reaperscans.com/file/4SRBHm/rpjkjsuajx9v0z276o8em9i8.png",
     },
     {
       title: "Falling in Love With My Ex-Fiance's Grandfather",
@@ -74,49 +74,49 @@ const mangaData = [
       title: "After School, We Wander in Space",
       chapter: "C.3",
       time: "6 ngày trước",
-      image: "https://mangadex.org/covers/91a2e0c9-cd81-4bf7-b5f7-bb37434bf6b3/7a41b522-5383-422b-b6b4-fc2007f5c603.jpg.512.jpg",
+      image: "https://preview.redd.it/art-new-serialization-after-school-we-wander-in-space-debut-v0-g8zad1exdple1.jpeg?auto=webp&s=e5ab9c93865244bd62a70608f8062451d152d6c2",
     },
     {
         title: "The Return of the Corpse King",
         chapter: "C.2",
         time: "12 ngày trước",
-        image: "https://mangadex.org/covers/d89cfcf7-dcb4-4af7-8c95-330c2c6167d0/aaa79460-a247-4d95-bbed-7f0883372fe2.png.512.jpg",
+        image: "https://cdn.novelupdates.com/images/2025/03/The-Return-of-the-Corpse-King-I-the-Former-Hero-Summoned-Once-Again-to-Another-World-to-Stop-the-Chuunibyou-Secret-Society-I-Formed.jpg",
     },
     {
         title: "Kage no Jitsuryokusha ni Naritakute!",
         chapter: "C.71",
         time: "18 ngày trước",
-        image: "https://mangadex.org/covers/77bee52c-d2d6-44ad-a33a-1734c1fe696a/3e07507b-3425-48ee-baf0-83603a098487.jpg.512.jpg",
+        image: "https://img.animeschedule.net/production/assets/public/img/anime/jpg/default/kage-no-jitsuryokusha-ni-naritakute-78981dc7d8.jpg",
       },
       {
         title: "Dragon Ball: Goku Shiden",
         chapter: "Oneshot",
         time: "Ngày hôm qua",
-        image: "https://mangadex.org/covers/94b3b927-eacb-4264-87bd-0a4cf79bfef3/4a41d345-e33a-452b-b2e9-78659656f5ad.jpg.512.jpg",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx4D4VRnz6vZF3tAZdZrrtQGFNEbjV_-aU0A&s",
       },
       {
         title: "Kuroko no Basket - Maison Ushi no Koku (Doujinshi)",
         chapter: "Oneshot",
         time: "2 ngày trước",
-        image: "https://mangadex.org/covers/fb1ad36e-685e-4088-a8eb-bd5d76043cd0/f55900fe-33f6-4eb2-9d04-a6532f4ca909.png.512.jpg",
+        image: "https://kurokuro11.wordpress.com/wp-content/uploads/2017/12/1.jpg",
       },
       {
         title: "Eikoku Roman Giga: Forest Ivy",
         chapter: "C.0",
         time: "Chưa xác định",
-        image: "https://mangadex.org/covers/2446b119-79d7-4b9d-921b-5cfb3580b6bd/834b5ee6-200f-4343-ab67-88c8797930e4.jpg.512.jpg",
+        image: "https://www.animenewsnetwork.com/images/encyc/A35237-2015333198.1742399101.jpg",
       },
       {
         title: "Akuyaku Reijou Level 99: Watashi wa UraBoss desu ga Maou de wa Arimasen",
         chapter: "C.21",
         time: "4 tháng trước",
-        image: "https://mangadex.org/covers/878634d2-ea39-4001-a4bf-31458020d16a/ab903f92-b3d9-4ce3-9332-d5cffa35cf67.jpg.512.jpg",
+        image: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1706238963i/60097326.jpg",
       },
       {
           title: "One Piece",
           chapter: "C.1142",
           time: "11 ngày trước",
-          image: "https://mangadex.org/covers/a1c7c817-4e59-43b7-9365-09675a149a6f/249fa95b-2214-4ae3-a8f7-77338fe34542.png.512.jpg",
+          image: "https://dep.com.vn/wp-content/uploads/2019/12/poster-chinh-thuc-phim-one-piece-stampede.jpg",
       },
   ];
 
@@ -250,33 +250,33 @@ const MangaPage = () => {
                         mangaData.map((manga, index) => (
                             <div key={index} className="p-4 text-black">
                                 <img src={manga.image} alt={manga.title} className="w-full object-cover" />
-                                <div className="p-2">
+                                <div className="p-2" id="Comic">
                                     <h3 className="text-sm font-bold">{manga.title}</h3>
-                                    <p className="text-xs text-gray-600">{manga.chapter}</p>
-                                    <p className="text-xs text-gray-500">{manga.time}</p>
+                                    <p className="text-xs text-gray-400 dark:text-white  ">{manga.chapter}</p>
+                                    <p className="text-xs text-gray-400 dark:text-white">{manga.time}</p>
                                 </div>
                             </div>
                         ))}
                 </div>
-                <a href="#" className="flex justify-end mt-2 mr-7">Xem tất cả</a>
+                <a href="#" className="flex justify-end mt-2 mr-7 text-black hover:text-orange-500">Xem tất cả</a>
                 <div className="h-[20px]"></div>
             </div>
             <div className="mx-auto justify-center w-full max-w-screen-lg">
                 <h2 className="font-bold text-lg ">🔥 MỚI CẬP NHẬT 🔥</h2>
-                <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 text-sm">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-sm">
                     {
                         newMangaData.map((manga, index) => (
                             <div key={index} className="p-4 text-black">
                                 <img src={manga.image} alt={manga.title} className="w-full object-cover" />
-                                <div className="p-2">
+                                <div className="p-2" id="Comic">
                                     <h3 className="text-sm font-bold">{manga.title}</h3>
-                                    <p className="text-xs text-gray-600">{manga.chapter}</p>
-                                    <p className="text-xs text-gray-500">{manga.time}</p>
+                                    <p className="text-xs text-gray-400 dark:text-white">{manga.chapter}</p>
+                                    <p className="text-xs text-gray-400 dark:text-white">{manga.time}</p>
                                 </div>
                             </div>
                         ))}
                 </div>
-                <a href="#" className="flex justify-end mt-2 mr-7">Xem tất cả</a>
+                <a href="#" className="flex justify-end mt-2 mr-7 text-black hover:text-orange-500">Xem tất cả</a>
                 <div className="h-[20px]"></div>
             </div>
             {/* <footer className="bg-black text-white text-center p-3" id="contact">
