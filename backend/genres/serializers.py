@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from .models import Genres, Author
+from .models import Genre, Author
 
 class GenresSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Genres
+        model = Genre
         fields = '__all__'
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
