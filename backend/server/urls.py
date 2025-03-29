@@ -10,6 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('manga.urls')),  # API starts with /api/
+    path('api/', include('genres.urls')),  # API starts with /api/
     path('api/', include('users.urls')),
     path('', home),
 ]
