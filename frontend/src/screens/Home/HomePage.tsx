@@ -67,9 +67,6 @@ const HomePage = () => {
 
   const [activeIndex] = useState<number | null>(null);
 
-
-
-
   // Danh sách nội dung
   const aboutData = [
     { title: "Tâm huyết", description: "Thức khuya hơn cú đêm." },
@@ -77,9 +74,6 @@ const HomePage = () => {
     { title: "Sáng tạo", description: "Cũng có nhưng không đáng kể." },
     { title: "Đam mê", description: "Làm là phải cháy hết mình." },
   ];
-
-
-
 
   const timelineData = [
     { date: '3 / 2025', title: 'Bước khởi đầu', description: 'Khởi động dự án với những ý tưởng đột phá.', image: kid },
@@ -128,19 +122,25 @@ const HomePage = () => {
         </div>
 
         {/* Phần phải: Mockups */}
-        <div className="relative w-[690px] h-[520px] flex items-center justify-center md:mt-0">
-          {/* iPad Mockup */}
-          <div className="relative w-[690px] h-[520px] rounded-3xl border-8 border-gray-800 shadow-xl overflow-hidden mt-9 left-[20px] flex items-center justify-center">
-            <div className="absolute top-0 left-0 right-0 h-6 rounded-t-2xl"></div>
-            <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url("${kid}")` }}></div>
+        <div className="relative flex flex col items-center justify-center w-full max-w-[690px] md:mt-0 ml-auto">
+            {/* iPad Mockup */}
+            <div className="relative w-full max-w-[690px] aspect-[4/3] rounded-3xl border-6 border-gray-800 shadow-xl overflow-hidden mt-9 flex items-center flex justify-end">
+              <div className="top-0 left-0 right-0 h-6 rounded-t-2xl"></div>
+              <div
+                className="w-full h-full bg-cover bg-center"
+                style={{ backgroundImage: `url("${kid}")` }}
+              ></div>
+            </div>
+
+            {/* Mobile Mockup */}
+            <div className="absolute w-[40%] max-w-[280px] aspect-[9/16] bg-gray-900 rounded-[40px] border-[5px] border-gray-800 shadow-xl overflow-hidden left-[-15%] top-[21%] scale-90 hover:scale-100 hover:shadow-2xl transition-transform flex items-center justify-center">
+              <div
+                className="w-full h-full bg-cover bg-center"
+                style={{ backgroundImage: `url("${homeMobile}")` }}
+              ></div>
+            </div>
           </div>
 
-          {/* Mobile Mockup */}
-          <div className="absolute w-[280px] h-[450px] bg-gray-900 rounded-[40px] border-[10px] border-gray-800 shadow-xl overflow-hidden left-[-100px] top-[21%] scale-90 hover:scale-100 hover:shadow-2xl transition-transform flex items-center justify-center">
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-6 bg-gray-800 rounded-b-2xl"></div>
-            <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url("${homeMobile}")` }}></div>
-          </div>
-        </div>
       </div>
 
       {/* --- PHẦN TRẢI NGHIỆM (KÉO XUỐNG MỚI HIỆN) --- */}
