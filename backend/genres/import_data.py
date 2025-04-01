@@ -19,4 +19,5 @@ def import_genres():
     print("✅ Genres imported successfully!")
 
 if __name__ == "__main__":
+    Genre.objects.all().delete() #xóa để tránh xung đột dữ liệu
     import_genres()
