@@ -2,15 +2,18 @@ from django.db import models
 import uuid
 from genres.models import Genre
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
+from django.utils.html import mark_safe
+import os
 class Manga(models.Model):
     _id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
-
     STATUS_CHOICES = [
         ('completed', 'Hoàn thành'),
         ('ongoing', 'Còn tiếp'),
         ('paused', 'Tạm ngưng'),
         ('unverified', 'Chưa xác minh'),
     ]
+    
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     description = models.TextField()
@@ -41,17 +44,3 @@ class Comments(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"{self.manga.title} - Chapter {self.content} - {self.user.username}"
-class Chapters(models.Model):
-    _id = models.UUIDField(default=uuid.uuid4,  unique=True,
-                           primary_key=True, editable=False)
-    manga = models.ForeignKey(Manga, related_name="chapters", on_delete=models.CASCADE)
-    chapter_number = models.IntegerField(blank=True, null=True)
-    def save(self, *args, **kwargs):
-        if self.chapter_number is None:  # Nếu chưa có số chương
-            last_chapter = Chapters.objects.filter(manga=self.manga).order_by('-chapter_number').first()
-            self.chapter_number = (last_chapter.chapter_number + 1) if last_chapter else 1
-        super().save(*args, **kwargs)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return f"{self.manga.title} - Chapter {self.number}"
