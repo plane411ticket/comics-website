@@ -88,7 +88,34 @@ const HomePage = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-      }}></div>
+      }}>
+
+        {/* --- PHẦN HEADER --- */}
+              <div className="min-h-screen flex flex-col md:flex-row items-start justify-between px-6 pt-10">
+                {/* Phần trái: Giới thiệu */}
+                <div className="w-full md:w-1/2 flex flex-col items-start text-left space-y-6">
+                  <button className="bg-gray-800 text-white px-4 py-2 rounded-full flex items-center space-x-2">
+                    <span>🔧 Không thể bỏ qua</span>
+                  </button>
+        
+                  <h1 className="text-4xl md:text-5xl font-bold text-white ">
+                    {title.map((word, index) => (
+                      <motion.span
+                        key={index}
+                        className="inline-block mr-2"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.3, duration: 0.9 }}
+                      >
+                        {word}
+                      </motion.span>
+                    ))}
+                  </h1>
+                  </div>
+                  </div>
+                  </div>
+
+
 
     );
 };
