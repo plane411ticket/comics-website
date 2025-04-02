@@ -25,3 +25,15 @@ import hanquoc from "../../assets/HQ_charater.png";
 import vietnam from "../../assets/VN_character.png";
 import trungquoc from "../../assets/TQ_chrater.png";
 */}
+
+const text = "Trải nghiệm đa dạng các thể loại về Comic";
+const words = text.split(" ");
+
+const main_title = "Welcome to my website";
+const title = main_title.split(" ");
+
+const community = "Tham gia cộng đồng \"nghiện\" Comic tại đây";
+const set_community = community.split(" ");
+
+const aboutme = "Về chúng mình";
+const set_aboutme = aboutme.split(" ");
