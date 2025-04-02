@@ -37,3 +37,60 @@ const set_community = community.split(" ");
 
 const aboutme = "Về chúng mình";
 const set_aboutme = aboutme.split(" ");
+
+const HomePage = () => {
+  /// Điều khiển animation cho phần "Trải nghiệm đa dạng..."
+  const controls1 = useAnimation();
+  const { ref: ref1, inView: inView1 } = useInView({ triggerOnce: true, threshold: 0.2 });
+
+  useEffect(() => {
+    if (inView1) controls1.start("visible");
+  }, [inView1, controls1]);
+
+  // Điều khiển animation cho phần "Tham gia cộng đồng..."
+  const controls2 = useAnimation();
+  const { ref: ref2, inView: inView2 } = useInView({ triggerOnce: true, threshold: 0.2 });
+
+  useEffect(() => {
+    if (inView2) controls2.start("visible");
+  }, [inView2, controls2]);
+
+    //const [shake, setShake] = useState(false);
+
+
+    // Điều khiển animation xuất hiện khi cuộn đến
+  const controls3 = useAnimation();
+  const { ref: ref3, inView: inView3 } = useInView({ triggerOnce: true, threshold: 0.2 });
+
+  useEffect(() => {
+    if (inView3) controls3.start("visible");
+  }, [inView3, controls3]);
+
+  const [activeIndex] = useState<number | null>(null);
+
+  // Danh sách nội dung
+  const aboutData = [
+    { title: "Tâm huyết", description: "Thức khuya hơn cú đêm." },
+    { title: "Kinh nghiệm", description: "Tay trái code, tay phải viết prompt." },
+    { title: "Sáng tạo", description: "Cũng có nhưng không đáng kể." },
+    { title: "Đam mê", description: "Làm là phải cháy hết mình." },
+  ];
+
+  const timelineData = [
+    { date: '3 / 2025', title: 'Bước khởi đầu', description: 'Khởi động dự án với những ý tưởng đột phá.', image: kid },
+    { date: '4 / 2025', title: 'Ra mắt các tính năng', description: 'Các sản phẩm độc đáo và đa dạng từ Happy Monkey sẽ được cung cấp tại website.', image: magazine },
+    { date: '5 / 2025', title: 'Ra mắt tính năng advanced search', description: 'Tăng trải nghiệm người dùng, dễ dàng kiếm truyện.', image: homeMobile },
+  ];
+
+  return (
+      <div className="min-h-screen  text-white" style={{
+        backgroundImage: `url("${book}")`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}></div>
+
+    );
+};
+
+export default HomePage;
