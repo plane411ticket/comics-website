@@ -8,3 +8,20 @@
     </div> 
 
  */
+
+
+import { useEffect, useState } from "react";
+import { FaCircle } from 'react-icons/fa';
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import homeMobile from "../../assets/home_mobile.jpg";
+import kid from "../../assets/kid.jpg";
+import book from "../../assets/book.jpg";
+import magazine from "../../assets/magazine.jpg";
+import video from "../../assets/trailer_web.mp4";
+{/*}
+import japan from "../../assets/japan.png";
+import hanquoc from "../../assets/HQ_charater.png";
+import vietnam from "../../assets/VN_character.png";
+import trungquoc from "../../assets/TQ_chrater.png";
+*/}
