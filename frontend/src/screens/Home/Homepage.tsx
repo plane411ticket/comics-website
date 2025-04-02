@@ -111,9 +111,37 @@ const HomePage = () => {
                       </motion.span>
                     ))}
                   </h1>
+        <p className="text-lg text-gray-300">
+                    Là món ăn tinh thần không thể bỏ lỡ cho các fan chân chính của comic-chan!!!!
+                  </p>
+        
+                  <a href="#" className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:opacity-80 transition">
+                    Tham gia ngay →
+                  </a>
+                </div>
+        
+                {/* Phần phải: Mockups */}
+                <div className="relative flex flex col items-center justify-center w-full max-w-[690px] md:mt-0 ml-auto">
+                    {/* iPad Mockup */}
+                    <div className="relative w-full max-w-[690px] aspect-[4/3] rounded-3xl border-6 border-gray-800 shadow-xl overflow-hidden mt-9 flex items-center flex justify-end">
+                      <div className="top-0 left-0 right-0 h-6 rounded-t-2xl"></div>
+                      <div
+                        className="w-full h-full bg-cover bg-center"
+                        style={{ backgroundImage: `url("${kid}")` }}
+                      ></div>
+                    </div>
+        
+                    {/* Mobile Mockup */}
+                    <div className="absolute w-[40%] max-w-[280px] aspect-[9/16] bg-gray-900 rounded-[40px] border-[5px] border-gray-800 shadow-xl overflow-hidden left-[-15%] top-[21%] scale-90 hover:scale-100 hover:shadow-2xl transition-transform flex items-center justify-center">
+                      <div
+                        className="w-full h-full bg-cover bg-center"
+                        style={{ backgroundImage: `url("${homeMobile}")` }}
+                      ></div>
+                    </div>
                   </div>
-                  </div>
-                  </div>
+        
+              </div>
+              </div>
 
 
 
