@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import viewsets,status
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Manga,Chapter,Page
-from .serializers import MangaSerializer, ChapterSerializer, PageSerializer
+from .models import Manga,Chapters,Comments
+from .serializers import MangaSerializer, ChapterSerializer, CommentSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny,IsAuthenticated,IsAdminUser
@@ -17,12 +17,12 @@ class MangaViewSet(viewsets.ModelViewSet):
             return [AllowAny()]
         return [IsAdminUser()] 
 class ChapterViewSet(viewsets.ModelViewSet):
-    queryset = Chapter.objects.all()
+    queryset = Chapters.objects.all()
     serializer_class = ChapterSerializer
 
-class PageViewSet(viewsets.ModelViewSet):
-    queryset = Page.objects.all()
-    serializer_class = PageSerializer
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comments.objects.all()
+    serializer_class = CommentSerializer
     parser_classes = (MultiPartParser, FormParser)
 
 @api_view(['GET'])

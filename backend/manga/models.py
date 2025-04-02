@@ -1,26 +1,57 @@
 from django.db import models
+import uuid
+from genres.models import Genre
+from django.contrib.auth.models import User
 class Manga(models.Model):
+    _id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+
+    STATUS_CHOICES = [
+        ('completed', 'Hoàn thành'),
+        ('ongoing', 'Còn tiếp'),
+        ('paused', 'Tạm ngưng'),
+        ('unverified', 'Chưa xác minh'),
+    ]
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     description = models.TextField()
-    cover_image = models.ImageField(upload_to='manga_covers/',default='manga_covers/default.jpg',blank=True)
+    cover_image = models.ImageField(upload_to='manga_covers/', default='manga_covers/default.jpg', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    genres = models.ManyToManyField(
+        Genre, related_name='manga_genres', blank=True)
+    source = models.CharField(max_length=255,default='Không rõ')
+    numComments = models.IntegerField(null=True,blank=True,default=0)
+    numViews = models.IntegerField(null=True,blank=True,default=0)
+    numFavorites = models.IntegerField(null=True,blank=True,default=0)
+    numChapters = models.IntegerField(null=True,blank=True,default=0)
+    numRatings = models.IntegerField(null=True,blank=True,default=0)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='unverified'
+    )
     def __str__(self):
         return self.title
-
-class Chapter(models.Model):
+class Comments(models.Model):
+    _id = models.UUIDField(default=uuid.uuid4,  unique=True,
+                           primary_key=True, editable=False)
+    manga = models.ForeignKey(Manga, on_delete=models.CASCADE,null=True,related_name='comments')
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.manga.title} - Chapter {self.content} - {self.user.username}"
+class Chapters(models.Model):
+    _id = models.UUIDField(default=uuid.uuid4,  unique=True,
+                           primary_key=True, editable=False)
     manga = models.ForeignKey(Manga, related_name="chapters", on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    number = models.IntegerField()
+    chapter_number = models.IntegerField(blank=True, null=True)
+    def save(self, *args, **kwargs):
+        if self.chapter_number is None:  # Nếu chưa có số chương
+            last_chapter = Chapters.objects.filter(manga=self.manga).order_by('-chapter_number').first()
+            self.chapter_number = (last_chapter.chapter_number + 1) if last_chapter else 1
+        super().save(*args, **kwargs)
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"{self.manga.title} - Chapter {self.number}"
-
-class Page(models.Model):
-    chapter = models.ForeignKey(Chapter, related_name="pages", on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="manga_pages/")
-    page_number = models.IntegerField()
-
-    def __str__(self):
-        return f"Page {self.page_number} of {self.chapter}"

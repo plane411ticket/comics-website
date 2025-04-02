@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Manga, Chapter, Page
+from .models import Manga, Chapters, Comments
 
 class MangaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -7,10 +7,10 @@ class MangaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Chapter
+        model = Chapters
         fields = '__all__'
 
-class PageSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Page
+        model = Comments
         fields = '__all__'
