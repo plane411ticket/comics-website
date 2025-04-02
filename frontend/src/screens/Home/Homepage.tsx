@@ -257,6 +257,117 @@ const HomePage = () => {
 
         </motion.div>
 
+        <div className="flex justify-center items-center px-4 pt-40">
+      {/* Khung bao bọc */}
+      <motion.div
+        ref={ref2}
+        initial="hidden"
+        animate={controls2}
+        variants={{
+          hidden: { opacity: 0, y: 50 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+        }}
+        className="relative w-full max-w-5xl p-[3px] rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 shadow-2xl"
+      >
+        {/* Nội dung bên trong khung */}
+        <div className="w-full min-h-[60vh] flex flex-col md:flex-row items-center justify-between px-10 py-16 bg-black text-white rounded-2xl">
+          {/* Nội dung bên trái */}
+          <div className="md:w-1/2 space-y-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              {set_community.map((word, index) => (
+                <motion.span
+                  key={index}
+                  className="inline-block mr-2"
+                  initial="hidden"
+                  animate={controls2}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  transition={{ delay: index * 0.2, duration: 0.5 }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </h2>
+
+            <p className="text-lg text-gray-300">
+              Với hàng nghìn thành viên và đa dạng nội dung về Comic, cùng chúng mình nhập hội nhé!
+            </p>
+
+            <div className="flex space-x-4">
+              <motion.button
+                className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:opacity-80 transition"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Tham gia ngay
+              </motion.button>
+              <motion.button
+                className="bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-700 transition"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Tìm hiểu thêm
+              </motion.button>
+            </div>
+          </div>
+
+          {/* Hình ảnh bên phải */}
+          <div className="md:w-1/2 flex justify-center mt-6 md:mt-0">
+           <img 
+              src={magazine}
+              alt="Comic Community"
+             ></img> 
+           
+          </div>
+        </div>
+      </motion.div>
+
+
+    </div>
+
+    <motion.div
+      ref={ref3}
+      initial="hidden"
+      animate={controls3}
+      variants={{
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+      }}
+      className="relative w-full flex flex-col items-center justify-center text-center px-6 bg-black py-20"
+    >
+      <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          {set_aboutme.map((word, index) => (
+            <motion.span
+              key={index}
+              className="inline-block mr-2"
+              initial="hidden"
+              animate={controls3}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ delay: index * 0.2, duration: 0.3 }}
+            >
+              {word}
+            </motion.span>
+          ))}
+      </h2>
+
+      <motion.p
+              className="text-lg text-gray-300 max-w-2xl mx-auto mb-8 mt-6"
+              initial={{ opacity: 0, x: -50 }}
+              animate={controls3}
+              variants={{
+                hidden: { opacity: 0, x: -50 },
+                visible: { opacity: 1, x: 0 },
+              }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            > Luôn nỗ lực hết mình để có trang web hoàn hảo nhất cho các bạn.
+            </motion.p>
+            </motion.div>
+
 
               </div>
 
