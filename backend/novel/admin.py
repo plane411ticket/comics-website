@@ -1,3 +1,6 @@
 from django.contrib import admin
-
-# Register your models here.
+from .models import Novel
+@admin.register(Novel)
+class NovelAdmin(admin.ModelAdmin):
+    list_display = ("title", "numViews", "numChapters","status", "created_at")
+    readonly_fields = ("numViews","numChapters","numFavorites","numComments","numLikes")

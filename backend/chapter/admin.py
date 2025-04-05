@@ -29,3 +29,4 @@ class NovelChapterAdmin(admin.ModelAdmin):
     list_filter = ("novel",)
     ordering = ("-created_at",)   
 admin.site.register(MangaChapter, MangaChapterAdmin)
+admin.site.register(NovelChapter,NovelChapterAdmin)
