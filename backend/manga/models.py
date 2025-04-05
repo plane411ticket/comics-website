@@ -27,7 +27,7 @@ class Manga(models.Model):
     numViews = models.IntegerField(null=True,blank=True,default=0)
     numFavorites = models.IntegerField(null=True,blank=True,default=0)
     numChapters = models.IntegerField(null=True,blank=True,default=0)
-    numRatings = models.IntegerField(null=True,blank=True,default=0)
+    numLikes = models.IntegerField(null=True,blank=True,default=0)
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -35,12 +35,3 @@ class Manga(models.Model):
     )
     def __str__(self):
         return self.title
-class Comments(models.Model):
-    _id = models.UUIDField(default=uuid.uuid4,  unique=True,
-                           primary_key=True, editable=False)
-    manga = models.ForeignKey(Manga, on_delete=models.CASCADE,null=True,related_name='comments')
-    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return f"{self.manga.title} - Chapter {self.content} - {self.user.username}"

@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-
+from ..import_data import create_genres
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -14,4 +14,5 @@ class Migration(migrations.Migration):
             model_name='genre',
             name='description',
         ),
+        migrations.RunPython(create_genres),
     ]

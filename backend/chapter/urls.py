@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import getChapter, getChapterList
+from .views import getMangaChapter, getMangaChapterList
 
 urlpatterns = [
-    path("manga/<str:pk>/chapters", getChapterList, name="chapters-by-manga"),  
-    path("chapter/<str:pk>/", getChapter, name="chapter-detail"),  
+    path("manga/<str:pk>/chapters", getMangaChapterList, name="chapters-by-manga"),  
+    path("chapter/<str:pk>/", getMangaChapter, name="chapter-detail"),  
 ]

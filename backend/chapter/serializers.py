@@ -1,4 +1,4 @@
-from .models import MangaChapter, MangaChapterImage
+from .models import MangaChapter, MangaChapterImage, NovelChapter
 from rest_framework import serializers
 class MangaChapterImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +17,12 @@ class MangaChapterDetailSerializer(serializers.ModelSerializer):
         images = MangaChapterImage.objects.filter(chapter=obj)
         serializer = MangaChapterImageSerializer(images, many=True)
         return serializer.data
+class NovelChapterListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NovelChapter
+        fields = ['_id', 'title','chapter_number', 'created_at']
+
+class NovelChapterDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NovelChapter
+        fields = ['id', 'title', 'number', 'content', 'created_at']
