@@ -24,12 +24,12 @@ def import_genres(json_file_path):
     print("✅ Genres imported successfully!")
 
 # Main function
-if __name__ == "__main__":
+def create_genres(apps, schema_editor):
     # Ensure the environment is correctly set
     print(f"Using Django settings module: {os.environ.get('DJANGO_SETTINGS_MODULE')}")
 
     # Optionally delete existing data to avoid conflict
-    Genre.objects.all().delete()
+    Genre = apps.get_model('genres', 'Genre')
     
     # Define the path to your JSON file (could be passed as an argument or configured)
     json_file_path = os.path.join(project_path,"genres", 'genres.json')  # Assuming the JSON file is in the project root

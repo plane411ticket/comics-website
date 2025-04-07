@@ -4,7 +4,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from manga.serializers import MangaSerializer
 
-from .models import Favorite
+from .models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -41,8 +41,6 @@ class UserSerializerWithToken(UserSerializer):
 
 class FavoriteSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField(read_only=True)
-    manga = serializers.SerializerMethodField(read_only=True)
-
     class Meta:
         model = Favorite
         fields = '__all__'
@@ -50,7 +48,21 @@ class FavoriteSerializer(serializers.ModelSerializer):
         user = obj.user
         serializers = UserSerializer(user,many=False)
         return serializers.data
-    def get_manga(self, obj):
-        manga = obj.manga
-        serializer = MangaSerializer(manga, many=False)
-        return serializer.data
+class CommentsSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = Comments
+        fields = '__all__'
+    def get_user(self,obj):
+        user = obj.user
+        serializers = UserSerializer(user,many=False)
+        return serializers.data
+class LikeSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = Likes
+        fields = '__all__'
+    def get_user(self,obj):
+        user = obj.user
+        serializers = UserSerializer(user,many=False)
+        return serializers.data

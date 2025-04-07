@@ -1,18 +1,16 @@
 from django.contrib.auth.models import User
 from rest_framework import viewsets
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from django.contrib.auth import authenticate
-from .serializers import UserSerializer, FavoriteSerializer, UserSerializerWithToken
+from .serializers import *
 from .models import Favorite
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):   
@@ -143,7 +141,66 @@ def getUserProfile(request):
     except Exception as e:
         return Response({'detail':f'{e}'},status=status.HTTP_204_NO_CONTENT)
 
-
+class LikeViewSet(viewsets.ModelViewSet):
+    queryset = Likes.objects.all()
+    serializer_class = LikeSerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        user = self.request.user
+        return Likes.objects.filter(user=user)
+    def perform_create(self, serializer):
+        # Lấy đối tượng Novel từ serializer
+        novel = serializer.validated_data['novel']
+        
+        # Kiểm tra xem người dùng đã thích truyện này chưa
+        if Likes.objects.filter(user=self.request.user, novel=novel).exists():
+            # Nếu đã có lượt thích rồi, trả về lỗi hoặc không làm gì
+            return None
+        # Nếu chưa có lượt thích, tiến hành lưu đối tượng Like và gắn người dùng hiện tại vào
+        if serializer.is_valid():
+            # Lưu đối tượng Like với người dùng hiện tại
+            serializer.save(user=self.request.user)
+            
+            # Cập nhật số lượt thích cho Novel
+            novel.numLikes += 1  # Tăng thêm 1 lượt thích
+            novel.save(update_fields=['numLikes'])
+    def perform_destroy(self, instance):
+        # Truy cập đối tượng Novel liên quan đến Like
+        novel = instance.novel
+        
+        # Giảm số lượt thích cho Novel
+        novel.numLikes -= 1
+        novel.save(update_fields=['numLikes'])  # Lưu lại sự thay đổi
+        # Xóa đối tượng Like
+        instance.delete()
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comments.objects.all()
+    serializer_class = CommentsSerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        user = self.request.user
+        # Lọc các bình luận của người dùng hiện tại
+        return Comments.objects.filter(user=user)
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(user=self.request.user)
+    
+            # Cập nhật số lượt thích cho Novel
+            novel = serializer.validated_data['novel'] # Lấy đối tượng Novel từ Comment
+            novel.numComments += 1  # Tăng thêm 1 lượt thích
+            novel.save(update_fields=['numComments'])
+        else: 
+            print(serializer.errors)
+    def perform_destroy(self, instance):
+        # Truy cập đối tượng Novel liên quan đến Comments
+        novel = instance.novel
+        
+        # Giảm số lượt thích cho Novel
+        novel.numComments -= 1  # Giảm bớt 1 lượt thích
+        novel.save(update_fields=['numComments'])  # Lưu lại sự thay đổi
+        
+        # Xóa đối tượng Comment
+        instance.delete()
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
@@ -153,6 +210,20 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         return Favorite.objects.filter(user=user)
     def perform_create(self, serializer):
         if serializer.is_valid():
-            serializer.save(user=self.request.user)
+            serializer.save(user=self.request.user) # 
+            # Cập nhật số lượt thích cho Novel
+            novel = serializer.validated_data['novel']
+            novel.numFavorites += 1
+            novel.save(update_fields=['numFavorites'])
         else: 
             print(serializer.errors)
+    def perform_destroy(self, instance):
+        # Truy cập đối tượng Novel liên quan đến Like
+        novel = instance.novel
+        
+        # Giảm số lượt thích cho Novel
+        novel.numFavorites -= 1  # Giảm bớt 1 lượt thích
+        novel.save(update_fields=['numFavorites'])  # Lưu lại sự thay đổi
+        
+        # Xóa đối tượng Like
+        instance.delete()
