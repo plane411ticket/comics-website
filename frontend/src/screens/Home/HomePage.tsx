@@ -152,20 +152,20 @@ const HomePage = () => {
         hidden: { opacity: 0, y: 50 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
       }}
-      className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 pt-16 bg-cover bg-center"
+      className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-8 pt-20 md:pt-24 bg-cover bg-center"
       style={{ backgroundImage: `url(${kid})` }}
       >
       {/* Lớp overlay để tạo hiệu ứng mờ */}
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
       {/* Nội dung chính */}
-      <div className="relative z-10">
+      <div className="relative z-10 max-w-5xl w-full px-4 sm:px-6 md:px-8">
         {/* Tiêu đề có hiệu ứng */}
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 leading-snug sm:leading-tight">
           {words.map((word, index) => (
             <motion.span
               key={index}
-              className="inline-block mr-2"
+              className="inline-block mr-1 sm:mr-2"
               initial="hidden"
               animate={controls1}
               variants={{
@@ -182,7 +182,7 @@ const HomePage = () => {
               {/* Mô tả */}
               {/* Mô tả - Hiệu ứng slide-in từ trái */}
             <motion.p
-              className="text-lg text-gray-300 max-w-2xl mx-auto"
+              className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto px-2"
               initial={{ opacity: 0, x: -50 }}
               animate={controls1}
               variants={{
@@ -195,41 +195,45 @@ const HomePage = () => {
 
             {/* Nút CTA - Hiệu ứng slide-up */}
             <motion.div
-              className="mt-6 flex space-x-4 justify-center"
+              className="mt-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center items-center"
               initial="hidden"
               animate={controls1}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 },
               }}
-              transition={{ duration: 0.8, delay: 0.8 }}>
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
               <motion.button
-                className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:opacity-80 transition"
+                className="w-full max-w-[260px] bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 sm:px-6 py-3 rounded-md text-base sm:text-lg font-semibold shadow-lg hover:opacity-80 transition"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-              >Khám phá ngay
+              >
+                Khám phá ngay
               </motion.button>
 
               <motion.button
-                className="bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-700 transition"
+                className="w-full max-w-[260px] bg-gray-800 text-white px-4 sm:px-6 py-3 rounded-md text-base sm:text-lg font-semibold shadow-lg hover:bg-gray-700 transition"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-              >Tìm hiểu thêm
+              >
+                Tìm hiểu thêm
               </motion.button>
             </motion.div>
 
+
             </div>
-                <div className="relative w-[790px] h-[520px] flex items-center justify-center md:mt-0 pt-10">
+            <div className="relative w-full flex items-center justify-center pt-10 px-4 md:px-0">
                     <motion.div 
-                        className="relative w-[690px] h-[450px] rounded-[40px] border-[10px] border-gray-800 shadow-xl bg-black flex flex-col"
+                        className="relative w-full max-w-[790px] aspect-video rounded-2xl md:rounded-[20px] border-[2px] md:border-[10px] border-gray-800 shadow-xl bg-black flex flex-col"
                         //animate={shake ? { rotate: [0, -5, 5, -5, 5, 0] } : {} }
                         transition={{ duration: 0.5 }}
                     >
-                        <div className="absolute top-0 left-0 right-0 h-[40px] bg-gray-900 flex items-center px-4 rounded-t-[30px]">
+                        {/* <div className="absolute top-0 left-0 right-0 h-[40px] bg-gray-900 flex items-center px-4 rounded-t-[30px]">
                             <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
                             <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
                             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                        </div>
+                        </div> */}
                         <video 
                             className="w-full h-full object-cover"
                             src={video}
@@ -258,7 +262,7 @@ const HomePage = () => {
 
         </motion.div>
 
-      <div className="flex justify-center items-center px-4 pt-40">
+        <div className="flex justify-center items-center px-4 sm:px-6 md:px-8 pt-24 sm:pt-32 md:pt-40">
       {/* Khung bao bọc */}
       <motion.div
         ref={ref2}
@@ -268,13 +272,13 @@ const HomePage = () => {
           hidden: { opacity: 0, y: 50 },
           visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
         }}
-        className="relative w-full max-w-5xl p-[3px] rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 shadow-2xl"
+        className="relative w-full max-w-6xl p-[2px] sm:p-[3px] rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 shadow-2xl"
       >
         {/* Nội dung bên trong khung */}
-        <div className="w-full min-h-[60vh] flex flex-col md:flex-row items-center justify-between px-10 py-16 bg-black text-white rounded-2xl">
+        <div className="w-full flex flex-col md:flex-row items-center justify-between px-6 sm:px-10 py-10 sm:py-14 md:py-16 bg-black text-white rounded-2xl">
           {/* Nội dung bên trái */}
-          <div className="md:w-1/2 space-y-6">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <div className="md:w-1/2 space-y-4 sm:space-y-6 text-center md:text-left">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
               {set_community.map((word, index) => (
                 <motion.span
                   key={index}
@@ -292,20 +296,20 @@ const HomePage = () => {
               ))}
             </h2>
 
-            <p className="text-lg text-gray-300">
+            <p className="text-base sm:text-lg text-gray-300">
               Với hàng nghìn thành viên và đa dạng nội dung về Comic, cùng chúng mình nhập hội nhé!
             </p>
 
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 items-center sm:items-start justify-center sm:justify-start">
               <motion.button
-                className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:opacity-80 transition"
+                className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-5 sm:px-6 py-3 rounded-md text-base sm:text-lg font-semibold shadow-lg hover:opacity-80 transition"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Tham gia ngay
               </motion.button>
               <motion.button
-                className="bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-700 transition"
+                className="bg-gray-800 text-white px-5 sm:px-6 py-3 rounded-md text-base sm:text-lg font-semibold shadow-lg hover:bg-gray-700 transition"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -315,10 +319,11 @@ const HomePage = () => {
           </div>
 
           {/* Hình ảnh bên phải */}
-          <div className="md:w-1/2 flex justify-center mt-6 md:mt-0">
+          <div className="md:w-1/2 flex justify-center mt-8 md:mt-0 px-4">
            <img 
               src={magazine}
               alt="Comic Community"
+              className="w-full max-w-[300px] sm:max-w-[400px] md:max-w-[500px] h-auto object-contain"
              ></img> 
            
           </div>
@@ -371,7 +376,7 @@ const HomePage = () => {
 
       {/* Container chứa các ô nội dung */}
       <motion.div 
-  className="grid grid-cols-4 gap-x-12 gap-y-6 w-full max-w-5xl pt-5"
+   className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-6 w-full max-w-6xl px-4 sm:px-6 md:px-8 pt-5"
   initial="hidden"
   animate="visible"
   variants={{
@@ -410,40 +415,54 @@ const HomePage = () => {
     </motion.div>
 
 
-    <div className=" text-white min-h-screen p-10 flex justify-center">
-      <div className="w-full max-w-4xl relative">
+          <div className="text-white min-h-screen px-4 sm:px-6 md:px-10 py-10 flex justify-center">
+        <div className="w-full max-w-4xl relative">
+          {/* Đường timeline */}
+          <div className="absolute left-6 sm:left-10 top-0 h-full w-1 bg-gray-600 z-0" />
 
-        <div className="absolute left-10 top-0 h-full w-1 bg-gray-600" />
-        {timelineData.map((event, index) => (
-          
-          <motion.div 
-            key={index}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
-            viewport={{ once: true }}
-            className="flex items-center mb-10 relative"
-          >
+          {timelineData.map((event, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+              viewport={{ once: true }}
+              className="flex flex-col sm:flex-row items-start sm:items-center mb-16 relative"
+            >
+              {/* Chấm tròn và ngày tháng */}
+              <div className="absolute left-6 sm:left-10 top-0 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                <div className="flex flex-col items-center">
+                  <div className="bg-orange-500 p-2 rounded-full">
+                    <FaCircle className="text-white" size={12} />
+                  </div>
+                  <div className="mt-2 text-sm sm:text-base font-bold text-orange-400 whitespace-nowrap">
+                    {event.date}
+                  </div>
+                </div>
+              </div>
 
-            <div className="absolute left-10 -translate-x-1/2 bg-orange-500 p-2 rounded-full ">
-              <FaCircle className="text-white" size={12} />
-            </div>
-
-             {/* Hiển thị ngày tháng bên trái */}
-            <div className="ml-20 text-xl font-bold text-orange-400 whitespace-nowrap">{event.date}
-            </div>
-
-            <div className="ml-20 p-6 rounded-lg shadow-lg w-full">
-              <h3 className="text-3xl font-bold mb-2">{event.title}</h3>
-              <p className="text-black-900 mb-4">{event.description}</p>
-              <img src={event.image} alt={event.title} className="w-full rounded-lg" />
-            </div>
-
-
-          </motion.div>
-        ))}
+              {/* Nội dung chính */}
+              <div className="sm:ml-40 mt-10 sm:mt-0 pl-6 sm:pl-0 pr-2 w-full bg-white/30 rounded-lg shadow-lg text-black">
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-2xl sm:text-3xl font-bold mb-2">
+                    {event.title}
+                  </h3>
+                  <p className="mb-4 text-sm sm:text-base">
+                    {event.description}
+                  </p>
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    className="w-full max-w-full rounded-lg ml-0 sm:ml-4"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
+
+
 
 
     </div>
