@@ -15,7 +15,8 @@ def create_superuser(apps, schema_editor):
     username = os.getenv('SUPERUSER_USERNAME')
     email = os.getenv('SUPERUSER_EMAIL')
     password = os.getenv('SUPERUSER_PASSWORD')
-
+    if not all([username, email, password]):
+        raise ValueError(f"Thiếu biến môi trường: username={username}, email={email}, password={'***' if password else None}")
     if not User.objects.filter(username=username).exists():
         User.objects.create_superuser(username, email, password)
 
