@@ -3,6 +3,7 @@ import LoginScreen from '../screens/Auth/LoginScreen'
 import ProfileScreen from '../screens/Auth/ProfileScreen'
 import RegisterScreen from '../screens/Auth/RegisterScreen'
 import Manga from '../screens/Manga/MangaPage'
+import Novel from '../screens/Novel/NovelList'
 
 export default function AuthRoutes()
 {
@@ -12,6 +13,7 @@ export default function AuthRoutes()
             <Route path='/profile' element={<ProfileScreen />} />
             <Route path='/register' element={<RegisterScreen />} />
             <Route path='/manga' element={<Manga />} />
+            <Route path='/novel' element={<Novel />} />
         </Routes>
     )
 }
