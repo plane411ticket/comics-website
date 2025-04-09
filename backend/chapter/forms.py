@@ -22,13 +22,15 @@ class MangaChapterForm(forms.ModelForm):
 
     class Meta:
         model = MangaChapter
-        fields = ['manga', 'title', 'chapter_number']
+        fields = ['chapter_number','manga', 'title']
 
     def save(self, commit=True):
         instance = super().save(commit=False)
         if commit:
             instance.save()
             images = self.cleaned_data.get("images", [])
+            print("📸 Images uploaded:", images)
             for idx, image in enumerate(images):
                 MangaChapterImage.objects.create(chapter=instance, image=image, page=idx)
         return instance
+

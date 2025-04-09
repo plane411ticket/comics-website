@@ -16,7 +16,14 @@ class MangaChapterImageInline(admin.TabularInline):
 
 class MangaChapterAdmin(admin.ModelAdmin):
     form = MangaChapterForm  # Sử dụng form tùy chỉnh cho MangaChapter
-    list_display = ("_id","title", "manga", "chapter_number", "created_at")
+    
+    fields = ['chapter_number', 'manga', 'title', 'images']
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        images = form.cleaned_data.get("images", [])
+        for idx, image in enumerate(images):
+            MangaChapterImage.objects.create(chapter=obj, image=image, page=idx)
+    list_display = ("_id","title", "manga","chapter_number", "created_at")
     # inlines = [MangaChapterImageInline]  # Hiển thị ảnh trong MangaChapter
     search_fields = ("manga___id", "manga__title","chapter_number","title")
     class Media:

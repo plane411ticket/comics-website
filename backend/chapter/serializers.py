@@ -25,4 +25,4 @@ class NovelChapterListSerializer(serializers.ModelSerializer):
 class NovelChapterDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = NovelChapter
-        fields = ['id', 'title', 'number', 'content', 'created_at']
+        fields = ['_id', 'title', 'chapter_number', 'content', 'created_at']
