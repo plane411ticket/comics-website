@@ -32,7 +32,7 @@ const Genre: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 mx-auto items-center justify-center">
                 {genres.length > 0 ? (
                     genres.map((genre) => (
-                    <div>
+                    <div  key={genre._id}>
                         <button className=" bg-white text-black text-sm w-full  hover:bg-yellow-400">
                                 <a className="text-black hover:text-white" href={`/tim-truyen/${genre.name}`}>{genre.name}</a>
                         </button>

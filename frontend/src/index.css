@@ -11,6 +11,7 @@
   font-family: "Nunito Sans", sans-serif;
   font-weight: 400;
   font-synthesis: none;
+  
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -138,6 +139,12 @@ button:focus {
 
 .dark #navbottom a {
   color: white !important;
+  background-color: #262626;
+}
+
+.dark #navbottom a:hover {
+  color: black;
+  background-color: #fede0e; /* Yellow color */
 }
 
 .loginchange{
@@ -149,5 +156,14 @@ button:focus {
   color: white;
 }
 
+.dark a {
+  background-color: #4d4d4d;
+  color: white;
+}
+
+.dark .Emphasize{
+  background-color: #4d4d4d;
+  color: black;
+}
 
 

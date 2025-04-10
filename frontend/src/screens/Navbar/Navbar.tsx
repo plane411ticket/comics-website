@@ -53,13 +53,13 @@ const Navbar = () => {
       </div>
 
       {/* Nav Bottom (Desktop) */}
-      <div className=" lg:block bg-gray-100 dark:text-black dark:bg-white m-0 p-0 min-h-0 hidden " id="navbottom" >
+      <div className=" lg:block bg-gray-100 m-0 p-0 min-h-0 hidden " id="navbottom" >
         <ul className="container mx-auto flex justify-between items-center py-0 h-full">
           {navbarItems.map((item, index) => (
             <li key={index} className="h-full flex-1 p-0">
               <Link
                 to={item.path}
-                className="h-full flex items-center text-black justify-center px-4 py-1 min-w-[90px] hover:text-black hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
+                className="h-full flex items-center text-black justify-center dark:bg-black px-4 py-1 min-w-[90px] hover:text-black hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
               >
                 {item.name}
               </Link>

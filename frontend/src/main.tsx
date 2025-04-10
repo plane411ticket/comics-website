@@ -7,7 +7,7 @@ import Profiles from "./screens/Auth/ListProfiles";
 import Error from "./screens/Error";
 import UserProfilePage from "./screens/Auth/ProfileScreen";
 import MangaList from "./screens/Manga/MangaPage";
-import NovelList from "./screens/Novel/NovelList.tsx";
+import NovelList from "./screens/Novel/NovelPage.tsx";
 import Forum from "./screens/Forum/Forum";
 import Genre from "./screens/Genre/Genre.tsx";
 import Leaderboard from "./screens/Leaderboard/Leaderboard";
