@@ -8,7 +8,6 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny,IsAdminUser
 
-
 class GenresViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenresSerializer
@@ -19,5 +18,5 @@ class GenresViewSet(viewsets.ModelViewSet):
 @permission_classes([AllowAny])
 def genre_request(request):
     genres = Genre.objects.all() 
-    serializer = GenresSerializer(genres, many=True) 
+    serializer = GenresSerializer(genres, many=True)
     return Response({"genres": serializer.data}, status=status.HTTP_200_OK)
