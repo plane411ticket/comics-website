@@ -57,6 +57,6 @@ def import_novel(json_file_path):
 
 if __name__ == '__main__':
     print(f"Using Django settings module: {os.environ.get('DJANGO_SETTINGS_MODULE')}")
-    for i in range(20):
+    for i in range(26):
         json_file_path = os.path.join(project_path, 'novel', 'truyen-save', f'page1_truyen{i+1}.json')
         import_novel(json_file_path)
