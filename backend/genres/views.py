@@ -14,6 +14,7 @@ class GenresViewSet(viewsets.ModelViewSet):
     serializer_class = GenresSerializer
     permission_classes = [AllowAny]
     
+    
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def genre_request(request):

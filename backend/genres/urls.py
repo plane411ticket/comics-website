@@ -3,9 +3,9 @@ from .views import *
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'genre', GenresViewSet)
+router.register(r'genres', GenresViewSet)  
 
 urlpatterns = [
-    path('genre/', genre_request, name="genres"),
+    path('', include(router.urls)), 
 ]
 

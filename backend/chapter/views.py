@@ -28,6 +28,7 @@ def getMangaChapterList(request, pk):
         except Exception as e:
             return Response({'details': f"{e}"}, status=status.HTTP_204_NO_CONTENT)   
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getNovelChapter(request, pk):
     try:
         chapter = NovelChapter.objects.get(_id=pk)
@@ -38,9 +39,10 @@ def getNovelChapter(request, pk):
     except Exception as e:
         return Response({'details': f"{e}"}, status=status.HTTP_204_NO_CONTENT)
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getNovelChapterList(request, pk):
     try:
-        chapter = NovelChapter.objects.filter(novel__pk=pk)
+        chapter = NovelChapter.objects.filter(novel__pk=pk).order_by("chapter_number")
         serializer = NovelChapterListSerializer(chapter, many=True)
         return Response(serializer.data)
     except Exception as e:

@@ -20,9 +20,9 @@ class MangaChapterDetailSerializer(serializers.ModelSerializer):
 class NovelChapterListSerializer(serializers.ModelSerializer):
     class Meta:
         model = NovelChapter
-        fields = ['_id', 'title','chapter_number', 'created_at']
+        fields = '__all__'
 
 class NovelChapterDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = NovelChapter
-        fields = ['id', 'title', 'number', 'content', 'created_at']
+        fields = '__all__'
