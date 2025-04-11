@@ -9,8 +9,8 @@ const baseURL = 'http://localhost:8000';
 
 export const fetchStoryDetails = async (novelid: string) => {
     try{
-      //const response = await axios.get(`$(baseURL)/api/novel/${novelid}`)
-      const response = await axios.get(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef`)
+      const response = await axios.get(`${baseURL}/api/novel/${novelid}`)
+      //const response = await axios.get(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef`)
       console.log(response.data);
       return response.data;
     }
@@ -22,8 +22,8 @@ export const fetchStoryDetails = async (novelid: string) => {
 
 export const fetchStoryChapters = async (novelid: string) => {
   try {
-    const response = await axios.get(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef/chapters`);
-    //const response = await axios.get(`${baseURL}/api/novel/${novelid}/chapters/`);
+    //const response = await axios.get(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef/chapters`);
+    const response = await axios.get(`${baseURL}/api/novel/${novelid}/chapters`);
       console.log(response.data);
       return response.data;
   }
@@ -36,14 +36,14 @@ export const fetchStoryChapters = async (novelid: string) => {
 };
 
 export const fetchChapterDetail = async (chapterId: string) => {
-  const response = await axios.get(`/api/chapter/${chapterId}`);
+  const response = await axios.get(`/api/novel/chapter/${chapterId}`);
   return response.data;
 };
 
 export const updateNumberFavorite  = async (novelid: string) => {
   try{
-      const response = await axios.post(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef/updateNumFavorite/`);
-      //const response = await axios.put(`${baseURL}/api/novel/${novelid}/updateNumFavorite`);
+      //const response = await axios.post(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef/updateNumFavorite/`);
+      const response = await axios.put(`${baseURL}/api/novel/${novelid}/updateNumFavorite`);
       console.log(response.data);
       return response.data;
   }

@@ -7,12 +7,14 @@ import Profiles from "./screens/Auth/ListProfiles";
 import Error from "./screens/Error";
 import UserProfilePage from "./screens/Auth/ProfileScreen";
 import MangaList from "./screens/Manga/MangaPage";
-import NovelList from "./screens/Novel/NovelPage.tsx";
+import NovelList from "./screens/Novel/NovelList.tsx";
 import Forum from "./screens/Forum/Forum";
 import Genre from "./screens/Genre/Genre.tsx";
 import Leaderboard from "./screens/Leaderboard/Leaderboard";
 import AdvanceSearch from "./screens/Search/Avsearch";
 import AuthRoutes from "./router/AuthRoutes";
+import NovelData from './screens/Novel/NovelPage'
+import ChapterDetailPage from './screens/Novel/NovelChapterDetail'
 // redux 
 import {store} from './store'
 import { Provider } from "react-redux";
@@ -34,6 +36,8 @@ const router = createBrowserRouter([
       { path: "/genre", element: <Genre /> },
       { path: "/avsearch", element: <AdvanceSearch /> },
       { path: "/auth/*", element: <AuthRoutes /> },
+      { path: "/novel/:storyId", element: <NovelData />},
+      { path: "/chapter/:chapterId", element: <ChapterDetailPage />},
     ],
   },
 ]);

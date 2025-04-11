@@ -85,7 +85,7 @@ const NovelList = () => {
           </span>
           <span className="flex items-center gap-1">
             <FontAwesomeIcon icon={faHeart} className="w-3.5 h-3.5 text-red-400" />
-            {novel.numLikes || 0}
+            {novel.numFavorites || 0}
           </span>
         </div>
       </div>
