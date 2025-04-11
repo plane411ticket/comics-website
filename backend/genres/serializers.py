@@ -5,7 +5,7 @@ from .models import Genre, Author
 class GenresSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
-        fields = '__all__'
+        fields = ('_id', 'name')
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author

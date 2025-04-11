@@ -33,11 +33,11 @@ staticfiles/
 # media/
 static/
 # *.png
-# *.jpg
+*.jpg
 # *.jpeg
 # *.gif
 # *.svg
-
+*.json
 # Coverage & Testing
 .coverage
 htmlcov/
