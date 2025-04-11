@@ -37,7 +37,7 @@ static/
 # *.jpeg
 # *.gif
 # *.svg
-*.json
+# *.json
 # Coverage & Testing
 .coverage
 htmlcov/
