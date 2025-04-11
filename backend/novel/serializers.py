@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Novel
-from genres.serializers import GenresSerializer  
+from genres.serializers import GenresSerializer
 class NovelSerializer(serializers.ModelSerializer):
     genres = GenresSerializer(many=True, read_only=True)
     class Meta:
