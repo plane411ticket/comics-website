@@ -13,7 +13,7 @@ import Genre from "./screens/Genre/Genre.tsx";
 import Leaderboard from "./screens/Leaderboard/Leaderboard";
 import AdvanceSearch from "./screens/Search/Avsearch";
 import AuthRoutes from "./router/AuthRoutes";
-import NovelData from './screens/Novel/NovelPage'
+import NovelData from './screens/Novel/NovelDetail.tsx'
 import ChapterDetailPage from './screens/Novel/NovelChapterDetail'
 // redux 
 import {store} from './store'

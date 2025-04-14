@@ -10,17 +10,3 @@ export interface Genre {
     _id: string;
     name: string;
   }
-export interface Novel {
-    _id: string;
-    author: string;
-    title: string;
-    status: string;
-    cover_image: string;
-    numChapters: number;
-    numViews: number;
-    numLikes: number;
-    numComments: number;
-    numFavorites: number;
-    updatedAt: string;
-    genres: Genre[];
-  }

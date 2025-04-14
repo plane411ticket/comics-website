@@ -119,6 +119,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
+CACHE_MIDDLEWARE_SECONDS = 60
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",

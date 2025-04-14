@@ -7,3 +7,5 @@ export interface NovelChapter {
     content: string;
     created_at: string;
 }
+
+  

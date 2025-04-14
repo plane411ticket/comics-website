@@ -165,5 +165,8 @@ button:focus {
   background-color: #4d4d4d;
   color: black;
 }
-
+.dark #gernes a{
+  background-color: white;
+  color:black;
+}
 

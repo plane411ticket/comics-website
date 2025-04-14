@@ -21,11 +21,17 @@ const Navbar = () => {
   return (
     <nav className="bg-white text-black font-Nurito" id="navtop">
       {/* Nav Top */}
-      <div className="max-w-screen-lg w-full mx-auto px-4 py-4 flex justify-between items-center">
-        <Logo />
-        <SearchBar />
-        <ThemeSwitcher />
-        
+      <div className="w-full flex items-center justify-between px-4 py-2 space-x-4">
+      <div className="flex-shrink-0">
+      <Logo />
+    </div>
+    <div className="flex-1 flex justify-center">
+      <SearchBar />
+    </div>
+    <div className="flex-shrink-0">
+      <ThemeSwitcher />
+    </div>
+
         {/* Hiển thị UserMenu nếu đã đăng nhập */}
         <div className="hidden lg:flex items-center space-x-4">
           {!userInfo ? (

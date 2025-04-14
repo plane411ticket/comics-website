@@ -6,7 +6,7 @@ class Genre(models.Model):
                            primary_key=True, editable=False)
     name = models.CharField(max_length=255)
     createdAt = models.DateTimeField(auto_now_add=True)
-
+    isCommon = models.BooleanField(default=False)
     def __str__(self):
         return self.name
 class Author(models.Model):

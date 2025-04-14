@@ -1,6 +1,6 @@
 const SearchBar = () => {
   return (
-    <div className="hidden lg:block w-full max-w-md">
+    <div className="hidden lg:block w-full max-w-4xl">
       <input 
         type="text" 
         placeholder="Hôm nay Người đẹp muốn đọc gì..." 

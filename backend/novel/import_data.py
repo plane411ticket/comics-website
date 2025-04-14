@@ -45,18 +45,32 @@ def import_novel(json_file_path):
         genre_instances.append(genre)
 
     novel.genres.set(genre_instances)
+    
     chapters = item.get('chapters', [])
+    novel.numChapters = len(chapters)
+    print(novel.numChapters)
     for idx, chapter in enumerate(chapters):
-        NovelChapter.objects.get_or_create(
+        created = NovelChapter.objects.get_or_create(
             novel=novel,
             chapter_number=idx+1,
             title=chapter['title_chapter'],
             content=chapter['content'],
         )
+        if not created:
+            novel.author = item['author']
+            novel.description = item['description']
+            novel.status = item['status']
+            novel.save()
+    novel.save()
     print("✅ Novel imported successfully!")
 
 if __name__ == '__main__':
     print(f"Using Django settings module: {os.environ.get('DJANGO_SETTINGS_MODULE')}")
-    for i in range(26):
-        json_file_path = os.path.join(project_path, 'novel', 'truyen-save', f'page1_truyen{i+1}.json')
-        import_novel(json_file_path)
+    for i in range(2):
+        for j in range(26):
+            json_file_path = os.path.join(project_path, 'novel', 'truyen-save-2', f'page{i+1}_truyen{j+1}.json')
+            if os.path.isfile(json_file_path): 
+                import_novel(json_file_path)
+            else:
+                print(f'File không tồn tại: {json_file_path}')
+                break

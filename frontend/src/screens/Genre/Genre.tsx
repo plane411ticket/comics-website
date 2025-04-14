@@ -28,11 +28,11 @@ const Genre: React.FC = () => {
     <div className="w-full max-w-screen-lg overflow-hidden relative flex justify-center mx-auto mt-3">
         <div className="h-[50px]"></div>
         <div className="w-full max-w-screen-lg overflow-hidden relative"> 
-            <h2 className="font-bold text-lg">🌟 THỂ LOẠI 🌟</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 mx-auto items-center justify-center">
+            <h2 className="font-bold text-lg flex justify-center">🌟 THỂ LOẠI 🌟</h2>
+            <div  className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 mx-auto items-center justify-center">
                 {genres.length > 0 ? (
                     genres.map((genre) => (
-                    <div  key={genre._id}>
+                    <div  id = "gernes"  key={genre._id}>
                         <button className=" bg-white text-black text-sm w-full  hover:bg-yellow-400">
                                 <a className="text-black hover:text-white" href={`/tim-truyen/${genre.name}`}>{genre.name}</a>
                         </button>
