@@ -15,6 +15,7 @@ import AdvanceSearch from "./screens/Search/Avsearch";
 import AuthRoutes from "./router/AuthRoutes";
 import NovelData from './screens/Novel/NovelDetail.tsx'
 import ChapterDetailPage from './screens/Novel/NovelChapterDetail'
+import NovelChapterDetail from './screens/Novel/NovelChapterDetail.tsx'
 // redux 
 import {store} from './store'
 import { Provider } from "react-redux";
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
       { path: "/avsearch", element: <AdvanceSearch /> },
       { path: "/auth/*", element: <AuthRoutes /> },
       { path: "/novel/:storyId", element: <NovelData />},
+      {path: "/novel/chapter/:chapterId", element: <NovelChapterDetail/>},
       { path: "/chapter/:chapterId", element: <ChapterDetailPage />},
     ],
   },

@@ -11,6 +11,7 @@ export const fetchStoryDetails = async (novelid: string) => {
     try{
       const response = await axios.get(`${baseURL}/api/novel/${novelid}`)
       //const response = await axios.get(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef`)
+      console.log("novel details:");
       console.log(response.data);
       return response.data;
     }
@@ -24,6 +25,7 @@ export const fetchStoryChapters = async (novelid: string) => {
   try {
     //const response = await axios.get(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef/chapters`);
     const response = await axios.get(`${baseURL}/api/novel/${novelid}/chapters`);
+    console.log("list chapters:");
       console.log(response.data);
       return response.data;
   }
@@ -36,8 +38,17 @@ export const fetchStoryChapters = async (novelid: string) => {
 };
 
 export const fetchChapterDetail = async (chapterId: string) => {
-  const response = await axios.get(`/api/novel/chapter/${chapterId}`);
-  return response.data;
+  try {
+    //const response = await axios.get(`${baseURL}/api/novel/chapters/${chapterId}`);
+    const response = await axios.get(`${baseURL}/api/novel/chapter/${chapterId}`);
+    console.log("chapter details:");
+    console.log(response.data);
+    return response.data;
+  }
+  catch (error) {
+    console.error("Error fetching chapter detail:", error);
+    throw error;
+  }
 };
 
 export const updateNumberFavorite  = async (novelid: string) => {
