@@ -45,42 +45,42 @@
         "title": "Virtual Reality War",
         "author": "Yuki Kato",
         "description": "In a future where virtual reality gaming becomes the battlefield, a group of players must fight to survive in deadly war games.",
-        "cover_image": "manga_covers/virtual_reality_war.jpg",
+        "cover_image": "Doraemon1.jpg",
         "genres": ["Sci-Fi", "Action"]
     },
     {
         "title": "Demon Princess",
         "author": "Rika Yamada",
         "description": "A princess from a demon kingdom is betrayed and must fight to reclaim her throne from dark forces.",
-        "cover_image": "manga_covers/demon_princess.jpg",
+        "cover_image": "Doraemon1.jpg",
         "genres": ["Fantasy", "Action"]
     },
     {
         "title": "Space Odyssey",
         "author": "Nobuhiro Takeda",
         "description": "A group of astronauts venture to an unknown planet, facing strange alien lifeforms and discovering ancient technology that could change humanity's future.",
-        "cover_image": "manga_covers/space_odyssey.jpg",
+        "cover_image": "Doraemon1.jpg",
         "genres": ["Sci-Fi", "Adventure"]
     },
     {
         "title": "Dragonborn",
         "author": "Kaito Fujiwara",
         "description": "A young man discovers he's a descendant of an ancient dragon lineage and must protect the world from a great disaster using his newfound powers.",
-        "cover_image": "manga_covers/dragonborn.jpg",
+        "cover_image": "Doraemon1.jpg",
         "genres": ["Fantasy", "Adventure"]
     },
     {
       "title": "The Legendary Hero",
       "author": "John Doe",
       "description": "A young man becomes a legendary hero in a world on the brink of destruction. With exceptional combat skills, he faces various trials to save the world.",
-      "cover_image": "manga_covers/legendary_hero.jpg",
+      "cover_image": "Doraemon1.jpg",
       "genres": ["Action", "Adventure"]
     },
     {
       "title": "Dark Chronicles",
       "author": "Jane Smith",
       "description": "In a world descending into darkness, a group of warriors with special powers must protect humanity from supernatural creatures and uncover hidden secrets.",
-      "cover_image": "manga_covers/dark_chronicles.jpg",
+      "cover_image": "Doraemon1.jpg",
       "genres": ["Fantasy", "Mystery"]
     },
     {

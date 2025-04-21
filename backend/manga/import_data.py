@@ -14,11 +14,10 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
 # Initialize Django
 django.setup()
 
+from django.core.files import File
 from manga.models import Manga
 from genres.models import Genre
 
-
-# Function to import genres from a JSON file
 def import_mangas(json_file_path):
     Manga.objects.all().delete()  # Xóa dữ liệu cũ
 
@@ -26,12 +25,19 @@ def import_mangas(json_file_path):
         data = json.load(f)
 
         for item in data:
-            manga = Manga.objects.create(
-                title=item['title'],
-                author=item['author'],
-                description=item['description'],
-                cover_image=item['cover_image']
-            )
+            # Đường dẫn ảnh thật nằm trong backend/manga/Doraemon1.jpg
+            image_path = os.path.join(project_path, 'manga', 'Doraemon1.jpg')
+            if not os.path.exists(image_path):
+                print(f"❌ Không tìm thấy ảnh {image_path}")
+                continue
+
+            with open(image_path, 'rb') as img_file:
+                manga = Manga.objects.create(
+                    title=item['title'],
+                    author=item['author'],
+                    description=item['description'],
+                    cover_image=File(img_file, name='Doraemon1.jpg')
+                )
 
             for genre_name in item.get('genres', []):
                 genre, _ = Genre.objects.get_or_create(name=genre_name)
@@ -39,15 +45,7 @@ def import_mangas(json_file_path):
 
     print("✅ Manga imported successfully!")
 
-# Main function
-def create_Mangas(apps, schema_editor):
-    # Ensure the environment is correctly set
-    print(f"Using Django settings module: {os.environ.get('DJANGO_SETTINGS_MODULE')}")
-
-    # Optionally delete existing data to avoid conflict
-    Manga = apps.get_model('manga', 'Manga')
-
 if __name__ == '__main__':
     json_file_path = os.path.join(project_path, 'manga', 'UNREAL_data.JSON')
+    print(json_file_path)
     import_mangas(json_file_path)
-    print("✅ Đã lọc và tải truyện lên database.")

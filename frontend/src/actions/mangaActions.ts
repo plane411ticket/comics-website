@@ -9,7 +9,7 @@ const baseURL = 'http://localhost:8000';
 
 export const fetchMangaDetails = async (mangaid: string) => {
     try{
-      const response = await axios.get(`${baseURL}/api/manga/f830dcab-bd35-4394-b006-84d2901f2e88/change/`)
+      const response = await axios.get(`${baseURL}/api/manga/${mangaid}`)
       //const response = await axios.get(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef`)
       console.log("manga details:");
       console.log(response.data);
@@ -43,7 +43,19 @@ export const fetchMangaChapterDetail = async (chapterId: string) => {
     const response = await axios.get(`${baseURL}/api/manga/chapter/${chapterId}`);
     console.log("chapter details:");
     console.log(response.data);
-    return response.data;
+
+    const raw = response.data;
+    const chapter: MangaChapter = {
+      _id: raw._id,
+      manga: raw.manga,
+      title: raw.title,
+      chapter_number: raw.chapter_number,
+      created_at: raw.created_at,
+      images: raw.chapterImages, // Ánh xạ đúng với interface
+      previousChapterId: raw.previousChapterId ?? null,
+      nextChapterId: raw.nextChapterId ?? null,
+    };
+    return chapter;
   }
   catch (error) {
     console.error("Error fetching chapter detail:", error);

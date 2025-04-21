@@ -9,7 +9,7 @@ def chapter_image_upload_path(instance, filename):
     filename = filename.replace(" ", "_")
     return os.path.join("manga_images", str(instance._id), filename)
 
-class MangaChapter(models.Model):
+class MangaChapter(models.Model): 
     _id = models.UUIDField(default=uuid.uuid4,  unique=True,
                            primary_key=True, editable=False)
     manga = models.ForeignKey(Manga, related_name="chapters", on_delete=models.CASCADE)
@@ -26,7 +26,7 @@ class MangaChapterImage(models.Model):
     page = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return f"Image for {self.chapter.title} - Page {self.chapter.page}"
+        return f"Image for {self.chapter.title} - Page {self.page}"
 class NovelChapter(models.Model):
     _id = models.UUIDField(default=uuid.uuid4,  unique=True,
                            primary_key=True, editable=False)

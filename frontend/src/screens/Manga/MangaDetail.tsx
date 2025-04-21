@@ -6,8 +6,9 @@ import {Manga} from '../../types/manga/mangaDetails';
 import {MangaChapter} from '../../types/manga/mangaChapters';
 import { fetchMangaDetails, fetchMangaChapters, updateNumberFavoriteManga} from '../../actions/mangaActions'; 
 import { faEye, faCommentDots, faHeart } from "@fortawesome/free-solid-svg-icons";
+
 const StoryDetailPage = () => {
-  const { storyId } = useParams(); // từ URL /story/:storyId
+  const { mangaId } = useParams(); // từ URL /story/:mangaId
   const [story, setStory] = useState<Manga | null>(null);
   const [chapters, setChapters] = useState<MangaChapter[]>([]);
   const [numFavorites, setNumFavorites] = useState(null);
@@ -17,7 +18,7 @@ const StoryDetailPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const detail = await fetchMangaDetails(String(storyId));
+        const detail = await fetchMangaDetails(String(mangaId));
 
         setStory(detail);
       } catch (error) {
@@ -26,12 +27,12 @@ const StoryDetailPage = () => {
     };
 
     fetchData();
-  }, [storyId]);
+  }, [mangaId]);
 
   useEffect(() => {
     const fetchChapter = async () => {
       try {
-        const chapterList = await fetchMangaChapters(String(storyId));
+        const chapterList = await fetchMangaChapters(String(mangaId));
         setChapters(chapterList);
       } catch (error) {
         console.error("Lỗi khi load chương:", error);
@@ -39,11 +40,11 @@ const StoryDetailPage = () => {
     };
   
     fetchChapter();
-  }, [storyId]);
+  }, [mangaId]);
 
   const handleFavoriteClick = async () => {
     try {
-      const updated = await updateNumberFavoriteManga(String(storyId));
+      const updated = await updateNumberFavoriteManga(String(mangaId));
       if (story) {
         setStory({ ...story, numFavorites: updated.numFavorites });
       }
@@ -53,23 +54,17 @@ const StoryDetailPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '20px' }}>
+    <div className="max-w-screen-lg mx-auto px-4 py-5">
       {story ? (
         <>
           {/* Div 1: Ảnh + Thông tin */}
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+          <div className="flex flex-col md:flex-row gap-5 items-start">
             {/* Ảnh bìa bên trái */}
-            <div style={{ minWidth: '250px' }}>
+            <div className="w-1/2 md:w-[200px] flex-shrink-0 mx-auto md:mx-0">
               <img
                 src={story.cover_image}
                 alt="Ảnh bìa"
-                style={{
-                  width: '180px',
-                  height: 'auto',
-                  objectFit: 'cover',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-                }}
+                className="w-full h-auto object-cover rounded-lg shadow-md"
               />
             </div>
 
@@ -100,14 +95,14 @@ const StoryDetailPage = () => {
               <div className="justify-between mt-2">
                 {firstChapter && (
                   <Link
-                    to={`/novel/chapter/${firstChapter._id}`}
+                    to={`/manga/chapter/${firstChapter._id}`}
                   >
                     <button className="text-white bg-orange-500 hover:bg-yellow-400 px-2 mr-2 py-2 rounded">Đọc từ đầu</button>
                   </Link>
                 )}
                 {lastChapter && (
                   <Link
-                    to={`/novel/chapter/${lastChapter._id}`}
+                    to={`/manga/chapter/${lastChapter._id}`}
                   >
                     <button className="text-white bg-orange-500 hover:bg-yellow-400 ml-2 px-2 py-2 rounded">Đọc mới nhất</button>
                   </Link>
@@ -143,7 +138,7 @@ const StoryDetailPage = () => {
                   <div className="col-span-1" key={chapter._id}>
                     <div className="p-1">
                       <p>
-                        <Link to={`/novel/chapter/${chapter._id}`} className="text-neutral-700 hover:text-orange-500 dark:text-white">
+                        <Link to={`/manga/chapter/${chapter._id}`} className="text-neutral-700 hover:text-orange-500 dark:text-white">
                           Chương {chapter.chapter_number}
                         </Link>
                       </p>

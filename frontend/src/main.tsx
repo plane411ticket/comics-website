@@ -14,8 +14,11 @@ import Leaderboard from "./screens/Leaderboard/Leaderboard";
 import AdvanceSearch from "./screens/Search/Avsearch";
 import AuthRoutes from "./router/AuthRoutes";
 import NovelData from './screens/Novel/NovelDetail.tsx'
+import MangaData from './screens/Manga/MangaDetail.tsx'
 import ChapterDetailPage from './screens/Novel/NovelChapterDetail'
-import NovelChapterDetail from './screens/Novel/NovelChapterDetail.tsx'
+import NovelChapterDetail from './screens/Novel/NovelChapterDetail'
+import MangaChapterDetailPage from './screens/Manga/MangaChapterDetail.tsx'
+import MangaChapterDetail from './screens/Manga/MangaChapterDetail.tsx'
 // redux 
 import {store} from './store'
 import { Provider } from "react-redux";
@@ -38,8 +41,11 @@ const router = createBrowserRouter([
       { path: "/avsearch", element: <AdvanceSearch /> },
       { path: "/auth/*", element: <AuthRoutes /> },
       { path: "/novel/:storyId", element: <NovelData />},
-      {path: "/novel/chapter/:chapterId", element: <NovelChapterDetail/>},
+      { path: "/manga/:mangaId", element: <MangaData />},
+      { path: "/novel/chapter/:chapterId", element: <NovelChapterDetail/>},
       { path: "/chapter/:chapterId", element: <ChapterDetailPage />},
+      { path: "/manga/chapter/:chapterId", element: <MangaChapterDetail/>},
+      { path: "/chapter/:chapterId", element: <MangaChapterDetailPage />},
     ],
   },
 ]);
