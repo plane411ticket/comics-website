@@ -3,7 +3,7 @@ import Navbar from "./screens//Navbar/Navbar.tsx";
 import Footer from "./screens//Footer/Footer.tsx";
 import "./index.css";
 import useAutoLogin from "./actions/userActions.ts";
-
+import ScrollToTop from "./actions/routerAction.ts";
 const App = () => {
   useAutoLogin();
   const location = useLocation();  // Lấy thông tin URL hiện tại
@@ -14,6 +14,7 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {(!hideNavbar && !hideNavbar02 && <Navbar />)}  {/* Navbar luôn hiển thị */}
+      <ScrollToTop /> 
       <Outlet />   {/* Nội dung trang sẽ thay đổi ở đây */}
       {(!hideFooter && !hideFooter01 && <Footer />)}  {/* Navbar luôn hiển thị */}
     </div>

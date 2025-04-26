@@ -72,6 +72,38 @@ const ChapterDetailPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-10">
+      <button
+        onClick={goToPrevious}
+        disabled={!chapter.previousChapterId}
+        className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
+          chapter.previousChapterId
+            ? "bg-orange-500 text-white hover:bg-orange-600"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        }`}
+      >
+        ⬅ Chương trước
+      </button>
+
+        <Link to={`/novel/${chapter.novel}`}>
+        <button className="px-6 py-3 rounded-full font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">
+          📚 Quay lại chi tiết
+        </button>
+        </Link>
+
+        <button
+        onClick={goToNext}
+        disabled={!chapter.nextChapterId}
+        className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
+          chapter.nextChapterId
+            ? "bg-orange-500 text-white hover:bg-orange-600"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        }`}
+      >
+        Chương sau ➡
+      </button>
+      </div>
+      <br/>
       <h1 className="text-7xl sm:text-4xl font-bold text-center text-orange-600 mb-6">
         Chương {chapter.chapter_number}: {chapter.title}
       </h1>
@@ -96,7 +128,7 @@ const ChapterDetailPage = () => {
         ⬅ Chương trước
       </button>
 
-        <Link to={`/novel/${chapter._id}`}>
+        <Link to={`/novel/${chapter.novel}`}>
         <button className="px-6 py-3 rounded-full font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">
           📚 Quay lại chi tiết
         </button>

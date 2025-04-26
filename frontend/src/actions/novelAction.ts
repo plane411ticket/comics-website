@@ -89,7 +89,7 @@ export const fetchAdvancedSearch = async (filters: AdvancedFilter): Promise<Nove
         if (filters.maxChapters) query.set("min_chapters", filters.maxChapters.toString());
         if (filters.author) query.set("author", filters.author);
         if (filters.status) query.set("status", filters.status);
-        const response = await axios.get(`${API_BASE_URL}advanced-search?${query}/`);
+        const response = await axios.get(`${API_BASE_URL}advanced-search?${query}`);
         console.log(response.data);
         return response.data.results;
     } catch (error) {
