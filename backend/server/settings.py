@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     'audio',
     'genres',
     'users',
+    'commentChapter',
 ]
 
 MIDDLEWARE = [
