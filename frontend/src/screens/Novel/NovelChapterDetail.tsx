@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { NovelChapter } from '../../types/novel/novelChapters';
 import { fetchChapterDetail, fetchStoryChapters } from '../../actions/novelAction';
+import CommentSection from './CommentChapter';
 
 const ChapterDetailPage = () => {
   const { chapterId } = useParams();
@@ -146,7 +147,12 @@ const ChapterDetailPage = () => {
         Chương sau ➡
       </button>
       </div>
+      
+        {/* Bình luận chương */}
+          <CommentSection />
     </div>
+
+    
   );
 };
 
