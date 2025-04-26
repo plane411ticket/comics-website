@@ -94,14 +94,14 @@ const StoryDetailPage = () => {
             <div className="justify-between mt-2">
               {firstChapter && (
                 <Link
-                  to={`/manga/chapter/${firstChapter._id}`}
+                  to={`/novel/chapter/${firstChapter._id}`}
                 >
                   <button className="text-white bg-orange-500 hover:bg-yellow-400 px-2 mr-2 py-2 rounded">Đọc từ đầu</button>
                 </Link>
               )}
               {lastChapter && (
                 <Link
-                  to={`/manga/chapter/${lastChapter._id}`}
+                  to={`/novel/chapter/${lastChapter._id}`}
                 >
                   <button className="text-white bg-orange-500 hover:bg-yellow-400 ml-2 px-2 py-2 rounded">Đọc mới nhất</button>
                 </Link>
@@ -137,7 +137,7 @@ const StoryDetailPage = () => {
                 <div className="col-span-1" key={chapter._id}>
                   <div className="p-1">
                     <p>
-                      <Link to={`/manga/chapter/${chapter._id}`} className="text-neutral-700 hover:text-orange-500 dark:text-white">
+                      <Link to={`/novel/chapter/${chapter._id}`} className="text-neutral-700 hover:text-orange-500 dark:text-white">
                         Chương {chapter.chapter_number}
                       </Link>
                     </p>
