@@ -1,7 +1,20 @@
-# Website Setup Guide
+# Manga & Novel & Audio Platform
 ---
 
-## 1. Install Required Software
+## I. Overview
+This project is a full-featured online platform where users can enjoy:
+
+- 📖 Novels (text-based stories)
+
+- 📚 Comics (manga-style graphic stories)
+
+- 🎧 Audio Books (listen to narrated stories)
+
+The system supports different content types seamlessly and offers a smooth reading and listening experience.
+
+Additionally, it features a comprehensive user account system with VIP membership benefits, including premium content access and personalized user experiences.
+## II. How to use?
+### 1. Install Required Software
 
 Before starting, install the following:
 
