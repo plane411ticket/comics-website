@@ -17,6 +17,8 @@ from genres.models import Genre
 
 # Function to import genres from a JSON file
 def import_genres(json_file_path):
+    #Delete to avoid duplicate
+    Genre.objects.all().delete()
     with open(json_file_path, encoding='utf-8') as f:
         data = json.load(f)
         for item in data:
@@ -30,9 +32,8 @@ def create_genres(apps, schema_editor):
 
     # Optionally delete existing data to avoid conflict
     Genre = apps.get_model('genres', 'Genre')
-    
-    # Define the path to your JSON file (could be passed as an argument or configured)
-    json_file_path = os.path.join(project_path,"genres", 'genres.json')  # Assuming the JSON file is in the project root
 
-    # Import genres
+if __name__ == '__main__':
+    json_file_path = os.path.join(project_path, 'genres', 'unique_genres.json')
     import_genres(json_file_path)
+    print("✅ Đã lọc và tải truyện lên database.")

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {Manga} from "../../types/manga/mangaDetail";  // Import API function
+import {Manga} from "../../types/manga/mangaDetails";  // Import API function
 import {fetchManga} from "../../actions/mangaActions";
 
 const Forum = () => {

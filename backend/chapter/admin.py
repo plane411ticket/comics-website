@@ -24,7 +24,7 @@ class MangaChapterAdmin(admin.ModelAdmin):
         for idx, image in enumerate(images):
             MangaChapterImage.objects.create(chapter=obj, image=image, page=idx)
     list_display = ("_id","title", "manga","chapter_number", "created_at")
-    # inlines = [MangaChapterImageInline]  # Hiển thị ảnh trong MangaChapter
+    inlines = [MangaChapterImageInline]  # Hiển thị ảnh trong MangaChapter
     search_fields = ("manga___id", "manga__title","chapter_number","title")
     class Media:
         js = (

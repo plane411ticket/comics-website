@@ -1,33 +1,63 @@
-import { useEffect, useState } from "react";
-import {Manga} from "../../types/manga/mangaDetail";  // Import API function
-import {fetchManga} from "../../actions/mangaActions";
+import {useEffect, useState } from "react";
+import { Manga } from '../../types/manga/mangaDetails'; 
+import {fetchManga} from "../../actions/mangaActions"; 
+import MangaGrid from "../../components/MangaGrid";
 const MangaList = () => {
-    const [mangas, setMangas] = useState<Manga[]>([]);
+  const [mangas, setMangas] = useState<Manga[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    useEffect(() => {
-        const loadMangas = async () => {
-            const data = await fetchManga();
-            setMangas(data);
-        };
+  useEffect(() => {
+    const loadMangas = async () => {
+      setIsLoading(true);
+      const data = await fetchManga(page);
+      setMangas(data);
+      setIsLoading(false);
+    };
+    loadMangas();
+  }, [page]);
 
-        loadMangas();
-    }, []);
+  const handlePrevPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
 
-    return (
-        <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-            <h1 style={{ textAlign: "center", color: "#333" }}>Manga List</h1>
-            <ul style={{ listStyleType: "none", padding: 0 }}>
-                {mangas.map(manga => (
-                    <li key={manga.id} style={{ marginBottom: "20px", borderBottom: "1px solid #ddd", paddingBottom: "10px" }}>
-                        <h2 style={{ color: "#555" }}>{manga.title}</h2>
-                        <p style={{ margin: "5px 0" }}><strong>Author:</strong> {manga.author}</p>
-                        <p style={{ margin: "5px 0" }}>{manga.description}</p>
-                        <img src={manga.cover_image} alt={manga.title} style={{ width: "200px", borderRadius: "10px" }} />
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  const handleNextPage = () => {
+    if(mangas.length!==0)setPage(page + 1);
+  };
+
+  return (
+    <div className="max-w-screen-lg mx-auto px-4 py-6">
+      <h2 className="text-xl font-bold mb-4">📚 Danh sách truyện ({mangas.length})</h2>
+
+      {isLoading ? (
+        <p>Đang tải...</p>
+      ) : (<MangaGrid mangas ={mangas}/>)
+      }
+
+      <div className="flex justify-center items-center gap-6 mt-8">
+        <button
+          onClick={handlePrevPage}
+          disabled={page === 1}
+          className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white shadow-sm text-gray-700 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+        >
+          <span>←</span> Trang trước
+        </button>
+
+        <span className="text-base font-semibold text-gray-700">
+          <span className="text-blue-600">Trang {page}</span>
+        </span>
+
+        <button
+          onClick={handleNextPage}
+          className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white shadow-sm text-gray-700 hover:bg-gray-100 transition"
+        >
+          Trang sau <span>→</span>
+        </button>
+      </div>
+
+    </div>
+  );
 };
 
 export default MangaList;
+
