@@ -4,6 +4,8 @@ export interface user{
     name:string,
     email:string,
     Islogin:false,
+    avatar: string;
+    level: number;
 }
 
 const initialState = {
