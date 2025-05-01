@@ -1,5 +1,5 @@
 // src/pages/ChapterDetailPage.tsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { NovelChapter } from '../../types/novel/novelChapters';
 import { fetchChapterDetail, fetchStoryChapters } from '../../actions/novelAction';
