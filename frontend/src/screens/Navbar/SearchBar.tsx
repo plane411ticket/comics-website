@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import { searchKeyword } from '../../actions/searchActions';
+import {Link} from 'react-router-dom';
 interface SearchBarProps {
   isMobile: boolean;
 }
@@ -38,13 +39,21 @@ const SearchBar:React.FC<SearchBarProps> = ({isMobile}) => {
           type="text" 
           placeholder="Hôm nay Người đẹp muốn đọc gì..." 
           onChange={handleSearchChange}
+          value = {query}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
         />
         {showResults && results.length > 0 ? (
           <ul className="search-results" aria-live="assertive">
             {results.map((item) => (
-              <li key={item.id} className="search-result-item">
+              <li key={item._id} className="search-result-item">
+                <Link to = {`/novel/${item._id}`} 
+                    onClick={()=>{
+                      setQuery('');
+                      setResults([]);
+                      setShowResults(false);
+                    }}>
                 <strong>{item.title}</strong> — {item.author}
+                </Link>
               </li>
             ))}
           </ul>
