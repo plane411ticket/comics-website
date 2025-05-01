@@ -55,7 +55,7 @@ class Comments(models.Model):
                            primary_key=True, editable=False)
     post_id = models.CharField(max_length=255, blank=True)
     # post_id là id của post mà comment này thuộc về có thể là manga hoặc novel, audio gì đó
-    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True) # khóa ngoại
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies') 
     # parent là comment được réply
     # nếu không có thì là null

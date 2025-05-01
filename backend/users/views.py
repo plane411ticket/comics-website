@@ -140,7 +140,7 @@ def getUserProfile(request):
         return Response(info,status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'detail':f'{e}'},status=status.HTTP_204_NO_CONTENT)
-
+# CRUD create, delete v.v 
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Likes.objects.all()
     serializer_class = LikeSerializer

@@ -6,8 +6,9 @@ from .serializers import NovelSerializer
 from .models import Novel
 from rest_framework.response import Response
 from rest_framework import status
-from django.db.models import Count, Q
+from django.db.models import Value, IntegerField, Case, When, Q, Count
 from .models import Novel
+from rest_framework import filters
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def advanced_search(request):
@@ -52,10 +53,22 @@ class NovelViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     def get_queryset(self):
         queryset = super().get_queryset()
-        search = self.request.query_params.get('search')
-        if search:
-            queryset = queryset.filter(title__icontains=search)
-        return queryset
+        q = self.request.query_params.get('q')
+        if not q:
+            return queryset
+        keyword = q.strip().split()
+        query = Q()
+        relevance = Value(0, output_field=IntegerField())
+        for kw in keyword:
+            query |= Q(title__icontains=kw)
+            query |= Q(author__icontains=kw)
+            relevance = relevance + Case(
+                When(title__icontains=kw, then=Value(10)),       # ưu tiên title
+                When(author__icontains=kw, then=Value(5)),
+                default=Value(0),
+                output_field=IntegerField()
+            )
+        return queryset.filter(query).annotate(score=relevance).order_by('-score')
     
 @api_view(['PUT'])
 @permission_classes([AllowAny])
