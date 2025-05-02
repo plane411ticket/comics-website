@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { navbarItems } from "../../components/Navbarapi";
-import { FiSun, FiMoon, FiMenu } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
-import { logout, selectUser } from "../../types/user/userSlice";
-import { logoutUser } from "../../actions/userActions";
-import { AppDispatch } from "../../store";
+import { FiMenu } from "react-icons/fi";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../types/user/userSlice";
 
 // Import các component riêng
 import Logo from "./Logo";
@@ -26,7 +24,7 @@ const Navbar = () => {
       <Logo />
     </div>
     <div className="flex-1 flex justify-center">
-      <SearchBar />
+      <SearchBar isMobile = {false} />
     </div>
     <div className="flex-shrink-0">
       <ThemeSwitcher />
@@ -65,7 +63,7 @@ const Navbar = () => {
             <li key={index} className="h-full flex-1 p-0">
               <Link
                 to={item.path}
-                className="h-full flex items-center text-black justify-center dark:bg-black px-4 py-1 min-w-[90px] hover:text-black hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
+                className="h-full flex items-center text-black justify-center dark:bg-black px-2 py-1 min-w-[100px] hover:text-black hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
               >
                 {item.name}
               </Link>

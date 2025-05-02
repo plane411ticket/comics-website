@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GenreState, AdvancedFilter, STATUS_OPTIONS } from "../../types/search/advanceSearch";
 import { Novel } from '../../types/novel/novelDetails';
 import { Genre } from "../../types/genre/genreDetails";
-import { fetchAdvancedSearch } from "../../actions/novelAction"; // nếu có API thật, bạn gọi từ đây
+import { fetchAdvancedSearch } from "../../actions/searchActions"; // nếu có API thật, bạn gọi từ đây
 import {fetchGenre} from "../../actions/genreAction"; // nếu có API thật, bạn gọi từ đây
 import NovelGrid from "../../components/NovelGrid";
 
@@ -39,7 +39,7 @@ const AdvancedSearch: React.FC = () => {
 
   const applyFilters = async () => {
     try {
-      const novels = await fetchAdvancedSearch(filters);
+      const novels = await fetchAdvancedSearch(filters,"novel");
       setResults(novels);
     } catch (err) {
       console.error("Lỗi khi tìm kiếm nâng cao:", err);
@@ -88,9 +88,6 @@ const AdvancedSearch: React.FC = () => {
           </option>
         ))}
       </select>
-
-
-
       <input
         type="number"
         placeholder="Tối thiểu chương"

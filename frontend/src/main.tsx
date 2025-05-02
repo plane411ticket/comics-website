@@ -8,18 +8,24 @@ import Error from "./screens/Error";
 import UserProfilePage from "./screens/Auth/ProfileScreen";
 import MangaList from "./screens/Manga/MangaList.tsx";
 import NovelList from "./screens/Novel/NovelList.tsx";
+import AudioList from "./screens/Audio/AudioList.tsx";
 import Forum from "./screens/Forum/Forum";
 import Genre from "./screens/Genre/Genre.tsx";
 import Leaderboard from "./screens/Leaderboard/Leaderboard";
-import AdvanceSearch from "./screens/Search/Avsearch";
+import AdvanceSearch from "./screens/Search/AdvanceSearch.tsx";
 import AuthRoutes from "./router/AuthRoutes";
 import NovelData from './screens/Novel/NovelDetail.tsx'
 import MangaData from './screens/Manga/MangaDetail.tsx'
-import ChapterDetailPage from './screens/Novel/NovelChapterDetail'
+import AudioData from './screens/Audio/AudioDetail.tsx'
+import NovelChapterDetailPage from './screens/Novel/NovelChapterDetail'
 import NovelChapterDetail from './screens/Novel/NovelChapterDetail'
 import MangaChapterDetailPage from './screens/Manga/MangaChapterDetail.tsx'
 import MangaChapterDetail from './screens/Manga/MangaChapterDetail.tsx'
+import AudioChapterDetailPage from './screens/Audio/AudioChapterDetail.tsx'
+import AudioChapterDetail from './screens/Audio/AudioChapterDetail.tsx'
+
 // redux 
+
 import {store} from './store'
 import { Provider } from "react-redux";
 const router = createBrowserRouter([
@@ -35,6 +41,7 @@ const router = createBrowserRouter([
       //{ path: "/profiles/:userId", element: <UserProfilePage /> },
       { path: "/manga", element: <MangaList /> },
       { path: "/novel", element: <NovelList /> },
+      { path: "/audio", element: <AudioList /> },
       { path: "/leaderboard", element: <Leaderboard /> },
       { path: "/forum", element: <Forum /> },
       { path: "/genre", element: <Genre /> },
@@ -42,10 +49,13 @@ const router = createBrowserRouter([
       { path: "/auth/*", element: <AuthRoutes /> },
       { path: "/novel/:storyId", element: <NovelData />},
       { path: "/manga/:mangaId", element: <MangaData />},
+      { path: "/audio/:audioId", element: <AudioData />},
       { path: "/novel/chapter/:chapterId", element: <NovelChapterDetail/>},
-      { path: "/chapter/:chapterId", element: <ChapterDetailPage />},
+      { path: "/chapter/:chapterId", element: <NovelChapterDetailPage />},
       { path: "/manga/chapter/:chapterId", element: <MangaChapterDetail/>},
       { path: "/chapter/:chapterId", element: <MangaChapterDetailPage />},
+      { path: "/audio/chapter/:chapterId", element: <AudioChapterDetail/>},
+      { path: "/audio/:chapterId", element: <AudioChapterDetailPage />},
     ],
   },
 ]);

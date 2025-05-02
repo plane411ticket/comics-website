@@ -13,7 +13,7 @@ export const registerUser = async (name: string, email: string, password: string
         }
         const response = await axios.post(
             `${baseURL}/api/register/`, 
-            {name, email, password },
+            {name, email, password }, // gửi thông tin user về backend
             config
         );
 

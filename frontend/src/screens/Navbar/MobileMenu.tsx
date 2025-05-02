@@ -5,7 +5,7 @@ import {selectUser } from "../../types/user/userSlice";
 import { logout } from "../../types/user/userSlice";
 import { logoutUser } from "../../actions/userActions";
 import { useDispatch } from "react-redux";
-
+import SearchBar from "./SearchBar";
 interface MobileMenuProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -20,13 +20,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ setIsOpen }) => {
     return (
     <div className="lg:hidden fixed inset-0 overflow-y-auto w-full dark:bg-gray-800 z-50 shadow-md text-sm text-left pl-2 mt-12"
               style={{marginTop: "clamp(6rem, 4vh, 3rem)"}}>
-        <div className="flex w-full items-center px-2 sm:px-3 py-2 sm:py-3 text-left relative">
+        <SearchBar isMobile = {true} />
+        {/* <div className="flex w-full items-center px-2 sm:px-3 py-2 sm:py-3 text-left relative">
             <input 
               type="text" 
               placeholder="Hôm nay Người đẹp muốn đọc gì..." 
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none bg-white dark:bg-gray-900 text-black dark:text-white"
             />
-        </div>
+        </div> */}
         <div className="rounded-sm bg-white text-black  dark:bg-gray-600">
             <ul className="flex flex-col text-left border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-black dark:text-white rounded-lg">
                 {navbarItems.map((item, index) => (

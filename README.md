@@ -1,12 +1,15 @@
-# Manga & Novel & Audio Platform
----
+<h1 align="center">CNA Platform</h1>
+
+<p align="center">
+  A full-featured website for Comics, Novels and Audio.
+</p>
 
 ## I. Overview
 This project is a full-featured online platform where users can enjoy:
 
-- 📖 Novels (text-based stories)
-
 - 📚 Comics (manga-style graphic stories)
+  
+- 📖 Novels (text-based stories)
 
 - 🎧 Audio Books (listen to narrated stories)
 
