@@ -12,7 +12,7 @@ import AudioList from "./screens/Audio/AudioList.tsx";
 import Forum from "./screens/Forum/Forum";
 import Genre from "./screens/Genre/Genre.tsx";
 import Leaderboard from "./screens/Leaderboard/Leaderboard";
-import AdvanceSearch from "./screens/Search/Avsearch";
+import AdvanceSearch from "./screens/Search/AdvanceSearch.tsx";
 import AuthRoutes from "./router/AuthRoutes";
 import NovelData from './screens/Novel/NovelDetail.tsx'
 import MangaData from './screens/Manga/MangaDetail.tsx'
