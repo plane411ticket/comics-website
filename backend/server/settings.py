@@ -104,6 +104,7 @@ INSTALLED_APPS = [
     'genres',
     'users',
     'commentChapter',
+    'forum',
 ]
 
 MIDDLEWARE = [
