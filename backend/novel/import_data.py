@@ -24,6 +24,13 @@ def download_image_to_file(url):
     except Exception as e:
         print(f"❌ Failed to download image from {url}: {e}")
         return None, None
+    
+def delete_all_novels():
+    try:
+        Novel.objects.all().delete()
+        print("✅ All novels deleted successfully!")
+    except Exception as e:
+        print(f"❌ Failed to delete novels: {e}")
 
 def import_novel(json_file_path):
     with open(json_file_path, encoding='utf-8') as f:
@@ -66,6 +73,7 @@ def import_novel(json_file_path):
 
 if __name__ == '__main__':
     print(f"Using Django settings module: {os.environ.get('DJANGO_SETTINGS_MODULE')}")
+    delete_all_novels()
     for i in range(2):
         for j in range(26):
             json_file_path = os.path.join(project_path, 'novel', 'truyen-save-2', f'page{i+1}_truyen{j+1}.json')
