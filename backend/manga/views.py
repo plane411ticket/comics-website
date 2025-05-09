@@ -2,7 +2,7 @@ from .models import Manga
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.http import HttpResponse
-from django.db.models import Value, IntegerField, Case, When, Q
+from django.db.models import Value, IntegerField, Case, When, Q, Count
 from .serializers import MangaSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes

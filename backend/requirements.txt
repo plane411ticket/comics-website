@@ -11,6 +11,5 @@ pytz
 sqlparse
 psycopg2-binary
 python-dotenv
-framer-motion
-react-intersection-observer
 request
+gTTS
