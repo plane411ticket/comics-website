@@ -5,6 +5,7 @@ import { NovelChapter } from '../../types/novel/novelChapters';
 import { fetchChapterDetail, fetchStoryChapters } from '../../actions/novelAction';
 import CommentSection from './CommentChapter';
 import AudioPlay from '../../components/AudioPlay';
+import { slugifyVietnamese } from '../../actions/audioAction';
 const ChapterDetailPage = () => {
   const { chapterId } = useParams();
   const navigate = useNavigate();
@@ -68,11 +69,18 @@ const ChapterDetailPage = () => {
       navigate(`/novel/chapter/${chapter.nextChapterId}`);
     }
   };
-
   if (!chapter) return <p>Đang tải chương...</p>;
 
   return (
+    
     <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
+      <div id="audio">
+        <AudioPlay audioContent={chapter.content} 
+              audioTitle={slugifyVietnamese(chapter._id+"-"+chapter.title)+".mp3"}
+              nextAudio={chapter.nextChapterId} 
+              preAudio={chapter.previousChapterId}/>
+      </div>
+
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-10">
       <button
         onClick={goToPrevious}
@@ -147,11 +155,6 @@ const ChapterDetailPage = () => {
         Chương sau ➡
       </button>
       </div>
-
-      <div id="audio">
-        <AudioPlay audioContent={chapter.content} audioTitle={chapter.title}/>
-      </div>
-
       
         {/* Bình luận chương */}
         <CommentSection postId={chapter.novel._id} type="novel" />

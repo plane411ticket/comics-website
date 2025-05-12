@@ -7,6 +7,8 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('audio.urls')),
+    
     path('api/', include('manga.urls')),  # API starts with /api/
     path('api/', include('genres.urls')),  # API starts with /api/
     path('api/', include('users.urls')),

@@ -15,3 +15,5 @@ framer-motion
 react-intersection-observer
 request
 docker-compose
+request
+gTTS
