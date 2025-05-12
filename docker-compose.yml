@@ -2,44 +2,27 @@ version: '3.8'
 
 services:
   backend:
-    build: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./backend:/app
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
-    env_file:
-      - .env
-    depends_on:
-      - db
-
-  frontend:
-    build: ./frontend
-    command: npm start
     volumes:
-      - ./frontend:/app
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
-    depends_on:
-      - backend
-
-  db:
-    image: mysql:5.7
-    volumes:
-      - ./database/mysql_data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: BiggestGroup
-      MYSQL_DATABASE: website_comics_storage
-      MYSQL_PASSWORD: BiggestGroup
-
-  nginx:
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./backend:/app
+      - ./backend/db.sqlite3:/app/db.sqlite3  # Mount file SQLite từ host
     depends_on:
       - frontend
-      - backend
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+    stdin_open: true
+    tty: true
+
+  
+

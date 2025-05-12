@@ -9,6 +9,13 @@ from rest_framework import status
 from django.db.models import Value, IntegerField, Case, When, Q, Count
 from .models import Novel
 from rest_framework import filters
+
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def advanced_search(request):
@@ -83,3 +90,28 @@ def updateNumFavorite(request, pk):
     except Exception as e:
         print(f"[ERROR updateNumFavorite]: {e}")
         return Response({'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def updateNumComments(request, pk):
+    try:
+        # Lấy truyện theo ID
+        novel = Novel.objects.get(_id=pk)
+        
+        # Tăng số lượng bình luận
+        novel.numComments = novel.numComments + 1
+        novel.save()
+        
+        # Serialize và trả về dữ liệu
+        serialize = NovelSerializer(novel, many=False, context={'request': request})
+        return Response(serialize.data, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        print(f"[ERROR updateNumComments]: {e}")
+        return Response({'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+
+
+
+

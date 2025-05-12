@@ -25,6 +25,8 @@ from manga.models import *
     # def token(self):
     #     return ''
 # Create your models here.
+
+
 class Favorite(models.Model):
     FAVORITE_TYPE = [
         ('novel', 'Tiểu thuyết'),
@@ -44,6 +46,8 @@ class Favorite(models.Model):
     ) # tăng tốc độ truy xuất 
     def __str__(self):
         return str(self.user)
+
+
 class Comments(models.Model):
     COMMENT_PLACES = [
         ('novel', 'Tiểu thuyết'),
@@ -70,6 +74,8 @@ class Comments(models.Model):
         return f"{self.user} - Content {self.content} - {self.user.username}"
     def get_replies(self):
         return self.replies.all()
+
+        
 class Likes(models.Model):
     LIKE_PLACES = [
         ('novel', 'Tiểu thuyết'),

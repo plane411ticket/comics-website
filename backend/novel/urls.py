@@ -5,6 +5,7 @@ router = DefaultRouter()
 router.register(r'novel', NovelViewSet)  # /api/manga/
 novel_custom_urls = [
     path('<str:pk>/updateNumFavorite/', updateNumFavorite, name='updateNumFavorite'),
+    path('<str:pk>/updateNumComments/', updateNumComments, name='updateNumComments'),
 ]
 
 urlpatterns = [

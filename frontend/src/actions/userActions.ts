@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { login } from '../types/user/userSlice';
-
+import { CommentPayload } from '../types/user/User';
 const baseURL = 'http://localhost:8000'
     
 export const registerUser = async (name: string, email: string, password: string) => {
@@ -76,7 +76,7 @@ export const fetchProfile = async () => {
     }
 };
 
-const useAutoLogin = () => {
+export const useAutoLogin = () => {
     const dispatch = useDispatch();
     console.log("AutoLogin chạy!");
     console.log(`${baseURL}/api/refresh/`);
@@ -98,4 +98,20 @@ const useAutoLogin = () => {
     }, [dispatch]);
 };
 
-export default useAutoLogin;
+export const useComment = async (payload: CommentPayload): Promise<void> => {
+  try{
+    const config = {
+      headers: {'Content-Type': 'Application/json'},
+      withCredentials:true,
+    };
+    const response = await axios.post(
+      `${baseURL}/api/comment/`,
+        payload,
+        config
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error sending comment:", error);
+    throw error;
+  }
+}

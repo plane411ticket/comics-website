@@ -154,7 +154,8 @@ const ChapterDetailPage = () => {
 
       
         {/* Bình luận chương */}
-          <CommentSection />
+        <CommentSection postId={chapter.novel._id} type="chapter" />
+        {/* <CommentSection/> */}
     </div>
     
   );
