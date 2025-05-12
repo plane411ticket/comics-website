@@ -12,6 +12,7 @@ from rest_framework import status
 from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import HttpResponse
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):   
     def validate(self,attrs):
@@ -141,6 +142,8 @@ def getUserProfile(request):
     except Exception as e:
         return Response({'detail':f'{e}'},status=status.HTTP_204_NO_CONTENT)
 # CRUD create, delete v.v 
+
+
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Likes.objects.all()
     serializer_class = LikeSerializer
@@ -173,6 +176,8 @@ class LikeViewSet(viewsets.ModelViewSet):
         novel.save(update_fields=['numLikes'])  # Lưu lại sự thay đổi
         # Xóa đối tượng Like
         instance.delete()
+
+
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comments.objects.all()
     serializer_class = CommentsSerializer
@@ -181,6 +186,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         user = self.request.user
         # Lọc các bình luận của người dùng hiện tại
         return Comments.objects.filter(user=user)
+    
     def perform_create(self, serializer):
         if serializer.is_valid():
             serializer.save(user=self.request.user)
@@ -194,13 +200,14 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         # Truy cập đối tượng Novel liên quan đến Comments
         novel = instance.novel
-        
         # Giảm số lượt thích cho Novel
         novel.numComments -= 1  # Giảm bớt 1 lượt thích
         novel.save(update_fields=['numComments'])  # Lưu lại sự thay đổi
         
         # Xóa đối tượng Comment
         instance.delete()
+
+
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer

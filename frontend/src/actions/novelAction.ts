@@ -57,6 +57,21 @@ export const updateNumberFavorite  = async (novelid: string) => {
     throw error;
   }
 }
+
+export const updateNumberComments = async (novelid: string) => {
+  try {
+      const response = await axios.put(`${baseURL}/api/novel/${novelid}/updateNumComments/`);
+      console.log(response.data);
+      return response.data;
+  } 
+  
+  catch (error) {
+      console.error("Error updating number of comments:", error);
+      throw error;
+  }
+}
+
+
 export const fetchNovel = async (page=1): Promise<Novel[]> => {
     try {
             const response = await axios.get(`${baseURL}/api/novel/?page=${page}`);
