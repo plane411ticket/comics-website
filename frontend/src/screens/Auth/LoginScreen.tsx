@@ -11,7 +11,7 @@ export default function LoginScreen() {
     const userRef = useRef<HTMLInputElement | null>(null);
     const errRef = useRef<HTMLInputElement | null>(null);
     
-    const [user, setUser] = useState('');
+    // const [user, setUser] = useState('');
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');

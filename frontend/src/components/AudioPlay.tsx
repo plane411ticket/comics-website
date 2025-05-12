@@ -2,7 +2,7 @@ import {useEffect, useState, useRef} from 'react';
 import { faForwardFast ,faBackwardFast} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { audioText } from '../actions/audioAction';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 //Interface 
 const baseURL = 'http://localhost:8000'
 interface AudioPlayProps {
@@ -12,11 +12,11 @@ interface AudioPlayProps {
     preAudio?: string|null;
 }
 
-const AudioPlay = ({audioContent, audioTitle,nextAudio,preAudio}:AudioPlayProps) => {
+const AudioPlay = ({audioContent, audioTitle}:AudioPlayProps) => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [audioUrl, setAudioUrl] = useState<string>('');
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     /* Tải hoặc tạo audio chỉ định */
     useEffect(()=>{
         const url = `${baseURL}/api/audio/tts/${audioTitle}/`;

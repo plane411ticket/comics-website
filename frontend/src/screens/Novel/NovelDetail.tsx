@@ -10,7 +10,7 @@ const StoryDetailPage = () => {
   const { storyId } = useParams(); // từ URL /story/:storyId
   const [story, setStory] = useState<Novel | null>(null);
   const [chapters, setChapters] = useState<NovelChapter[]>([]);
-  const [numFavorites, setNumFavorites] = useState(null);
+  // const [numFavorites, setNumFavorites] = useState(null);
   const firstChapter = chapters[0];
   const lastChapter = chapters[chapters.length - 1];
 

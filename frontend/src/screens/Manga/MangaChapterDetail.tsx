@@ -1,7 +1,7 @@
 // src/pages/ChapterDetailPage.tsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { MangaChapter, MangaChapterImage } from '../../types/manga/mangaChapters';
+import { MangaChapter} from '../../types/manga/mangaChapters';
 import { fetchMangaChapterDetail, fetchMangaChapters } from '../../actions/mangaActions';
 
 const ChapterMangaDetailPage = () => {

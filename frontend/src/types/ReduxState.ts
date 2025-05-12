@@ -1,7 +1,7 @@
-import {
-    UserRegisterState
-} from './user/UserRegister'
+// import {
+//     UserRegisterState
+// } from '../user/UserRegister'
 
-export interface ReduxState {
-	userRegister: UserRegisterState
-}
+// export interface ReduxState {
+// 	userRegister: UserRegisterState
+// }

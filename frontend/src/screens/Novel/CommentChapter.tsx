@@ -2,12 +2,12 @@
 // Bản mởi nhất comments
 
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { selectUser } from "../../types/user/userSlice";
-import { useComment } from "../../actions/userActions";
+// import { useComment } from "../../actions/userActions";
 type Comment = {
   id: string;
   user: {
@@ -76,11 +76,11 @@ export default function CommentSection({ postId, type }: CommentSectionProps) {
     if (newComment.trim() === "") return;
 
     try {
-      const response = await useComment({
-        content: newComment.trim(),
-        post_id: postId,
-        type,
-      });
+      // const response = await useComment({
+      //   content: newComment.trim(),
+      //   post_id: postId,
+      //   type,
+      // });
 
       setNewComment("");
       fetchComments(); // Tải lại danh sách bình luận

@@ -122,9 +122,9 @@ const HomePage = () => {
         </div>
 
         {/* Phần phải: Mockups */}
-        <div className="relative flex flex col items-center justify-center w-full max-w-[690px] md:mt-0 ml-auto">
+        <div className="relative flex col items-center justify-center w-full max-w-[690px] md:mt-0 ml-auto">
             {/* iPad Mockup */}
-            <div className="relative w-full max-w-[690px] aspect-[4/3] rounded-3xl border-6 border-gray-800 shadow-xl overflow-hidden mt-9 flex items-center flex justify-end">
+            <div className="relative w-full max-w-[690px] aspect-[4/3] rounded-3xl border-6 border-gray-800 shadow-xl overflow-hidden mt-9 items-center flex justify-end">
               <div className="top-0 left-0 right-0 h-6 rounded-t-2xl"></div>
               <div
                 className="w-full h-full bg-cover bg-center"

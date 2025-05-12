@@ -11,7 +11,7 @@ const StoryDetailPage = () => {
   const { mangaId } = useParams(); // từ URL /story/:mangaId
   const [story, setStory] = useState<Manga | null>(null);
   const [chapters, setChapters] = useState<MangaChapter[]>([]);
-  const [numFavorites, setNumFavorites] = useState(null);
+  // const [numFavorites, setNumFavorites] = useState(null);
   const firstChapter = chapters[0];
   const lastChapter = chapters[chapters.length - 1];
 
