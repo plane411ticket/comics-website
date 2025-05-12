@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { Dispatch } from 'redux';
+//import { Dispatch } from 'redux';
 import { Manga } from '../types/manga/mangaDetails'; 
 import { MangaChapter } from '../types/manga/mangaChapters'; 
-import { GenreState, AdvancedFilter } from "../types/search/advanceSearch";
+import { AdvancedFilter } from "../types/search/advanceSearch";
 const baseURL = 'http://localhost:8000';
 
 // string id = "baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef";

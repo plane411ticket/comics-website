@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Dispatch } from 'redux';
+//import { Dispatch } from 'redux';
 import { Novel } from '../types/novel/novelDetails';
 const baseURL = 'http://localhost:8000';
 
