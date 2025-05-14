@@ -53,7 +53,11 @@ const AudioPlay = ({audioContent, audioTitle}:AudioPlayProps) => {
     //     audio.removeEventListener("pause", handlePause);
     //     };
     // }, []);
-
+    useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.load();  // Tải lại audio mỗi khi audioUrl thay đổi
+    }
+  }, [audioUrl]);
     const rewind = () =>
     {
         const audio = audioRef.current;
@@ -104,7 +108,6 @@ const AudioPlay = ({audioContent, audioTitle}:AudioPlayProps) => {
                 {/* Audio */} 
                 </div>
                 <div className="w-full flex items-center justify-between px-4 py-2 space-x-4">
-                    
                     <audio controls src={audioUrl} ref={audioRef} className="w-full">
                    </audio>
                 </div>

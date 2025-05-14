@@ -1,24 +1,32 @@
-# Sử dụng Python 3.9 làm base image
-FROM python:3.9
+# Use a lightweight Python base image
+FROM python:3.12
 
-# Đặt thư mục làm việc
+# Set working directory
 WORKDIR /app
 
-# Cài đặt các công cụ cần thiết
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    && apt-get clean
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Copy file requirements.txt và cài đặt thư viện
+# Install system dependencies for mysqlclient, psycopg2-binary, and Pillow
+RUN apt-get install -y \
+    default-libmysqlclient-dev \
+    pkg-config \
+    libpq-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    libpng-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --timeout=100 -r requirements.txt
 
-# Copy toàn bộ mã nguồn vào container
+# Copy project files
 COPY . .
-
-# Expose cổng 8000 để truy cập server Django
 EXPOSE 8000
+# Command to run the app (adjust as necessary)
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+CMD ["/app/entrypoint.sh"]
 
-# Chạy server Django
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
