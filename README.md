@@ -1,5 +1,9 @@
 <h1 align="center">CNA Platform</h1>
-
+<h2 align="center">
+  
+![Version](https://img.shields.io/badge/version-1.0.0-blue) 
+![Status](https://img.shields.io/badge/status-in%20development-yellow)
+</h2>
 <p align="center">
   A full-featured website for Comics, Novels and Audio.
 </p>
