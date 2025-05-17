@@ -5,6 +5,7 @@ export interface Manga {
     author: string;
     description: string;
     cover_image: string;
+    blurDataURL?: string;
     created_at: string;
     updated_at: string;
     genres: Genre[];

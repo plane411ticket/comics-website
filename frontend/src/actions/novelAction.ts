@@ -74,10 +74,10 @@ export const updateNumberComments = async (novelid: string) => {
 
 export const fetchNovel = async (page=1): Promise<Novel[]> => {
     try {
-            const response = await axios.get(`${baseURL}/api/novel/?page=${page}`);
+            const response = await fetch(`${baseURL}/api/novel/?page=${page}`);
             console.log(response)
             console.log(`${baseURL}/api/novel/?page=${page}`)
-            const data = await response.data
+            const data = await response.json();
             return Array.isArray(data.results) ? data.results : [];
         } catch (error) {
             console.error("Failed to fetch novel:", error);

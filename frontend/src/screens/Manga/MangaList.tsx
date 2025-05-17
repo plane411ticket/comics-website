@@ -1,28 +1,50 @@
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Manga } from '../../types/manga/mangaDetails'; 
-import {fetchManga} from "../../actions/mangaActions"; 
+import { fetchManga } from "../../actions/mangaActions"; 
 import MangaGrid from "../../components/MangaGrid";
+
 const MangaList = () => {
-  const [mangas, setMangas] = useState<Manga[]>([]);
+  // cache dữ liệu manga theo page
+  const [mangasCache, setMangasCache] = useState<Record<number, Manga[]>>({});
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // tải dữ liệu khi page thay đổi nếu chưa có trong cache
   useEffect(() => {
+    let mounted = true;
     const loadMangas = async () => {
+      if (mangasCache[page]) {
+        // đã có cache, không fetch nữa
+        return;
+      }
       setIsLoading(true);
-      const data = await fetchManga(page);
-      setMangas(data);
+      try {
+        const data = await fetchManga(page);
+        setMangasCache(prev => ({ ...prev, [page]: data }));
+      } catch (error) {
+        console.error("Lỗi tải truyện:", error);
+      }
       setIsLoading(false);
     };
+
     loadMangas();
+    return () => {
+      mounted = false;
+    };
   }, [page]);
 
+  
+
+  // Lấy dữ liệu để hiển thị của trang hiện tại từ cache
+  const mangas = mangasCache[page] || [];
+
+  // các hàm chuyển trang
   const handlePrevPage = () => {
     if (page > 1) setPage(page - 1);
   };
 
   const handleNextPage = () => {
-    if(mangas.length!==0)setPage(page + 1);
+    if (mangas.length <= 0) setPage(page + 1);
   };
 
   return (
@@ -31,8 +53,9 @@ const MangaList = () => {
 
       {isLoading ? (
         <p>Đang tải...</p>
-      ) : (<MangaGrid mangas ={mangas}/>)
-      }
+      ) : (
+        <MangaGrid mangas={mangas} />
+      )}
 
       <div className="flex justify-center items-center gap-6 mt-8">
         <button
@@ -54,10 +77,8 @@ const MangaList = () => {
           Trang sau <span>→</span>
         </button>
       </div>
-
     </div>
   );
 };
 
 export default MangaList;
-

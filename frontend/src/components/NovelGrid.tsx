@@ -10,17 +10,21 @@ const NovelGrid = ({ novels }: { novels: Novel[] }) => {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      {novels.map((novel) => (
+      {novels.map((novel, index) => (
         <div
           key={novel._id}
           className="bg-white shadow-md p-3 rounded-lg flex flex-col justify-between min-h-[360px]"
         >
           <Link to={`/novel/${novel._id}`} className="flex flex-col h-full">
-            <div className="w-full aspect-[5/7] overflow-hidden rounded">
+            <div className="w-full overflow-hidden rounded"
+              style={{ aspectRatio: "5 / 7" }}>
               <img
                 src={novel.cover_image}
                 alt={novel.title}
                 className="w-full h-full object-cover rounded"
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : "auto"}
+                style={{ width: 170, height: 230 }}
               />
             </div>
             <div className="flex-1 flex flex-col justify-between mt-2">
