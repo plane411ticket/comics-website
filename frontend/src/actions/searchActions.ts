@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AdvancedFilter } from "../types/search/advanceSearch";
 import { Novel } from '../types/novel/novelDetails';
-const baseURL = 'http://localhost:8000';
+const baseURL = import.meta.env.VITE_BASE_URL;
 export const searchKeyword = async(query:string,type:string) =>{
     try
     {

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Genre } from "../types/genre/genreDetails";
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const fetchGenre = async (): Promise<Genre[]> => {
     try {
