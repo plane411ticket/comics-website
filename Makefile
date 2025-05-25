@@ -4,13 +4,16 @@ COMPOSE=docker-compose
 DC_FILE=docker-compose.yml
 
 up:
-	$(COMPOSE) -f $(DC_FILE) up
-
+	docker-compose up --build
 down:
-	$(COMPOSE) -f $(DC_FILE) down
-
+	docker compose down
+build:
+	docker compose down || true
+	docker compose up --build
+rebuild:
+	docker-compose down -v || true
+	docker-compose up --build
 restart: down up
-
 logs:
 	$(COMPOSE) -f $(DC_FILE) logs -f
 
