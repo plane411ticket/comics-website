@@ -2,8 +2,7 @@ from django.db import models
 import uuid
 from genres.models import Genre
 from django.contrib.auth.models import User
-from django.core.files.storage import default_storage
-from django.utils.html import mark_safe
+from django.conf import settings
 import os
 class Manga(models.Model):
     _id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
@@ -14,6 +13,10 @@ class Manga(models.Model):
         ('unverified', 'Chưa xác minh'),
     ]
     
+    uploader = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                 on_delete=models.CASCADE,
+                                 null=False,
+                                 default=1)
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     description = models.TextField()

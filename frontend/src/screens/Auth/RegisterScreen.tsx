@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import bglogin from "@/assets/backlogin.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { registerUser } from "../../actions/userActions";
+import { registerUser } from "../../actions/userAction";
 import LogoWeb from "@/assets/logo.png";
 import { login } from "../../types/user/userSlice";
 import { useDispatch } from "react-redux";

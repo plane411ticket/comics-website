@@ -2,7 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./screens//Navbar/Navbar.tsx";
 import Footer from "./screens//Footer/Footer.tsx";
 import "./index.css";
-import {useAutoLogin} from "./actions/userActions.ts";
+import {useAutoLogin} from "./actions/userAction.ts";
 import ScrollToTop from "./actions/routerAction.ts";
 const App = () => {
   useAutoLogin();

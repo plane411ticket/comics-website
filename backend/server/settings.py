@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "users.authentication.CookieJWTAuthentication",
         
     ),
     "DEFAULT_PERMISSION_CLASSES": [
@@ -103,7 +103,6 @@ INSTALLED_APPS = [
     'audio',
     'genres',
     'users',
-    'commentChapter',
     'forum',
 ]
 
@@ -230,5 +229,6 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5174",  # Thay bằng URL frontend của bạn
+    "http://localhost:5174",
 ]
+AUTH_USER_MODEL = 'users.CustomUser'

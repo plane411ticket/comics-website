@@ -3,7 +3,7 @@ import { navbarItems } from "../../components/Navbarapi";
 import {useSelector } from "react-redux";
 import {selectUser } from "../../types/user/userSlice";
 import { logout } from "../../types/user/userSlice";
-import { logoutUser } from "../../actions/userActions";
+import { logoutUser } from "../../actions/userAction";
 import { useDispatch } from "react-redux";
 import SearchBar from "./SearchBar";
 interface MobileMenuProps {

@@ -7,13 +7,14 @@ services:
       dockerfile: Dockerfile
     container_name: django-backend-web
     ports:
-      - "8080:8080"
+      - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ./backend/app:/app/app          # chỉ code app
+      - ./backend/media:/app/media      # cho media
       - ./frontend/dist:/app/frontend/dist
     env_file:
       - .env
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
   frontend:
     build:

@@ -1,7 +1,7 @@
 import Sky from "@/assets/sky.jpg"
 import {useState} from "react"
 import { logout} from "../../types/user/userSlice";
-import { logoutUser } from "../../actions/userActions";
+import { logoutUser } from "../../actions/userAction";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store";
 

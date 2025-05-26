@@ -12,4 +12,11 @@ export interface CommentPayload {
     type: 'novel' | 'manga' | 'audio' | 'forum';
     parent?: string | null;
   }
-  
+export interface LikeProp{
+    post_id: string;
+    type: 'novel' | 'manga' | 'audio' | 'forum';
+}
+export interface FavoriteProp{
+    post_id: string;
+    type: 'novel' | 'manga' | 'audio' | 'forum';
+}
