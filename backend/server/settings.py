@@ -261,6 +261,10 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "https://comics-website-frontend.onrender.com",
+    "https://comics-website-backend.onrender.com/",
+
 ]
 
 print("STATICFILES_DIRS:", STATICFILES_DIRS)
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
