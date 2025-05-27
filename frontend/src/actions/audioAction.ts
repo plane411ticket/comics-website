@@ -1,5 +1,6 @@
 import axios from 'axios';
 const baseURL = import.meta.env.VITE_BASE_URL;
+console.log("Base URL:", baseURL);
 export const audioText = async (text: string, nameFile: string) => {
     try {
           const config = {
