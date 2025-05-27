@@ -180,8 +180,8 @@ WSGI_APPLICATION = 'server.wsgi.application'
 env = environ.Env()
 environ.Env.read_env() 
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # backend/server -> backend
-env.read_env(os.path.join(BASE_DIR, '.env'))
+DIRECTORY = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # backend/server -> backend
+env.read_env(os.path.join(DIRECTORY, '.env'))
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -224,15 +224,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 BASE_DIR = Path(__file__).resolve().parent.parent
+# print("BASE_DIR:", BASE_DIR)
+# print("STATICFILES_DIRS before:", STATICFILES_DIRS if 'STATICFILES_DIRS' in globals() else 'Not set')
 STATIC_URL = '/static/' 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 #print(STATIC_ROOT)
 # Additional static files (For frontend build)
 STATICFILES_DIRS = [
-    BASE_DIR.parent / "frontend" / "dist",  # nơi chứa static frontend nếu có
+    str(BASE_DIR.parent / "frontend" / "dist"),  # nơi chứa static frontend nếu có
 ]
-
+# print("STATICFILES_DIRS after:", STATICFILES_DIRS)
 
 # Media files (Uploaded images, documents, etc.)
 MEDIA_URL = 'media/'
@@ -260,3 +262,5 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://comics-website-frontend.onrender.com",
 ]
+
+print("STATICFILES_DIRS:", STATICFILES_DIRS)
