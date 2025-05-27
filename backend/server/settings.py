@@ -224,13 +224,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 BASE_DIR = Path(__file__).resolve().parent.parent
-STATIC_URL = 'staticfiles/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/' 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 #print(STATIC_ROOT)
 # Additional static files (For frontend build)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staticfiles'),
-    os.path.join(BASE_DIR.parent, "frontend", "dist"),
+    os.path.join(BASE_DIR.parent, "frontend", "dist"),  # nơi chứa static frontend nếu có
 ]
 # Media files (Uploaded images, documents, etc.)
 MEDIA_URL = 'media/'
