@@ -226,6 +226,7 @@ USE_TZ = True
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = '/static/' 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 #print(STATIC_ROOT)
 # Additional static files (For frontend build)
 STATICFILES_DIRS = [
@@ -241,11 +242,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_CREDENTIALS = True 
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^http://localhost:\d+$",
-    r"^http://127\.0\.0\.1:\d+$",
-]
-
 CORS_ALLOW_HEADERS = [
     "accept",
     "authorization",
@@ -255,7 +251,10 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with",
 ]
 
-CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5174",  # Thay bằng URL frontend của bạn
+    "https://comics-website-frontend.onrender.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://comics-website-frontend.onrender.com",
 ]
