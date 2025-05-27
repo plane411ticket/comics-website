@@ -234,7 +234,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     str(BASE_DIR.parent / "frontend" / "dist"),  # nơi chứa static frontend nếu có
 ]
-# print("STATICFILES_DIRS after:", STATICFILES_DIRS)
+print("STATICFILES_DIRS after:", STATICFILES_DIRS)
 
 # Media files (Uploaded images, documents, etc.)
 MEDIA_URL = 'media/'
@@ -261,9 +261,9 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "https://comics-website-frontend.onrender.com",
-    "https://comics-website-backend.onrender.com/",
-
+    "https://comics-website-backend.onrender.com",  
 ]
+
 
 print("STATICFILES_DIRS:", STATICFILES_DIRS)
 CSRF_COOKIE_SECURE = True
