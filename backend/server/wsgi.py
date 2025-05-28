@@ -15,10 +15,10 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
 
 application = get_wsgi_application()
 
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
-def create_admin():
-    if not User.objects.filter(username="admin").exists():
-        User.objects.create_superuser("admin", "nguyenngocdieuduyen@gmail.com", "@Duyen192005.")
+# def create_admin():
+#     if not User.objects.filter(username="admin").exists():
+#         User.objects.create_superuser("admin", "nguyenngocdieuduyen@gmail.com", "@Duyen192005.")
 
-create_admin()
+# create_admin()

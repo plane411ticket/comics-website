@@ -11,6 +11,7 @@ novel_custom_urls = [
 urlpatterns = [
     path('novel/advanced-search/', advanced_search, name='advanced_search'),
     path('novel/', include((novel_custom_urls, 'novel'))),
+    path('import-novels/', import_novel_view),
     path('', include(router.urls)),
 ]
 

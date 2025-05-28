@@ -20,3 +20,26 @@ def genre_request(request):
     genres = Genre.objects.all() 
     serializer = GenresSerializer(genres, many=True)
     return Response({"genres": serializer.data}, status=status.HTTP_200_OK)
+
+
+
+# views.py
+
+from django.http import JsonResponse
+import os
+import json
+from .models import Genre
+from django.conf import settings
+
+def import_genres_view(request):
+    file_path = os.path.join(settings.BASE_DIR, '..', 'genres', 'unique_genres.json')
+
+    # Xóa dữ liệu cũ để tránh trùng lặp
+    Genre.objects.all().delete()
+
+    with open(file_path, encoding='utf-8') as f:
+        data = json.load(f)
+        for item in data:
+            Genre.objects.get_or_create(name=item['name'])
+
+    return JsonResponse({"message": "✅ Genres imported successfully!"})
