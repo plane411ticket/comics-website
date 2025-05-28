@@ -40,16 +40,20 @@ class NovelChapter(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:  # Chỉ chạy khi tạo mới, không chạy khi update
             last_chapter = NovelChapter.objects.filter(novel=self.novel).order_by('-chapter_number').first()
-            self.chapter_number = (last_chapter.chapter_number + 1) if last_chapter else 1
-            self.novel.numChapters += 1
-            self.novel.save()
+            if(last_chapter):
+                if(last_chapter.chapter_number):
+                    self.chapter_number = (last_chapter.chapter_number + 1) if last_chapter else 1
+                if(self.novel.numChapters):
+                    self.novel.numChapters += 1
+                self.novel.save()
         super().save(*args, **kwargs)
     def delete(self, *args, **kwargs):
         # Lưu số chương hiện tại
         current_number = self.chapter_number
         
         # Giảm số chương của novel
-        self.novel.numChapters -= 1
+        if(self.novel.numChapters):
+            self.novel.numChapters -= 1
         self.novel.save()
 
         # Xóa chapter hiện tại
@@ -63,5 +67,5 @@ class NovelChapter(models.Model):
         ).order_by('chapter_number')
 
         for chapter in later_chapters:
-            chapter.chapter_number -= 1
+            if(chapter.chapter_number): chapter.chapter_number -= 1
             chapter.save()

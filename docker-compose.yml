@@ -9,7 +9,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend/app:/app/app          # chỉ code app
+      - ./backend:/app         
       - ./backend/media:/app/media      # cho media
       - ./frontend/dist:/app/frontend/dist
     env_file:

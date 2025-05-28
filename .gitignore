@@ -32,7 +32,7 @@ pnpm-lock.yaml
 staticfiles/
 media/
 static/
-# *.png
+*.png
 *.jpg
 *.mp3
 # *.jpeg

@@ -1,13 +1,13 @@
 import axios from 'axios';
 const baseURL = 'http://localhost:8000'
-export const audioText = async (text: string, nameFile: string) => {
+export const audioText = async (nameFile: string) => {
     try {
           const config = {
             headers: { 'Content-Type': 'audio/mpeg' },
             }
           const response = await axios.post(
               `${baseURL}/api/audio/tts/${nameFile}/`, 
-              {text:text}, 
+              {}, 
               config
           );
         console.log("Thông tin tải: ",response.headers); // Debug kết quả

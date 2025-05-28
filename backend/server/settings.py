@@ -204,7 +204,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR.parent, "frontend", "dist"),
 ]
 # Media files (Uploaded images, documents, etc.)
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
