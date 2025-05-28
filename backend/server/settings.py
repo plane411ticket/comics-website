@@ -231,7 +231,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 #print(STATIC_ROOT)
 # Additional static files (For frontend build)
 STATICFILES_DIRS = [
-    str(BASE_DIR.parent / "frontend" / "dist"),  # nơi chứa static frontend nếu có
+    str(BASE_DIR.parent / 'frontend' / 'dist'),  # nơi chứa static frontend nếu có
 ]
 
 print("BASE_DIR.parent:", BASE_DIR.parent)
