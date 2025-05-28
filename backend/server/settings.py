@@ -233,6 +233,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     str(BASE_DIR.parent / "frontend" / "dist"),  # nơi chứa static frontend nếu có
 ]
+
+print("BASE_DIR.parent:", BASE_DIR.parent)
 print("STATICFILES_DIRS after:", STATICFILES_DIRS)
 
 # Media files (Uploaded images, documents, etc.)

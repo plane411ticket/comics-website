@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { login } from '../types/user/userSlice';
-import { CommentPayload } from '../types/user/User';
+import { CommentPayload, LikeProp} from '../types/user/User';
 const baseURL = import.meta.env.VITE_BASE_URL;
     
 export const registerUser = async (name: string, email: string, password: string) => {
