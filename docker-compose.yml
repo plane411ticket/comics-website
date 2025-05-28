@@ -2,34 +2,30 @@ version: '3.8'
 
 services:
   backend:
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: django-backend
+    container_name: django-backend-web
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ./backend/app:/app/app          # chỉ code app
+      - ./backend/media:/app/media      # cho media
       - ./frontend/dist:/app/frontend/dist
     env_file:
       - .env
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
   frontend:
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: typescript-frontend
+    container_name: typescript-frontend-web
     ports:
       - "5174:5174"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     stdin_open: true
     command: ["npm", "run", "dev"]
 

@@ -3,7 +3,7 @@ import bglogin from "@/assets/backlogin.png";
 import LogoWeb from "@/assets/logo.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { loginUser } from "../../actions/userActions";
+import { loginUser } from "../../actions/userAction";
 import { AppDispatch } from "../../store";
 import { useDispatch } from "react-redux";
 import { login } from "../../types/user/userSlice";

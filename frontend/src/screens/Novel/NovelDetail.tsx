@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from 'react';
 import {Link, useParams } from 'react-router-dom';
 import {Novel} from '../../types/novel/novelDetails';
+import { updateLike ,updateFavorite} from "../../actions/userAction";
 import {NovelChapter} from '../../types/novel/novelChapters';
-import { fetchStoryDetails, fetchStoryChapters, updateNumberFavorite} from '../../actions/novelAction'; 
+import { fetchStoryDetails, fetchStoryChapters} from '../../actions/novelAction'; 
 import { faEye, faCommentDots, faHeart } from "@fortawesome/free-solid-svg-icons";
 const StoryDetailPage = () => {
   const { storyId } = useParams(); // từ URL /story/:storyId
@@ -43,15 +44,33 @@ const StoryDetailPage = () => {
 
   const handleFavoriteClick = async () => {
     try {
-      const updated = await updateNumberFavorite(String(storyId));
+      if (!storyId) {
+        console.error("Lỗi khi cập nhật số fav: storyID null");
+        return
+      }
+      const updated = await updateFavorite({post_id:storyId, type: "novel"});
       if (story) {
         setStory({ ...story, numFavorites: updated.numFavorites });
+      }
+    } catch (error) {
+      console.error("Lỗi khi cập nhật số fav:", error);
+    }
+  };
+  const handleLikeClick = async () => {
+    try {
+      if (!storyId) {
+        console.error("Lỗi khi cập nhật số lượt thích:");
+        return
+      }
+      const updated = await updateLike({post_id:storyId, type: "novel"});
+      console.log(updated.numLikes)
+      if (story) {
+        setStory({ ...story, numLikes: updated.numLikes });
       }
     } catch (error) {
       console.error("Lỗi khi cập nhật số lượt thích:", error);
     }
   };
-
   return (
     <div className="max-w-screen-lg mx-auto px-4 py-5">
     {story ? (
@@ -109,9 +128,15 @@ const StoryDetailPage = () => {
 
               <button
                 className="text-white bg-orange-500 hover:bg-yellow-400 ml-2 px-2 py-2 rounded"
+                onClick={handleLikeClick}
+              >
+                Thích ({story.numLikes})
+              </button>
+              <button
+                className="text-white bg-orange-500 hover:bg-yellow-400 ml-2 px-2 py-2 rounded"
                 onClick={handleFavoriteClick}
               >
-                Thích ({story.numFavorites})
+                Lưu ({story.numFavorites})
               </button>
             </div>
             

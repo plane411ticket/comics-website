@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from .models import *
-from rest_framework import serializers
+from django.db.models import F
 from django.views.decorators.cache import cache_page
 @cache_page(60)
 @api_view(['GET'])
@@ -14,8 +14,9 @@ from django.views.decorators.cache import cache_page
 def getMangaChapter(request, pk):
         try:
             chapter = MangaChapter.objects.get(_id=pk)
-            chapter.manga.numViews += 1
-            chapter.save()
+            chapter.manga.numViews = F('numViews') + 1
+            chapter.manga.save()
+            chapter.manga.refresh_from_db()
             serializer = MangaChapterDetailSerializer(chapter)
             return Response(serializer.data)
         except MangaChapter.DoesNotExist:
@@ -38,8 +39,9 @@ def getMangaChapterList(request, pk):
 def getNovelChapter(request, pk):
     try:
         chapter = NovelChapter.objects.get(_id=pk)
-        chapter.novel.numViews += 1
-        chapter.save()
+        chapter.novel.numViews = F('numViews') + 1
+        chapter.novel.save()
+        chapter.novel.refresh_from_db()
         serializer = NovelChapterDetailSerializer(chapter)
         return Response(serializer.data)
     except Exception as e:

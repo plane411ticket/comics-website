@@ -44,19 +44,7 @@ export const fetchChapterDetail = async (chapterId: string) => {
   }
 };
 
-export const updateNumberFavorite  = async (novelid: string) => {
-  try{
-      //const response = await axios.post(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef/updateNumFavorite/`);
-      const response = await axios.put(`${baseURL}/api/novel/${novelid}/updateNumFavorite/`);
-      console.log(response.data);
-      return response.data;
-  }
 
-  catch (error) {
-    console.error("Error update number favorite:", error);
-    throw error;
-  }
-}
 
 export const updateNumberComments = async (novelid: string) => {
   try {

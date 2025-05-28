@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../types/user/userSlice";
-import { logoutUser } from "../../actions/userActions";
+import { logoutUser } from "../../actions/userAction";
 
 const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);

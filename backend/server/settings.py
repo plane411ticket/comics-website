@@ -35,7 +35,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "users.authentication.CookieJWTAuthentication",
         
     ),
     "DEFAULT_PERMISSION_CLASSES": [
@@ -109,7 +109,6 @@ INSTALLED_APPS = [
     'audio',
     'genres',
     'users',
-    'commentChapter',
     'forum',
     # For image uploads
     'cloudinary_storage',
@@ -268,3 +267,8 @@ CSRF_TRUSTED_ORIGINS = [
 print("STATICFILES_DIRS:", STATICFILES_DIRS)
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+[
+    "http://localhost:5174",
+    "https://comics-website-frontend.onrender.com",
+]
+AUTH_USER_MODEL = 'users.CustomUser'

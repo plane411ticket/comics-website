@@ -5,13 +5,13 @@ FROM node:20
 WORKDIR /app
 
 # Copy file cấu hình package
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
 # Cài dependencies
 RUN npm install
 
 # Copy phần còn lại của source code
 COPY . .
-
+EXPOSE 5174
 # Chạy dev server (Vite, React, Next.js...)
 CMD ["npm", "run", "dev"]

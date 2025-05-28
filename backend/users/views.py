@@ -1,30 +1,28 @@
-from django.contrib.auth.models import User
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from django.contrib.auth import authenticate
 from .serializers import *
 from .models import Favorite
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import HttpResponse
-from rest_framework_simplejwt.authentication import JWTAuthentication
-
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):   
-    def validate(self,attrs):
-        data = super().validate(attrs) # perform JWT authentication.
-        serializer = UserSerializerWithToken(self.user).data
-        for k,v in serializer.items():
-            data[k] = v # add more data
-        return data   
-
-class MyTokenObtainView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
-
+from rest_framework.exceptions import PermissionDenied
+from novel.models import Novel
+from manga.models import Manga
+from django.contrib.auth import get_user_model
+import jwt
+import time
+from rest_framework import permissions, viewsets
+from django.contrib.contenttypes.models import ContentType
+from .models import Comments
+from .serializers import CommentsSerializer
+User = get_user_model()
+# ============================
+# Authentication with user
+# ============================
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def registerUser(request):
@@ -89,15 +87,30 @@ def logoutUser(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def refreshTokenView(request):
-    refresh_token = request.COOKIES.get("refresh_token")  # Lấy refresh token từ cookie
-    
+    refresh_token = request.COOKIES.get("refresh_token")
+    access_token = request.COOKIES.get("access_token")
+
+    # Kiểm tra access token còn hạn không
+    if access_token:
+        try:
+            # Giải mã access token để đọc `exp` mà không cần verify signature
+            payload = jwt.decode(access_token, options={"verify_signature": False})
+            exp = payload.get("exp")
+
+            if exp and exp > int(time.time()):
+                print("Token chưa hạn")
+                return Response({"message": "Access token vẫn còn hiệu lực, không cần refresh."})
+        except jwt.DecodeError:
+            pass  # token lỗi, sẽ xử lý bên dưới
     if not refresh_token:
         return Response({"error": "Không có refresh token!"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    # Nếu access token hết hạn hoặc lỗi → tạo token mới từ refresh
     try:
-        refresh = RefreshToken(refresh_token)  # Tạo access token mới từ refresh token
+        refresh = RefreshToken(refresh_token)
         new_access_token = str(refresh.access_token)
 
-        response = HttpResponse({"message": "Refresh token thành công!"})
+        response = HttpResponse({"message": "Đã tạo access token mới!"})
         response.set_cookie(
             key="access_token",
             value=new_access_token,
@@ -108,129 +121,158 @@ def refreshTokenView(request):
         return response
 
     except Exception:
-        return Response({"error": "Refresh token không hợp lệ!"}, status=status.HTTP_401_UNAUTHORIZED)   
+        return Response({"error": "Refresh token không hợp lệ!"}, status=status.HTTP_401_UNAUTHORIZED)
+
+# ============================
+#  User ViewSets
+# ============================
 
 
-    
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def updateUserProfile(request):
-    try:
-        user = request.user 
-        serializer = UserSerializerWithToken(user,many=False)
-        data = request.data
-        user.first_name =data['name']
-        user.username = data['username']
-        user.email = data['email']
-        if data['password']!='':
-            user.password = make_password(data['password'])
-        user.save()
-        return Response(serializer.data)
-    except Exception as e:
-        return Response({'detail':f'{e}'},status=status.HTTP_204_NO_CONTENT)
-
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def getUserProfile(request):
-    user = request.user
-    username = user.get['username']
-    id = user.get['id'] 
-    email = user.get['email']
-    info = {"user":({"username":username},{"id":id},{"email":email})}
-    try:
-        return Response(info,status=status.HTTP_200_OK)
-    except Exception as e:
-        return Response({'detail':f'{e}'},status=status.HTTP_204_NO_CONTENT)
-# CRUD create, delete v.v 
-
-
-class LikeViewSet(viewsets.ModelViewSet):
-    queryset = Likes.objects.all()
-    serializer_class = LikeSerializer
+class ProfileViewSet(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
         user = self.request.user
-        return Likes.objects.filter(user=user)
-    def perform_create(self, serializer):
-        # Lấy đối tượng Novel từ serializer
-        novel = serializer.validated_data['novel']
-        
-        # Kiểm tra xem người dùng đã thích truyện này chưa
-        if Likes.objects.filter(user=self.request.user, novel=novel).exists():
-            # Nếu đã có lượt thích rồi, trả về lỗi hoặc không làm gì
-            return None
-        # Nếu chưa có lượt thích, tiến hành lưu đối tượng Like và gắn người dùng hiện tại vào
-        if serializer.is_valid():
-            # Lưu đối tượng Like với người dùng hiện tại
-            serializer.save(user=self.request.user)
-            
-            # Cập nhật số lượt thích cho Novel
-            novel.numLikes += 1  # Tăng thêm 1 lượt thích
-            novel.save(update_fields=['numLikes'])
+        if(user.is_staff or user.is_superuser):
+            return User.objects.all()
+        return User.objects.filter(id=user.id)
     def perform_destroy(self, instance):
-        # Truy cập đối tượng Novel liên quan đến Like
-        novel = instance.novel
-        
-        # Giảm số lượt thích cho Novel
-        novel.numLikes -= 1
-        novel.save(update_fields=['numLikes'])  # Lưu lại sự thay đổi
-        # Xóa đối tượng Like
+        user = self.request.user
+        if not (user.is_staff or user.is_superuser or instance == user):
+            raise PermissionDenied("Bạn không có quyền xóa tài khoản này.")
         instance.delete()
+    def perform_update(self, serializer):
+        user = self.request.user
+        if not (user.is_staff or user.is_superuser or self.get_object() == user):
+            raise PermissionDenied("Bạn không có quyền cập nhật tài khoản này.")
+        serializer.save()
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def ToggleLike(request):
+    user = request.user
+    type = request.data.get("type")
+    post_id = request.data.get("post_id")
+    if not post_id:
+        return Response({"error": "Missing 'post' ID"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if(type == "novel"):
+        try:
+            post = Novel.objects.get(_id=post_id)
+        except Novel.DoesNotExist:
+            return Response({"error": "Novel not found"}, status=status.HTTP_404_NOT_FOUND)
+    if(type == "manga"):
+        try:
+            post = Manga.objects.get(_id=post_id)
+        except Manga.DoesNotExist:
+            return Response({"error": "Manga not found"}, status=status.HTTP_404_NOT_FOUND)
+    print("Debug like: ",post_id)
+    like = Likes.objects.filter(user=user, post_id=post_id).first()
+
+    if like:
+        # Nếu đã like → unlike
+        like.delete()
+        post.numLikes = max(post.numLikes - 1, 0)
+        post.save(update_fields=['numLikes'])
+        return Response({"status": "unliked","numLikes":post.numLikes}, status=status.HTTP_200_OK)
+    else:
+        # Nếu chưa like → like
+        Likes.objects.create(user=user, post_id=post_id, type=type)
+        post.numLikes += 1
+        post.save(update_fields=['numLikes'])
+        return Response({"status": "liked","numLikes":post.numLikes}, status=status.HTTP_201_CREATED)
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def ToggleFavorite(request):
+    user = request.user
+    type = request.data.get("type")
+    post_id = request.data.get("post_id")
+    if not post_id:
+        return Response({"error": "Missing 'post' ID"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if(type == "novel"):
+        try:
+            post = Novel.objects.get(_id=post_id)
+        except Novel.DoesNotExist:
+            return Response({"error": "Novel not found"}, status=status.HTTP_404_NOT_FOUND)
+    if(type == "manga"):
+        try:
+            post = Manga.objects.get(_id=post_id)
+        except Manga.DoesNotExist:
+            return Response({"error": "Manga not found"}, status=status.HTTP_404_NOT_FOUND)
+    print("Debug fav: ",post_id)
+    fav = Favorite.objects.filter(user=user, post_id=post_id).first()
+
+    if fav:
+        # Nếu đã fav → unfav
+        fav.delete()
+        post.numFavorites = max(post.numFavorites - 1, 0)
+        post.save(update_fields=['numFavorites'])
+        return Response({"status": "unfavorite","numFavorites":post.numFavorites}, status=status.HTTP_200_OK)
+    else:
+        # Nếu chưa fav → fav
+        Favorite.objects.create(user=user, post_id=post_id, type=type)
+        post.numFavorites += 1
+        post.save(update_fields=['numFavorites'])
+        return Response({"status": "favorite","numFavorites":post.numFavorites}, status=status.HTTP_201_CREATED)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comments.objects.all()
     serializer_class = CommentsSerializer
-    permission_classes = [IsAuthenticated]
-    def get_queryset(self):
-        user = self.request.user
-        # Lọc các bình luận của người dùng hiện tại
-        return Comments.objects.filter(user=user)
-    
-    def perform_create(self, serializer):
-        if serializer.is_valid():
-            serializer.save(user=self.request.user)
-    
-            # Cập nhật số lượt thích cho Novel
-            novel = serializer.validated_data['novel'] # Lấy đối tượng Novel từ Comment
-            novel.numComments += 1  # Tăng thêm 1 lượt thích
-            novel.save(update_fields=['numComments'])
-        else: 
-            print(serializer.errors)
-    def perform_destroy(self, instance):
-        # Truy cập đối tượng Novel liên quan đến Comments
-        novel = instance.novel
-        # Giảm số lượt thích cho Novel
-        novel.numComments -= 1  # Giảm bớt 1 lượt thích
-        novel.save(update_fields=['numComments'])  # Lưu lại sự thay đổi
-        
-        # Xóa đối tượng Comment
-        instance.delete()
 
+    def get_permissions(self):
+        # Mặc định mọi người được xem
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [permissions.AllowAny]
+        # Các action còn lại cần đăng nhập
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
-class FavoriteViewSet(viewsets.ModelViewSet):
-    queryset = Favorite.objects.all()
-    serializer_class = FavoriteSerializer
-    permission_classes = [IsAuthenticated]
     def get_queryset(self):
-        user = self.request.user
-        return Favorite.objects.filter(user=user)
+        chapter_type = self.request.query_params.get('chapter_type')
+        chapter_id = self.request.query_params.get('chapter_id')
+        content_type = self.request.query_params.get('content_type')
+        object_id = self.request.query_params.get('object_id')
+
+        if chapter_type and chapter_id:
+            try:
+                chapter_model = ContentType.objects.get(model=chapter_type.lower())
+                return Comments.objects.filter(
+                    chapter_content_type=chapter_model,
+                    chapter_object_id=chapter_id
+                ).order_by('-created_at')
+            except ContentType.DoesNotExist:
+                return Comments.objects.none()
+
+        elif content_type and object_id:
+            try:
+                post_model = ContentType.objects.get(model=content_type.lower())
+                return Comments.objects.filter(
+                    content_type=post_model,
+                    object_id=object_id
+                ).order_by('-created_at')
+            except ContentType.DoesNotExist:
+                return Comments.objects.none()
+
+        return Comments.objects.none()
+
     def perform_create(self, serializer):
-        if serializer.is_valid():
-            serializer.save(user=self.request.user) # 
-            # Cập nhật số lượt thích cho Novel
-            novel = serializer.validated_data['novel']
-            novel.numFavorites += 1
-            novel.save(update_fields=['numFavorites'])
-        else: 
-            print(serializer.errors)
+        serializer.save(user=self.request.user)
+        obj = serializer.validated_data['content_object']
+        if hasattr(obj, 'numComments'):
+            obj.numComments = getattr(obj, 'numComments', 0) + 1
+            obj.save(update_fields=['numComments'])
+
     def perform_destroy(self, instance):
-        # Truy cập đối tượng Novel liên quan đến Like
-        novel = instance.novel
-        
-        # Giảm số lượt thích cho Novel
-        novel.numFavorites -= 1  # Giảm bớt 1 lượt thích
-        novel.save(update_fields=['numFavorites'])  # Lưu lại sự thay đổi
-        
-        # Xóa đối tượng Like
+        user = self.request.user
+        if not (user.is_staff or user.is_superuser or instance.user == user):
+            raise PermissionDenied("Bạn chỉ có thể xóa comment của chính mình.")
+
+        obj = instance.content_object
+        if hasattr(obj, 'numComments'):
+            obj.numComments = max(getattr(obj, 'numComments', 1) - 1, 0)
+            obj.save(update_fields=['numComments'])
+
         instance.delete()

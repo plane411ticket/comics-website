@@ -30,7 +30,7 @@ pnpm-lock.yaml
 
 # Static & Media Files
 staticfiles/
-# media/
+media/
 static/
 # *.png
 *.jpg
