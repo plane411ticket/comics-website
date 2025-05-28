@@ -6,7 +6,7 @@ router = DefaultRouter()
 router.register(r'genres', GenresViewSet)  
 
 urlpatterns = [
-     path('import-genres/', import_genres_view),
+    path('import-genres/', import_genres_view),
     path('', include(router.urls)), 
 ]
 
