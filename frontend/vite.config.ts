@@ -19,7 +19,7 @@ export default defineConfig({
         secure: false,
       }
     },
-    allowedHosts: ['comics-website-frontend.onrender.com'],
+    allowedHosts: ['https://mangadak.onrender.com'],
   }
 });
 

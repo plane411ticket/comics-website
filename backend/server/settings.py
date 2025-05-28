@@ -257,11 +257,11 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://comics-website-frontend.onrender.com",
+    "https://mangadak.onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://comics-website-frontend.onrender.com",
+    "https://mangadak.onrender.com",
     "https://comics-website-backend.onrender.com",  
 ]
 
@@ -269,8 +269,5 @@ CSRF_TRUSTED_ORIGINS = [
 print("STATICFILES_DIRS:", STATICFILES_DIRS)
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-[
-    "http://localhost:5174",
-    "https://comics-website-frontend.onrender.com",
-]
+
 AUTH_USER_MODEL = 'users.CustomUser'
