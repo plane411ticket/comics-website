@@ -2,6 +2,7 @@ import json
 import os
 import django
 import sys
+from django.conf import settings
 
 # Dynamically setting the Django project path
 project_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Lấy đường dẫn gốc của dự án
@@ -34,7 +35,7 @@ def create_genres(apps, schema_editor):
     Genre = apps.get_model('genres', 'Genre')
 
 if __name__ == '__main__':
-    json_file_path = os.path.join(project_path, 'genres', 'unique_genres.json')
+    json_file_path = os.path.join(settings.BASE_DIR, 'genres', 'unique_genres.json')
     print("json_file_path", json_file_path)
     import_genres(json_file_path)
     print("✅ Đã lọc và tải truyện lên database.")
