@@ -64,7 +64,7 @@ export const fetchProfile = async () => {
             withCredentials:true,
         }
         const response = await axios.post(
-            `${baseURL}/api/profile/`,
+            `${baseURL}/api/me/`,
             {},  
             config
         );
@@ -159,3 +159,4 @@ export const updateFavorite  = async ({ post_id, type }: LikeProp) => {
     throw error;
   }
 }
+

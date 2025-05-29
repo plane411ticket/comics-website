@@ -8,7 +8,7 @@ from django.conf import settings
 
 
 class CustomUser(AbstractUser):
-    cover = models.ImageField(upload_to='covers/', null=True, blank=True)
+    cover = models.ImageField(upload_to='covers/', default='covers/default.jpg')
 
     def __str__(self):
         return self.username
@@ -41,8 +41,11 @@ class Comments(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     # Đối tượng cha (post chính): Manga, Novel, Audio, Forum
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='comment_post_type')
-    object_id = models.CharField(max_length=255)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, 
+                                     related_name='comment_post_type', 
+                                     null=True,  
+                                     blank=True )
+    object_id = models.CharField(max_length=255, null=True,blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 
     # Nếu comment nằm trong chapter cụ thể nào đó (ChapterManga, ChapterNovel,...)
@@ -71,4 +74,4 @@ class Likes(models.Model):
         default='novel'
     ) # tăng tốc độ truy xuất 
     def __str__(self):
-        return f"{self.user} - {self.comment}"
+        return f"{self.user}"

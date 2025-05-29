@@ -19,13 +19,15 @@ from rest_framework import permissions, viewsets
 from django.contrib.contenttypes.models import ContentType
 from .models import Comments
 from .serializers import CommentsSerializer
+from users.authentication import CookieJWTAuthentication
+from rest_framework.decorators import authentication_classes
 User = get_user_model()
 # ============================
 # Authentication with user
 # ============================
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def registerUser(request):
+def RegisterUser(request):
     data = request.data
     try:
         if User.objects.filter(email=data["email"]).exists():
@@ -49,7 +51,7 @@ def registerUser(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def loginUser(request):
+def LoginUser(request):
     data = request.data
     try:
         email = data['email']
@@ -78,15 +80,14 @@ def loginUser(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def logoutUser(request):
-    response = HttpResponse({"message": "Đăng xuất thành công!"})
-    response.delete_cookie("access_token", path="/",domain="localhost")
-    response.delete_cookie("refresh_token", path="/",domain="localhost")
+def LogoutUser(request):
+    response = Response({"message": "Logged out successfully"}, status=200)
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
     return response
-
 @api_view(["POST"])
 @permission_classes([AllowAny])
-def refreshTokenView(request):
+def RefreshTokenView(request):
     refresh_token = request.COOKIES.get("refresh_token")
     access_token = request.COOKIES.get("access_token")
 
@@ -127,7 +128,7 @@ def refreshTokenView(request):
 #  User ViewSets
 # ============================
 
-
+@authentication_classes([CookieJWTAuthentication])
 class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
@@ -148,7 +149,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         serializer.save()
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@authentication_classes([CookieJWTAuthentication])
 def ToggleLike(request):
     user = request.user
     type = request.data.get("type")
@@ -182,7 +183,7 @@ def ToggleLike(request):
         post.save(update_fields=['numLikes'])
         return Response({"status": "liked","numLikes":post.numLikes}, status=status.HTTP_201_CREATED)
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@authentication_classes([CookieJWTAuthentication])
 def ToggleFavorite(request):
     user = request.user
     type = request.data.get("type")
@@ -216,7 +217,7 @@ def ToggleFavorite(request):
         post.save(update_fields=['numFavorites'])
         return Response({"status": "favorite","numFavorites":post.numFavorites}, status=status.HTTP_201_CREATED)
 
-
+@authentication_classes([CookieJWTAuthentication])
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comments.objects.all()
     serializer_class = CommentsSerializer
