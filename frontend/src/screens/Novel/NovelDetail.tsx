@@ -140,14 +140,21 @@ return (
 
             <p>
               <span className="Emphasize font-bold">Thể loại: </span>
+             
               {Array.isArray(story.genres) &&
               story.genres.map((genre, index) => (
                 <span key={genre._id}>
+                  <Link
+                  to={`/avsearch/${genre._id}`}
+                  className="text-blue-600 hover:underline"
+                >
                   {genre.name}
+                </Link>
                   {index < story.genres.length - 1 && ', '}
                 </span>
               ))}
             </p>
+
             <p><span className = "Emphasize font-bold">Trạng thái:  </span> {story.status}</p>
             <p>
               <span className="Emphasize font-bold">Cập nhật: </span> 
