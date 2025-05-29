@@ -243,11 +243,11 @@ return (
 
           {/* Danh sách chương */}
         <div className="flex-1 mt-10">
-          <div className="bg-cyan-300 text-center py-4">
+          <div className="bg-orange-300 text-center py-2">
             <h2 className="text-xl font-semibold">DANH SÁCH CHƯƠNG</h2>
           </div>
 
-          <div className="mt-4 divide-y divide-blue-200">
+          <div className="mt-4 divide-y divide-orange-200">
             {
               // Chia danh sách chương thành các hàng 3 cột, 2 cột và 1 cột tùy kích thước
               Array.from({ length: Math.ceil(chapters.length / 3) }).map((_, rowIndex) => (
