@@ -8,7 +8,7 @@ from django.conf import settings
 
 
 class CustomUser(AbstractUser):
-    cover = models.ImageField(upload_to='covers/', default='covers/default.jpg')
+    cover = models.ImageField(upload_to='covers/', null=False ,default='covers/default.jpg')
 
     def __str__(self):
         return self.username
