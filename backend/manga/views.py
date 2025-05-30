@@ -93,7 +93,7 @@ def convert_views(view_str):
     except:
         return 0
 
-def import_json_file(filepath):
+def import_json_file(filepath, uploader):
     with open(filepath, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -104,7 +104,7 @@ def import_json_file(filepath):
         title=data["title"],
         author=data.get("author", "Không rõ"),
         description=data.get("description", "Đang cập nhật"),
-        uploader="Đang xác định",
+        uploader=uploader,  # ✅ dùng đối tượng CustomUser
         status='ongoing' if "tiến hành" in data["status"].lower() else 'completed',
         cover_image=data["cover"],
         source="Đang cập nhật",
@@ -133,11 +133,21 @@ def import_json_file(filepath):
     manga.save()
     return f"✅ Nhập thành công: {manga.title}"
 
+
+from django.contrib.auth import get_user_model
+
 def import_all_manga(request):
+    User = get_user_model()
+    uploader_user = User.objects.filter(username="upload").first()
+
+    if not uploader_user:
+        return JsonResponse({"error": "User 'upload' không tồn tại."}, status=400)
+
     results = []
     for file in os.listdir(TRUYEN_PATH):
         if file.endswith('.json'):
             json_file_path = os.path.join(TRUYEN_PATH, file)
-            result = import_json_file(json_file_path)
+            result = import_json_file(json_file_path, uploader_user)
             results.append(result)
     return JsonResponse({"results": results})
+
