@@ -16,7 +16,7 @@
   "cover": "https://res.cloudinary.com/drifu6znv/image/upload/v1748541514/manga/normal-days/cover/cover.jpg",
   "chapters": [
     {
-      "number": "Chapter Today is not a normal day",
+      "number": 1,
       "title": "Chapter Today is not a normal day",
       "images": [
         "https://res.cloudinary.com/drifu6znv/image/upload/v1748541516/manga/normal-days/Chapter%20Today%20is%20not%20a%20normal%20day/001.jpg",
