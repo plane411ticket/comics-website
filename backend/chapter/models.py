@@ -3,6 +3,7 @@ from manga.models import Manga
 from novel.models import Novel
 import uuid
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 import os
 def chapter_image_upload_path(instance, filename):
     """ Lưu ảnh vào thư mục `media/manga_images/id_chapter/` """
@@ -22,7 +23,7 @@ class MangaChapterImage(models.Model):
     _id = models.UUIDField(default=uuid.uuid4,  unique=True,
                            primary_key=True, editable=False)
     chapter = models.ForeignKey(MangaChapter, related_name="images", on_delete=models.CASCADE)
-    image = models.ImageField(default='',upload_to=chapter_image_upload_path)
+    image = CloudinaryField('chapter_page_image', blank=True, null=True)
     page = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):

@@ -3,6 +3,7 @@ import uuid
 from genres.models import Genre
 from django.contrib.auth.models import User
 from django.conf import settings
+from cloudinary.models import CloudinaryField
 import os
 class Manga(models.Model):
     _id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
@@ -20,7 +21,7 @@ class Manga(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     description = models.TextField()
-    cover_image = models.ImageField(upload_to='manga_covers/', default='manga_covers/default.jpg', blank=True)
+    cover_image = CloudinaryField('manga_covers', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     genres = models.ManyToManyField(
