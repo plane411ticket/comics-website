@@ -76,12 +76,12 @@ export const updateNumberFavoriteManga  = async (novelid: string) => {
     throw error;
   }
 }
-const API_BASE_URL = 'http://127.0.0.1:8000/api/manga/'
+
 export const fetchManga = async (page=1): Promise<Manga[]> => {
     try {
-            const response = await axios.get(API_BASE_URL+"?page="+page);
+            const response = await axios.get(baseURL+"?page="+page);
             console.log(response)
-            console.log(API_BASE_URL+"?page="+page)
+            console.log(baseURL+"?page="+page)
             const data = await response.data
             return Array.isArray(data.results) ? data.results : [];
         } catch (error) {
@@ -101,7 +101,7 @@ export const fetchAdvancedSearch = async (filters: AdvancedFilter): Promise<Mang
         if (filters.maxChapters) query.set("min_chapters", filters.maxChapters.toString());
         if (filters.author) query.set("author", filters.author);
         if (filters.status) query.set("status", filters.status);
-        const response = await axios.get(`${API_BASE_URL}advanced-search?${query}/`);
+        const response = await axios.get(`${baseURL}advanced-search?${query}/`);
         console.log(response.data);
         return response.data.results;
     } catch (error) {
