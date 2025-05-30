@@ -2,7 +2,7 @@ import axios from 'axios';
 //import { Dispatch } from 'redux';
 import { Novel } from '../types/novel/novelDetails';
 const baseURL = import.meta.env.VITE_BASE_URL;
-
+ 
 export const fetchStoryDetails = async (novelid: string) => {
     try{
       const response = await axios.get(`${baseURL}/api/novel/${novelid}`)

@@ -79,10 +79,10 @@ export const updateNumberFavoriteManga  = async (novelid: string) => {
 
 export const fetchManga = async (page=1): Promise<Manga[]> => {
     try {
-            const response = await axios.get(baseURL+"?page="+page);
+            const response = await fetch(`${baseURL}/api/manga/?page=${page}`);
             console.log(response)
-            console.log(baseURL+"?page="+page)
-            const data = await response.data
+            console.log(`${baseURL}/api/manga/?page=${page}`)
+            const data = await response.json()
             return Array.isArray(data.results) ? data.results : [];
         } catch (error) {
             console.error("Failed to fetch novel:", error);
