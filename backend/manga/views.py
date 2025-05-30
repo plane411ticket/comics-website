@@ -75,79 +75,79 @@ def home(request):
     return render(request, 'home.html')
 
 
-from django.shortcuts import render
-from django.http import JsonResponse
-import os, json
+# from django.shortcuts import render
+# from django.http import JsonResponse
+# import os, json
 
-from django.conf import settings
-from .models import Manga
-from chapter.models import MangaChapter, MangaChapterImage
-from genres.models import Genre
+# from django.conf import settings
+# from .models import Manga
+# from chapter.models import MangaChapter, MangaChapterImage
+# from genres.models import Genre
 
-TRUYEN_PATH = os.path.join(settings.BASE_DIR, 'truyen_tranh', 'Json')
+# TRUYEN_PATH = os.path.join(settings.BASE_DIR, 'truyen_tranh', 'Json')
 
-def convert_views(view_str):
-    try:
-        view_str = view_str.lower().replace('k', '000').replace('.', '')
-        return int(view_str)
-    except:
-        return 0
+# def convert_views(view_str):
+#     try:
+#         view_str = view_str.lower().replace('k', '000').replace('.', '')
+#         return int(view_str)
+#     except:
+#         return 0
 
-def import_json_file(filepath, uploader):
-    with open(filepath, "r", encoding="utf-8") as f:
-        data = json.load(f)
+# def import_json_file(filepath, uploader):
+#     with open(filepath, "r", encoding="utf-8") as f:
+#         data = json.load(f)
 
-    if Manga.objects.filter(title=data["title"]).exists():
-        return f"❗ Bỏ qua: {data['title']} đã tồn tại"
+#     if Manga.objects.filter(title=data["title"]).exists():
+#         return f"❗ Bỏ qua: {data['title']} đã tồn tại"
 
-    manga = Manga.objects.create(
-        title=data["title"],
-        author=data.get("author", "Không rõ"),
-        description=data.get("description", "Đang cập nhật"),
-        uploader=uploader,  # ✅ dùng đối tượng CustomUser
-        status='ongoing' if "tiến hành" in data["status"].lower() else 'completed',
-        cover_image=data["cover"],
-        source="Đang cập nhật",
-        numViews=convert_views(data.get("views", "0"))
-    )
+#     manga = Manga.objects.create(
+#         title=data["title"],
+#         author=data.get("author", "Không rõ"),
+#         description=data.get("description", "Đang cập nhật"),
+#         uploader=uploader,  # ✅ dùng đối tượng CustomUser
+#         status='ongoing' if "tiến hành" in data["status"].lower() else 'completed',
+#         cover_image=data["cover"],
+#         source="Đang cập nhật",
+#         numViews=convert_views(data.get("views", "0"))
+#     )
 
-    for g in data.get("genres", []):
-        genre, _ = Genre.objects.get_or_create(name=g)
-        manga.genres.add(genre)
+#     for g in data.get("genres", []):
+#         genre, _ = Genre.objects.get_or_create(name=g)
+#         manga.genres.add(genre)
 
-    for chap_data in data.get("chapters", []):
-        chapter = MangaChapter.objects.create(
-            manga=manga,
-            title=chap_data.get("title", f"Chapter {chap_data.get('number')}"),
-            chapter_number=chap_data.get("number", 0)
-        )
+#     for chap_data in data.get("chapters", []):
+#         chapter = MangaChapter.objects.create(
+#             manga=manga,
+#             title=chap_data.get("title", f"Chapter {chap_data.get('number')}"),
+#             chapter_number=chap_data.get("number", 0)
+#         )
 
-        for idx, image_url in enumerate(chap_data.get("images", []), start=1):
-            MangaChapterImage.objects.create(
-                chapter=chapter,
-                image=image_url,
-                page=idx
-            )
+#         for idx, image_url in enumerate(chap_data.get("images", []), start=1):
+#             MangaChapterImage.objects.create(
+#                 chapter=chapter,
+#                 image=image_url,
+#                 page=idx
+#             )
 
-    manga.numChapters = manga.chapters.count()
-    manga.save()
-    return f"✅ Nhập thành công: {manga.title}"
+#     manga.numChapters = manga.chapters.count()
+#     manga.save()
+#     return f"✅ Nhập thành công: {manga.title}"
 
 
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 
-def import_all_manga(request):
-    User = get_user_model()
-    uploader_user = User.objects.filter(username="upload").first()
+# def import_all_manga(request):
+#     User = get_user_model()
+#     uploader_user = User.objects.filter(username="upload").first()
 
-    if not uploader_user:
-        return JsonResponse({"error": "User 'upload' không tồn tại."}, status=400)
+#     if not uploader_user:
+#         return JsonResponse({"error": "User 'upload' không tồn tại."}, status=400)
 
-    results = []
-    for file in os.listdir(TRUYEN_PATH):
-        if file.endswith('.json'):
-            json_file_path = os.path.join(TRUYEN_PATH, file)
-            result = import_json_file(json_file_path, uploader_user)
-            results.append(result)
-    return JsonResponse({"results": results})
+#     results = []
+#     for file in os.listdir(TRUYEN_PATH):
+#         if file.endswith('.json'):
+#             json_file_path = os.path.join(TRUYEN_PATH, file)
+#             result = import_json_file(json_file_path, uploader_user)
+#             results.append(result)
+#     return JsonResponse({"results": results})
 
