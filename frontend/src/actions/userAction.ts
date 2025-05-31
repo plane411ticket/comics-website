@@ -2,8 +2,8 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { login } from '../types/user/userSlice';
-import { CommentPayload } from '../types/user/User';
 import { LikeProp, User } from '../types/user/User';
+import { Comment } from '../types/user/User';
 const baseURL = 'http://localhost:8000'
     
 export const registerUser = async (name: string, email: string, password: string) => {
@@ -111,23 +111,58 @@ export const useAutoLogin = () => {
         autoLogin();
     }, [dispatch]);
 };
-export const useComment = async (payload: CommentPayload): Promise<void> => {
+export const postComment = async (post_id:string, content:string, type:string, parent:number | null) => {
   try{
     const config = {
       headers: {'Content-Type': 'Application/json'},
       withCredentials:true,
     };
+    console.log("Post ID:", post_id);
     const response = await axios.post(
       `${baseURL}/api/comment/`,
-        payload,
+        {
+            content: content,
+            content_type: post_id,
+            parent: parent || null, // Nếu không có parent thì để là null
+            target_model: type,
+            target_object_id: post_id,
+        },
         config
     );
     return response.data;
   } catch (error) {
-    console.error("Error sending comment:", error);
+    console.error("Vui lòng đăng nhập trước khi gửi:", error);
     throw error;
   }
 }
+interface FetchCommentsOptions {
+  chapter_type?: string;
+  chapter_id?: string;
+  content_type?: string;
+  object_id?: string;
+}
+export const fetchComments = async (options: FetchCommentsOptions): Promise<Comment[]> => {
+
+    const config = {
+      headers: {'Content-Type': 'Application/json'},
+      withCredentials:true,
+    };
+    const url = new URL(`${baseURL}/api/comment/`);
+    if (options.chapter_type && options.chapter_id) {
+        url.searchParams.append("chapter_type", options.chapter_type);
+        url.searchParams.append("chapter_id", options.chapter_id);
+    } else if (options.content_type && options.object_id) {
+        url.searchParams.append("content_type", options.content_type);
+        url.searchParams.append("object_id", options.object_id);
+    } else {
+        throw new Error("Missing required query parameters");
+    }
+
+    const response = await axios.get(url.toString(), config);
+    console.log("Comments fetched:", response.data.results);
+    return response.data.results || [];
+}
+
 
 export const updateLike  = async ({ post_id, type }: LikeProp) => {
   try{

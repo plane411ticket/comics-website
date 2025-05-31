@@ -21,7 +21,7 @@ export const fetchStoryChapters = async (novelid: string) => {
   try {
     const response = await axios.get(`${baseURL}/api/novel/${novelid}/chapters`);
     console.log("list chapters:");
-    console.log(response.data);
+    console.log(response);
     return response.data;
   }
 

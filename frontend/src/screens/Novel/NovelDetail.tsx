@@ -8,9 +8,7 @@ import {NovelChapter} from '../../types/novel/novelChapters';
 import { fetchStoryDetails, fetchStoryChapters, fetchNovel} from '../../actions/novelAction'; 
 import { faEye, faCommentDots, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useMemo } from "react";
-
-
-  
+import { CommentList } from "../../components/CommentGrid";
 
 
 const StoryDetailPage = () => {
@@ -29,7 +27,7 @@ const StoryDetailPage = () => {
     const shuffled = [...filtered].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, n);
   }
-
+// Gửi bình luận
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -242,12 +240,6 @@ return (
           </div>
         </aside>
       </div>
-
-
-     
-    
-
-
           {/* Danh sách chương */}
         <div className="flex-1 mt-10">
           <div className="bg-orange-300 text-center py-2">
@@ -276,9 +268,12 @@ return (
             }
           </div>
         </div>
+        <div className="flex-1 mt-10">
+          <CommentList type="novel" post_id={String(storyId)} />
         </div>
+      </div>
 
-
+    
 
   );
 };

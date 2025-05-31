@@ -5,11 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 from chapter.models import NovelChapter
-
 from gtts import gTTS
-import json
-
-from django.views.decorators.csrf import csrf_exempt
 import re
 
 # --- Chương trình làm sạch dữ liệu  cho chapter ---
@@ -28,7 +24,7 @@ def clean_vietnamese_tts_text(text: str) -> str:
     # Remove common informal prefixes/suffixes or chat language
     pattern = re.compile(r'\bm(n|ik|t|mik|cj|k)\b', re.IGNORECASE)
     text = pattern.sub('', text)
-
+    
     # Remove non-writing symbols (common in UI/chat but not prose)
     text = re.sub(r'[=@#$%^*_~<>\\|{}\[\]]+', '', text)
     
