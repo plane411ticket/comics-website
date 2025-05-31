@@ -94,7 +94,15 @@ export const fetchManga = async (page=1): Promise<Manga[]> => {
             console.log(response)
             console.log(`${baseURL}/api/manga/?page=${page}`)
             const data = await response.json()
-            return Array.isArray(data.results) ? data.results : [];
+            // return Array.isArray(data.results) ? data.results : [];
+            const mangas = Array.isArray(data.results)
+              ? data.results.map((manga: any) => ({
+                  ...manga,
+                  cover_image: cleanImageURL(manga.cover_image), // xử lý ảnh ở đây
+                }))
+              : [];
+
+            return mangas;
         } catch (error) {
             console.error("Failed to fetch manga:", error);
             return [];
@@ -120,3 +128,10 @@ export const fetchAdvancedSearch = async (filters: AdvancedFilter): Promise<Mang
         return [];
     }
 } 
+
+// utils/image.ts (hoặc trong cùng file nếu bạn chưa chia module)
+export function cleanImageURL(url: string): string {
+  if (!url) return "";
+  const cloudinaryIndex = url.indexOf("https://res.cloudinary.com");
+  return cloudinaryIndex !== -1 ? url.slice(cloudinaryIndex) : url;
+}
