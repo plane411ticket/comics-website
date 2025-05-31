@@ -1,44 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../types/user/userSlice";
 import axios from "axios";
+import {Notification} from "../../types/notification/notify"
 
 const baseURL = import.meta.env.VITE_ADMIN_URL;
 
 const Notify = () => {
     const userInfo = useSelector(selectUser);
-    const [notifications, setNotifications] = useState([]);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
     const [showDropdown, setShowDropdown] = useState(false);
 
-    const handleClick = async () => {
-        if (!userInfo) {
-            console.log("User not logged in");
-            return;
-        }
+    // Tự động fetch mỗi 15 giây
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            if (!userInfo) return;
 
-        try {
-            const config = {
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true,
-            };
+            try {
+                const config = {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                };
 
-            const response = await axios.get(`${baseURL}/api/notifications/`, config);
-            console.log("Notifications:", response.data);
-            setNotifications(response.data.results);
-            setShowDropdown(!showDropdown);
-        } catch (error) {
-            console.error("Error fetching notifications:", error);
-        }
-    };
+                const response = await axios.get(`${baseURL}/api/notifications/`, config);
+                setNotifications(response.data.results);
+            } catch (error) {
+                console.error("Error fetching notifications:", error);
+            }
+        };
 
-    const unreadCount = notifications.filter((n: any) => !n.seen).length;
+        fetchNotifications();
 
+        const interval = setInterval(fetchNotifications, 5000); // 15 giây
+        return () => clearInterval(interval); // cleanup
+    }, [userInfo]);
+    
+    const unreadCount = notifications.filter(n => !n.seen).length;
     return (
         <div className="relative">
-            <button onClick={handleClick}>
-                <div id="notification-icon" className="relative cursor-pointer">
+            <button onClick={() => setShowDropdown(!showDropdown)}>
+                <div className="relative cursor-pointer">
                     <svg
-                        id="bell-icon"
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-6 w-6 text-gray-700 hover:text-yellow-500"
                         fill="none"
@@ -53,31 +55,51 @@ const Notify = () => {
                         />
                     </svg>
                     {unreadCount > 0 && (
-                        <span
-                            id="notify-count"
-                            className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1"
-                        >
+                        <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
                             {unreadCount}
                         </span>
                     )}
-                </div>
+                </div> 
             </button>
-
             {showDropdown && notifications.length > 0 && (
                 <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded shadow-lg z-50">
                     <ul className="max-h-60 overflow-y-auto">
-                        {notifications.map((noti: any) => (
-                            <li key={noti._id} className="p-2 hover:bg-gray-100 border-b">
-                                <a href={`/${noti.link}`} className="text-sm text-gray-800">
-                                    {noti.message}
-                                </a>
+                        {notifications.map((noti) => (
+                            <li
+                                key={noti._id}
+                                className={`p-2 hover:bg-gray-100 border-b ${noti.seen ? 'text-gray-500' : 'text-black'}`}
+                                onClick={async () => {
+                                    if (!noti.seen) {
+                                        try {
+                                            await axios.patch(
+                                                `${baseURL}/api/notifications/${noti._id}/`,
+                                                { seen: true },
+                                                {
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    withCredentials: true,
+                                                }
+                                            );
+
+                                            setNotifications(prev =>
+                                                prev.map(n =>
+                                                    n._id === noti._id ? { ...n, seen: true } : n
+                                                )
+                                            );
+                                        } catch (err) {
+                                            console.error("Failed to mark as seen", err);
+                                        }
+                                    }
+                                    window.location.href = `/${noti.link}`;
+                                }}
+                            >
+                                <span className="text-sm">{noti.message}</span>
                             </li>
                         ))}
                     </ul>
                 </div>
-            )}
-        </div>
+                )}
+            </div>
     );
 };
-
 export default Notify;
+
