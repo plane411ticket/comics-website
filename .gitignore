@@ -37,7 +37,7 @@ covers/
 managa_covers/
 managa_images/
 novel_covers/
-*.png
+# *.png
 *.jpg
 !default.jpg
 *.mp3

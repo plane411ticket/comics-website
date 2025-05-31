@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny,IsAuthenticated,IsAuthenticatedOrReadOnly
+from rest_framework.request import Request
 from django.contrib.auth import authenticate
 from .serializers import *
 from .models import Favorite
@@ -21,6 +22,7 @@ from .models import Comments
 from .serializers import CommentsSerializer
 from users.authentication import CookieJWTAuthentication
 from rest_framework.decorators import authentication_classes
+from django.shortcuts import get_object_or_404
 # from .models import Notification
 # from .serializers import NotificationSerializer
 User = get_user_model()
@@ -34,11 +36,14 @@ def RegisterUser(request):
     try:
         if User.objects.filter(email=data["email"]).exists():
             return Response({"detail": "User with this email already exists"}, status=status.HTTP_400_BAD_REQUEST)
-        if not data['name'] or not data['password']:
+        if User.objects.filter(email=data["username"]).exists():
+            return Response({"detail": "User with this email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not data['username'] or not data['password']:
             return Response({"detail": "Email and password are required"}, status=status.HTTP_400_BAD_REQUEST)
         user = User.objects.create(
-            first_name = data['name'],
-            username = data['email'],
+            first_name = data['username'],
+            username = data['username'],
             email = data['email'],
             password = make_password(data['password']) # hash password for security
         )
@@ -56,10 +61,10 @@ def RegisterUser(request):
 def LoginUser(request):
     data = request.data
     try:
-        email = data['email']
+        username = data['username']
         password = data['password']
         
-        user = authenticate(username=email, password=password)
+        user = authenticate(username=username, password=password)
 
         if user is not None:
             refresh = RefreshToken.for_user(user)
@@ -132,12 +137,22 @@ def RefreshTokenView(request):
 @authentication_classes([CookieJWTAuthentication])
 class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get_queryset(self):
         user = self.request.user
         if(user.is_staff or user.is_superuser):
             return User.objects.all()
         return User.objects.filter(id=user.id)
+    def retrieve(self, request, *args, **kwargs):
+        username = self.kwargs.get("username")
+        user = get_object_or_404(User, username=username)
+        # Optional: chỉ cho chính chủ hoặc admin xem
+        if user.is_superuser:
+            return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = self.get_serializer(user)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
     def perform_destroy(self, instance):
         user = self.request.user
         if not (user.is_staff or user.is_superuser or instance == user):
@@ -293,17 +308,17 @@ class CommentViewSet(viewsets.ModelViewSet):
 
         instance.delete()
 
-# @authentication_classes([CookieJWTAuthentication])
-# class NotificationViewSet():
-#     queryset = Notification.objects.all()
-#     serializer = NotificationSerializer()
-#     permission_classes = [IsAuthenticated]
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    authentication_classes = [CookieJWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-#     def get_queryset(self):
-#         return Notification.objects.filter(user=self.request.user).order_by('created_at')
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('created_at')
 
-#     def perform_create(self, serializer):
-#         serializer.save(user=self.request.user)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 # @authentication_classes([CookieJWTAuthentication])
 # class MarkAsSeenViewSet():

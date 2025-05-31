@@ -70,12 +70,12 @@ class LikeSerializer(serializers.ModelSerializer):
         serializers = UserSerializer(user,many=False)
         return serializers.data
 
-# class NotificationSerializer(serializers.ModelSerializer):
-#     user = serializers.SerializerMethodField(read_only=True)
-#     class Meta:
-#         model = Notification
-#         fields = '__all__'
-#     def get_user(self, obj):
-#         user = obj.user
-#         serializers = UserSerializer(user, many=False)
-#         return serializers.data
+class NotificationSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = Notification
+        fields = '__all__'
+    def get_user(self, obj):
+        user = obj.user
+        serializers = UserSerializer(user, many=False)
+        return serializers.data

@@ -8,7 +8,7 @@ from django.conf import settings
 # from django.contrib.auth.models import User
 
 class CustomUser(AbstractUser):
-    cover = models.ImageField(upload_to='covers/', null=False ,default='covers/default.jpg')
+    cover = models.ImageField(upload_to='user_covers/', null=False ,default='user_covers/default.jpg')
 
     def __str__(self):
         return self.username
@@ -76,13 +76,17 @@ class Likes(models.Model):
     def __str__(self):
         return f"{self.user}"
 
-# class Notification(models.Model):
-#     _id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     message = models.TextField()
-#     link = models.URLField()
-#     seen = models.BooleanField(default = False)
-#     created_at = models.DateTimeField(auto_now_add=True)
+class Notification(models.Model):
+    NOTIFY_TYPE = [
+        ('chapter_update', 'Truyện đã cập nhật'),
+        ('comment_reply', 'Comment được reply'),
+    ]
+    _id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    message = models.TextField()
+    link = models.URLField()
+    seen = models.BooleanField(default = False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return f"{self.user} - {self.message}"
+    def __str__(self):
+        return f"{self.user} - {self.message}"
