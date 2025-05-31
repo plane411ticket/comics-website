@@ -127,7 +127,6 @@ def RefreshTokenView(request):
 # ============================
 #  User ViewSets
 # ============================
-
 @authentication_classes([CookieJWTAuthentication])
 class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
@@ -216,6 +215,29 @@ def ToggleFavorite(request):
         post.numFavorites += 1
         post.save(update_fields=['numFavorites'])
         return Response({"status": "favorite","numFavorites":post.numFavorites}, status=status.HTTP_201_CREATED)
+
+@api_view(["GET"])
+@authentication_classes([CookieJWTAuthentication])
+def FindFavorite(request):
+    user = request.user
+    type = request.query_params.get("type")
+    if not user:
+        return Response({"error": "Missing user ID"}, status=status.HTTP_400_BAD_REQUEST)
+    if(type == "novel"):
+        try:
+            fav = Favorite.objects.get(user=user.id, type="novel")
+        except Favorite.DoesNotExist:
+            return Response({"error": "Novel's favorite not found"}, status=status.HTTP_404_NOT_FOUND)
+    if(type == "manga"):
+        try:
+            fav = Favorite.objects.get(user=user.id, type="manga")
+        except Favorite.DoesNotExist:
+            return Response({"error": "Manga's favorite not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    if fav:
+        return Response({"favorite": fav}, status=status.HTTP_200_OK)
+    else:
+        return Response({"error": "Favorite not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @authentication_classes([CookieJWTAuthentication])
 class CommentViewSet(viewsets.ModelViewSet):

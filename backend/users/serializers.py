@@ -8,7 +8,7 @@ from .models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'cover']
+        fields = ['id','email', 'first_name','cover','groups']
         read_only_fields = ['id'] 
     
 

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { login } from '../types/user/userSlice';
 import { CommentPayload } from '../types/user/User';
-import { LikeProp } from '../types/user/User';
+import { LikeProp, User } from '../types/user/User';
 const baseURL = 'http://localhost:8000'
     
 export const registerUser = async (name: string, email: string, password: string) => {
@@ -57,19 +57,19 @@ export const logoutUser = async () => {
 };
 
 
-export const fetchProfile = async () => {
+export const fetchProfile = async (): Promise<User | null> => {
     try {
         const config = {
             headers: { 'Content-Type': 'Application/json' },
             withCredentials:true,
         }
-        const response = await axios.post(
-            `${baseURL}/api/me/`,
-            {},  
+        const response = await axios.get(
+            `${baseURL}/api/me/`,  
             config
         );
-        console.log(response.data); // Debug kết quả
-        return response.data;
+        const user = response.data?.results?.[0];
+        console.log("User profile fetched:", user);
+        return user ? (user as User) : null;
         
     } catch (error) {
         console.error("Cần đăng nhập/đăng ký:", error);
@@ -79,25 +79,38 @@ export const fetchProfile = async () => {
 
 export const useAutoLogin = () => {
     const dispatch = useDispatch();
-    console.log("AutoLogin chạy!");
-    console.log(`${baseURL}/api/refresh/`);
+
     useEffect(() => {
-        const refreshToken = async () => {
-            const config = {
-                withCredentials:true}
+        const autoLogin = async () => {
+            const config = { withCredentials: true };
             try {
-                await axios.post(
-                    `${baseURL}/api/refresh/`,
-                    {}, 
-                    config);
-                dispatch(login({Islogin:true}));
+                // Bước 1: Refresh token
+                await axios.post(`${baseURL}/api/refresh/`, {}, config);
+                console.log("Refresh token thành công");
+
+                // Bước 2: Gọi fetchProfile để lấy user info
+                const profile = await fetchProfile();
+
+                if (profile) {
+                    dispatch(
+                        login({
+                            first_name: profile.first_name,
+                            cover: profile.cover,
+                            isLogin: true,
+                        })
+                    );
+                } else {
+                    console.log("Không lấy được profile");
+                }
+
             } catch (error) {
-                console.log("Không thể refresh token", error);}
+                console.error("Tự động đăng nhập thất bại:", error);
+            }
         };
-        refreshToken();
+
+        autoLogin();
     }, [dispatch]);
 };
-
 export const useComment = async (payload: CommentPayload): Promise<void> => {
   try{
     const config = {
