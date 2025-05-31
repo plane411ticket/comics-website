@@ -16,20 +16,16 @@ export default function RegisterScreen() {
     const errRef = useRef<HTMLInputElement | null>(null);
     const [user, setUser] = useState('');
     const [validName, setValidName] = useState(false);
-    const [userFocus, setUserFocus] = useState(false);
 
     const [pwd, setPwd] = useState('');
     const [validPwd, setValidPwd] = useState(false);
-    const [pwdFocus, setPwdFocus] = useState(false);
-
+    
     const [matchPwd, setMatchPwd] = useState('');
     const [validMatch, setValidMatch] = useState(false);
-    const [matchFocus, setMatchFocus] = useState(false);
 
     const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
-    const [emailFocus, setEmailFocus] = useState(false);
-
+    
 
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
@@ -76,7 +72,8 @@ export default function RegisterScreen() {
         try { 
             const response = await registerUser(user, email, pwd);
             console.log(response.status)
-            if(response?.status!==200) throw new Error("Registration failed");
+            if(response?.status!==200) throw new Error("Registration Failed");
+            
             setSuccess(true);
             dispatch(login({
                         _id:response.data.id,
@@ -94,7 +91,7 @@ export default function RegisterScreen() {
                 setErrMsg('Username Taken');
             } 
             else if (err.response?.status === 400) {
-                setErrMsg('Email Taken');
+                setErrMsg('Email or Username Taken');
             } 
             else {
                 setErrMsg('Registration Failed');
@@ -145,12 +142,10 @@ export default function RegisterScreen() {
                                         required
                                         aria-invalid={validName ? "false" : "true"}
                                         aria-describedby="uidnote"
-                                        onFocus={() => setUserFocus(true)}
-                                        onBlur={() => setUserFocus(false)}
                                         className="p-2 border rounded w-full"
                                         placeholder="Nhập user name"
                                     />
-                                    <p id="uidnote" className={userFocus && !validName ? "instructions" : "offscreen"}>
+                                    <p id="uidnote" className={!validName ? "instructions" : "offscreen"}>
                                         <FontAwesomeIcon icon={faInfoCircle} />
                                          4 to 24 characters.<br />
                                         Must begin with a letter.<br />
@@ -170,12 +165,10 @@ export default function RegisterScreen() {
                                         required
                                         aria-invalid={validEmail ? "false" : "true"}
                                         aria-describedby="uidnote"
-                                        onFocus={() => setEmailFocus(true)}
-                                        onBlur={() => setEmailFocus(false)}
                                         className="p-2 border rounded w-full"
                                         placeholder="Nhập Email"
                                     />
-                                    <p id="uidnote" className={emailFocus && !validEmail ? "instructions" : "offscreen"}>
+                                    <p id="uidnote" className={!validEmail ? "instructions" : "offscreen"}>
                                         <FontAwesomeIcon icon={faInfoCircle} />
                                          Please enter an valid email.<br />
                                     </p>
@@ -192,12 +185,10 @@ export default function RegisterScreen() {
                                         required
                                         aria-invalid={validPwd ? "false" : "true"}
                                         aria-describedby="pwdnote"
-                                        onFocus={() => setPwdFocus(true)}
-                                        onBlur={() => setPwdFocus(false)}
                                         className="p-2 border rounded w-full"
                                         placeholder="Nhập mật khẩu"
                                     />
-                                    <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
+                                    <p id="pwdnote" className={!validPwd ? "instructions" : "offscreen"}>
                                         <FontAwesomeIcon icon={faInfoCircle} />
                                          8 to 24 characters.<br />
                                         Must include uppercase and lowercase letters, a number and a special character.<br />
@@ -214,12 +205,10 @@ export default function RegisterScreen() {
                                         required
                                         aria-invalid={validMatch ? "false" : "true"}
                                         aria-describedby="confirmnote"
-                                        onFocus={() => setMatchFocus(true)}
-                                        onBlur={() => setMatchFocus(false)}
                                         className="p-2 border rounded w-full"
                                         placeholder="Nhập lại mật khẩu"
                                     />
-                                    <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
+                                    <p id="confirmnote" className={!validMatch ? "instructions" : "offscreen"}>
                                         <FontAwesomeIcon icon={faInfoCircle} />
                                          Must match the first password input field.
                                     </p>

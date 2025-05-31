@@ -46,7 +46,7 @@ export interface CommentItemProps {
   comment: Comment;
   getReplies?: (id: number) => Comment[];
   addReply: (text: string, parentId: number) => void;
-  depth?: number;
+  isNested?: boolean;
 }
 export interface CommentListProps {
   user?: number;

@@ -1,12 +1,14 @@
-import React from 'react'
-import { useState } from "react";
-import { Comment, CommentFormProps, CommentItemProps, CommentListProps } from "../types/user/User";
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Comment, CommentFormProps, CommentItemProps, CommentListProps } from '../types/user/User';
 import { fetchComments, postComment } from '../actions/userAction';
-import { useEffect } from 'react';
+
+// CommentForm component (giữ nguyên)
 export const CommentForm: React.FC<CommentFormProps> = ({
-    onSubmit = () => {},
-    initialText = "",
-    submitLabel = "Post",
+  onSubmit = () => {},
+  initialText = '',
+  submitLabel = 'Post',
 }) => {
   const [text, setText] = useState(initialText);
 
@@ -14,7 +16,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
     e.preventDefault();
     if (!text.trim()) return;
     onSubmit(text);
-    setText("");
+    setText('');
   };
 
   return (
@@ -32,15 +34,16 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   );
 };
 
+// CommentItem component
 export const CommentItem: React.FC<CommentItemProps> = ({
   comment,
   addReply,
-  depth = 0,
+  isNested = false, // Thay depth bằng isNested để xác định có thụt đầu dòng hay không
 }) => {
   const [isReplying, setIsReplying] = useState(false);
 
-   return (
-    <div className={`my-2 ${depth === 1 ? "ml-6" : ""}`}>
+  return (
+    <div className={`my-2 ${isNested ? 'ml-6' : ''}`}>
       <div className="flex items-center gap-2 mb-1">
         {comment.user.cover && (
           <img
@@ -55,14 +58,12 @@ export const CommentItem: React.FC<CommentItemProps> = ({
 
       <div className="bg-gray-100 p-2 rounded">
         <p>{comment.content}</p>
-        {depth === 0 && (
-          <button
-            onClick={() => setIsReplying(!isReplying)}
-            className="text-sm text-blue-500 mt-1"
-          >
-            Reply
-          </button>
-        )}
+        <button
+          onClick={() => setIsReplying(!isReplying)}
+          className="text-sm text-blue-500 mt-1"
+        >
+          Reply
+        </button>
       </div>
 
       {isReplying && (
@@ -81,75 +82,102 @@ export const CommentItem: React.FC<CommentItemProps> = ({
   );
 };
 
-export const CommentList: React.FC<CommentListProps> = ({type, post_id }) => {
+export const CommentList: React.FC<CommentListProps> = ({ type, post_id }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
 
-    const fetchData = async () => {
-      try {
-        const fetchedComments = await fetchComments({object_id: post_id, content_type:type});
-        setComments(fetchedComments);
-      } catch (error) {
-        console.error("Failed to fetch comments:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  
-  }, []);
-  const addComment = async (content: string, parent: number | null = null) => {
-    const info = await postComment(
-        post_id,
-        content,
-        type,
-        parent
-      );
-    console.log("Comment info:", info);
-    const newComment: Comment = {
-      id: info.id,
-      parent,
-      user: info.user,
-      target_model: type,
-      target_object_id: post_id,
-      content,
-      created_at: info.created_at || new Date(),
-    };
-    setComments((prev) => [newComment, ...prev]);
+  const fetchData = async () => {
+    try {
+      const fetchedComments = await fetchComments({ object_id: post_id, content_type: type });
+      setComments(fetchedComments);
+    } catch (error) {
+      console.error('Failed to fetch comments:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const calculateDepth = (comment: Comment, comments: Comment[]): number => {
-  let depth = 0;
-  let current = comment;
-  while (current.parent !== null) {
-    const parentComment = comments.find((c) => c.id === current.parent);
-    if (!parentComment) break;
-    current = parentComment;
-    depth += 1;
+  useEffect(() => {
+    fetchData();
+  }, [post_id, type]);
+
+  const addComment = async (content: string, parent: number | null = null) => {
+    try {
+      const info = await postComment(post_id, content, type, parent);
+      // Tạo comment mới từ dữ liệu trả về
+      const newComment: Comment = {
+        id: info.id,
+        parent,
+        user: info.user,
+        target_model: type,
+        target_object_id: post_id,
+        content,
+        created_at: info.created_at || new Date(),
+      };
+      // Cập nhật trạng thái comments bằng cách thêm comment mới
+      setComments((prev) => [newComment, ...prev]);
+    } catch (error) {
+      console.error('Error posting comment:', error);
+    }
+  };
+
+  // Hàm xây dựng cấu trúc cây comment
+  const buildCommentTree = (comments: Comment[]): CommentTree[] => {
+    const commentMap: { [key: number]: CommentTree } = {};
+    const tree: CommentTree[] = [];
+
+    // Khởi tạo map cho tất cả các comment
+    comments.forEach((comment) => {
+      commentMap[comment.id] = { ...comment, children: [] };
+    });
+
+    // Xây dựng cây
+    comments.forEach((comment) => {
+      if (comment.parent === null) {
+        tree.push(commentMap[comment.id]); // Comment gốc (root)
+      } else {
+        // Comment con, thêm vào danh sách con của comment cha
+        if (comment.parent && commentMap[comment.parent]) {
+          commentMap[comment.parent].children.push(commentMap[comment.id]);
+        }
+      }
+    });
+
+    return tree;
+  };
+
+  // Giao diện cho CommentTree để thêm thuộc tính children
+  interface CommentTree extends Comment {
+    children: CommentTree[];
   }
-  return depth;
-};
+
+  // Hàm render comment phẳng
+  const renderComments = (commentTree: CommentTree[], isNested: boolean = false) => {
+    return commentTree.map((comment) => (
+      <div key={comment.id}>
+        <CommentItem
+          comment={comment}
+          addReply={addComment}
+          isNested={isNested}
+        />
+        {/* Render tất cả comment con (bao gồm cháu, chắt) như comment con trực tiếp */}
+        {comment.children.length > 0 && (
+          <div>{renderComments(comment.children, true)}</div>
+        )}
+      </div>
+    ));
+  };
+
   if (loading && !Array.isArray(comments)) return <p>Loading comments...</p>;
+
+  // Xây dựng cây comment
+  const commentTree = buildCommentTree(comments);
+
   return (
     <div>
       <h2 className="text-xl font-semibold mb-2">Comments</h2>
       <CommentForm onSubmit={(text) => addComment(text)} />
-      <div className="mt-4">
-        {comments.map((comment) => {
-          const depth = calculateDepth(comment, comments);
-          return (
-            <CommentItem
-              key={comment.id}
-              comment={comment}
-              depth={depth > 1 ? 1 : depth} // depth 2+ gán bằng 1 (chỉ 2 cấp)
-              addReply={addComment}
-            />
-          );
-        })}
-    </div>
-
+      <div className="mt-4">{renderComments(commentTree)}</div>
     </div>
   );
 };
