@@ -51,7 +51,10 @@ export const fetchMangaChapterDetail = async (chapterId: string) => {
       title: raw.title,
       chapter_number: raw.chapter_number,
       created_at: raw.created_at,
-      images: raw.chapterImages, // Ánh xạ đúng với interface
+      images: raw.chapterImages.map((img: any) => ({
+        ...img,
+        image: img.image.replace(/^image\/upload\//, ''), // Bỏ chuỗi dư thừa
+      })),
       previousChapterId: raw.previousChapterId ?? null,
       nextChapterId: raw.nextChapterId ?? null,
     };
@@ -85,7 +88,7 @@ export const fetchManga = async (page=1): Promise<Manga[]> => {
             const data = await response.json()
             return Array.isArray(data.results) ? data.results : [];
         } catch (error) {
-            console.error("Failed to fetch novel:", error);
+            console.error("Failed to fetch manga:", error);
             return [];
         }
 };
