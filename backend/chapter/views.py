@@ -53,6 +53,6 @@ def getNovelChapterList(request, pk):
     try:
         chapter = NovelChapter.objects.filter(novel__pk=pk).order_by("chapter_number")
         serializer = NovelChapterListSerializer(chapter, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data,status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'details': f"{e}"}, status=status.HTTP_204_NO_CONTENT)
