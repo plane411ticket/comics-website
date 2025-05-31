@@ -6,7 +6,7 @@ import { LikeProp, User } from '../types/user/User';
 import { Comment } from '../types/user/User';
 const baseURL = import.meta.env.VITE_ADMIN_URL;
 
-export const registerUser = async (name: string, email: string, password: string) => {
+export const registerUser = async (username: string, email: string, password: string) => {
     try {
         const config = {
             headers: { 'Content-Type': 'Application/json' },
@@ -14,7 +14,7 @@ export const registerUser = async (name: string, email: string, password: string
         }
         const response = await axios.post(
             `${baseURL}/api/register/`, 
-            {name, email, password }, // gửi thông tin user về backend
+            {username, email, password }, // gửi thông tin user về backend
             config
         );
 
@@ -26,14 +26,14 @@ export const registerUser = async (name: string, email: string, password: string
     }
 };
 
-export const loginUser = async (email: string, password: string) => {
+export const loginUser = async (username: string, password: string) => {
     try {
         const config = {
             headers: { 'Content-Type': 'Application/json' },
             withCredentials:true,
         }
         const response = await axios.post(`${baseURL}/api/login/`, 
-            {email, password}, 
+            {username, password}, 
             config
         );
         console.log(response); // Debug kết quả
@@ -57,17 +57,28 @@ export const logoutUser = async () => {
 };
 
 
-export const fetchProfile = async (): Promise<User | null> => {
+export const fetchProfile = async (username?:string): Promise<User | null> => {
     try {
         const config = {
             headers: { 'Content-Type': 'Application/json' },
             withCredentials:true,
         }
-        const response = await axios.get(
-            `${baseURL}/api/me/`,  
-            config
-        );
-        const user = response.data?.results?.[0];
+        var response = null, user = null;
+        if(username) {
+            response = await axios.get(
+                `${baseURL}/api/user/${username}/`,  
+                config
+            );
+            user = response.data;
+        }
+        else {
+            response = await axios.get(
+                `${baseURL}/api/me/`,  
+                config
+            );
+            user = response.data?.results?.[0];
+        
+        }
         console.log("User profile fetched:", user);
         return user ? (user as User) : null;
         
@@ -90,10 +101,11 @@ export const useAutoLogin = () => {
 
                 // Bước 2: Gọi fetchProfile để lấy user info
                 const profile = await fetchProfile();
-
+                
                 if (profile) {
                     dispatch(
                         login({
+                            name: profile.first_name,
                             first_name: profile.first_name,
                             cover: profile.cover,
                             isLogin: true,

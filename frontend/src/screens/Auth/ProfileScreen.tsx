@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import {fetchProfile} from "../../actions/userAction";
 import { User } from "../../types/user/User";
 import { FaEdit } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 // 1. Define the tab keys and their content types
 type TabKey = "info" | "uploads" | "mdlists";
 
@@ -20,6 +21,8 @@ export default function ProfileScreen() {
         const userInfo = useSelector(selectUser);
         const [searchParams, setSearchParams] = useSearchParams();
         const tabRefs = useRef<{ [key in TabKey]?: HTMLAnchorElement | null }>({});
+        const { username } = useParams();
+        const [isValid,setValid] = useState<boolean>(false);
         // Define tabs with their content
         const tabsConfig: Record<TabKey, TabContent> = {
             info: {
@@ -46,7 +49,9 @@ export default function ProfileScreen() {
 
         const [selectorStyles, setSelectorStyles] =  useState<{ left: number; width: number } | null>(null);
         const [selectorReady, setSelectorReady] = useState(false);
-        // Update URL when tab changes
+        const [profile, setProfile] = useState<User | null>(null);
+        const isOwner = !username || username === userInfo?.name;
+        // Update URL khi tab thay đổi //
         useEffect(() => {
             setSearchParams({ tab: activeTab });
         }, [activeTab, searchParams]);
@@ -54,6 +59,7 @@ export default function ProfileScreen() {
         const tabContent = Object.fromEntries(
             Object.entries(tabsConfig).map(([key, { component }]) => [key, component])
         ) as Record<TabKey, React.ReactNode>;
+        // Update selector khi tab thay đổi //
         useLayoutEffect(() => {
             const timer = setTimeout(() => {
                 const el = tabRefs.current[activeTab];
@@ -63,29 +69,35 @@ export default function ProfileScreen() {
                 setSelectorReady(true);
                 }
             }, 0);
-
         return () => clearTimeout(timer);
         }, [activeTab, userInfo]);
 
-        const [profile, setProfile] = useState<User | null>(null);
+        // Fetch profile khi xác thực được đối tượng //
         useEffect(()=>{
-            if(userInfo)
-            {
-                const fetchData = async ()=>{
-                    try {
-                        const profileData = await fetchProfile();
-                        setProfile(profileData);
-                    } catch (error) {
-                        console.error("Error fetching profile:", error);
-                    }
-                }
-                fetchData();
-            }
-        },[userInfo]);
+          const fetchData = async () =>{
+              try {
+                var profileData = null;
+                  console.log("Fetching profile for user:", username);
+                  if(username) 
+                    profileData = await fetchProfile(username);
+                  else profileData = await fetchProfile();
+                  
+                  if(profileData === null) setValid(false);
+                  else {
+                    setProfile(profileData);
+                    setValid(true);
+                  }
+                  console.log("Profile fetched:", profileData);
+                  
+              } catch (error) {
+                  console.error("Error fetching profile:", error);
+                  setValid(false);
+              }
+          }
+            fetchData();
+        },[userInfo, searchParams]);
 
-
-
-        // Thêm state cho chế độ chỉnh sửa
+        // Thêm state cho chế độ chỉnh sửa //
         const [editMode, setEditMode] = useState(false);
         const [editProfile, setEditProfile] = useState<User | null>(null);
 
@@ -118,7 +130,7 @@ export default function ProfileScreen() {
 
         
 
-  return userInfo ? (
+  return isValid ? (
     <div className="bg-gray-100">
       <div className="container mx-auto py-8">
         <div className="w-full grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
@@ -194,7 +206,7 @@ export default function ProfileScreen() {
                 {activeTab === "info" ? (
                   <div className="relative">
                     {/* Nút chỉnh sửa */}
-                    {!editMode && (
+                    {!editMode && isOwner && (
                       <button
                         className="absolute top-0 right-0 text-gray-500 hover:text-blue-600"
                         onClick={handleEdit}
@@ -326,7 +338,7 @@ export default function ProfileScreen() {
     </div>
   ) : (
     <div className="flex items-center justify-center h-screen mt-1">
-      <h1 className="text-xl font-bold text-center">Vui lòng đăng nhập</h1>
+      <h1 className="text-xl font-bold text-center">Profile không tồn tại</h1>
     </div>
   );
 }

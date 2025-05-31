@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import HomePage from "./screens/Home/HomePage";
-import Profiles from "./screens/Auth/ListProfiles";
 import Error from "./screens/Error";
 import UserProfilePage from "./screens/Auth/ProfileScreen";
 import MangaList from "./screens/Manga/MangaList.tsx";
@@ -32,9 +31,8 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/home", element: <HomePage /> },
-      { path: "/profiles", element: <Profiles /> },
-      { path: "/profile", element: <UserProfilePage /> },
-      //{ path: "/profiles/:userId", element: <UserProfilePage /> },
+      { path: "/profile/me", element: <UserProfilePage /> },
+      { path: "/profiles/:username", element: <UserProfilePage /> },
       { path: "/manga", element: <MangaList /> },
       { path: "/novel", element: <NovelList /> },
       { path: "/leaderboard", element: <Leaderboard /> },

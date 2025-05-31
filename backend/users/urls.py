@@ -4,8 +4,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'comment', CommentViewSet, basename='comment')
-router.register(r'me', ProfileViewSet, basename='my-profile')
+router.register(r'me', ProfileViewSet, basename='me')
+
 urlpatterns = [
+    path('user/<str:username>/', ProfileViewSet.as_view({'get': 'retrieve'}), name='user-detail-by-username'),
     path('favorite/', ToggleFavorite, name='favorite'),
     path('like/',ToggleLike,name='like_post'),
     path('refresh/',RefreshTokenView,name='token_refresh'),
