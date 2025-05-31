@@ -203,3 +203,19 @@ button:focus {
 .search-result-item:last-child {
   border-bottom: none;
 }
+
+
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.animate-shine {
+  animation: shine 2s infinite;
+}
+
+
