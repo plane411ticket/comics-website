@@ -58,6 +58,8 @@ export const fetchMangaChapterDetail = async (chapterId: string) => {
       previousChapterId: raw.previousChapterId ?? null,
       nextChapterId: raw.nextChapterId ?? null,
     };
+    console.log("chapter", chapter);
+    console.log("images", chapter.images);
     return chapter;
   }
   catch (error) {
