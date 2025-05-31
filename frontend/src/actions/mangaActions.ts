@@ -13,7 +13,13 @@ export const fetchMangaDetails = async (mangaid: string) => {
       //const response = await axios.get(`${baseURL}/api/novel/baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef`)
       console.log("manga details:");
       console.log(response.data);
-      return response.data;
+      const data = await response.data
+      // return response.data;
+      if (data.cover_image) {
+      data.cover_image = cleanImageURL(data.cover_image);
+    }
+
+      return data;
     }
     catch (error) {
         console.error("Error fetching manga details:", error);
