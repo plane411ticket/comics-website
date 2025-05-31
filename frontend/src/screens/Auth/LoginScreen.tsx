@@ -47,15 +47,43 @@ export default function LoginScreen() {
         }  
     }
     return (
-        <div className="bg-orange-800 text-white font-Nurito flex items-center justify-center h-screen">
-            {success ? (
+        <div className="bg-orange-800 text-white font-Nurito flex items-center justify-center h-screen  ">
+            {/* {success ? (
                 <section>
-                    <h1>Success!</h1>
+                    <h2>Success!</h2>
                     <p>
                         <Link to="/">Back to home</Link>
                     </p>
                 </section>
+            ) : ( */}
+            {success ? (
+                <div className="flex items-center justify-center bg-orange-800 text-white font-Nurito px-4 ">
+                    <div className="bg-white text-gray-900 rounded-2xl shadow-2xl p-8 sm:p-10 w-full max-w-[1600px] text-center animate-fade-in transition-all duration-400">
+                        <img
+                            src={bglogin}
+                            alt="Logo"
+                            className="w-100 h-70 mx-auto mb-6 object-contain"
+                        />
+                        <h2 className="text-5xl md:text-4xl font-extrabold mb-3 text-orange-700">
+                            Đăng nhập thành công!
+                        </h2>
+                        <p className="text-base md:text-lg mb-6 text-gray-600">
+                            Chào mừng bạn đã trở lại.
+                        </p>
+                        <Link
+                            to="/"
+                            className="inline-block bg-orange-600 hover:bg-orange-500 text-white font-semibold py-2 px-6 rounded-full transition duration-300 shadow-md hover:shadow-lg"
+                        >
+                            Về trang chủ
+                        </Link>
+                    </div>
+                </div>
             ) : (
+    
+
+
+
+
                 <>
                     <div className="bg-white text-white font-Nurito flex flex-col md:flex-row items-center justify-center min-h-screen px-4">
                     {/* Cột bên trái (Ảnh) */}
@@ -99,15 +127,15 @@ export default function LoginScreen() {
                                         </div>
 
                                         <div className="flex flex-col sm:flex-row md:flex-col justify-between space-y-2 sm:space-y-0">
-                                            <div className="flex items-center">
+                                            {/* <div className="flex items-center">
                                                 <input type="checkbox" id="remember" className="w-5 h-5 bg-gray-600" />
                                                 <label htmlFor="remember" className="ml-2">Remember Account</label>
-                                            </div>
+                                            </div> */}
 
-                                            <div className="flex items-center">
+                                            {/* <div className="flex items-center">
                                                 <input type="checkbox" id="forgot" className="w-5 h-5 bg-gray-600" />
                                                 <label htmlFor="forgot" className="ml-2">Forgot Password</label>
-                                            </div>
+                                            </div> */}
                                         </div>
 
                                         <div className="h-4"></div>

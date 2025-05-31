@@ -210,3 +210,10 @@ export const updateFavorite  = async ({ post_id, type }: LikeProp) => {
 }
 
 
+ export const updateAvatar = async (formData: FormData) => {
+  const res = await axios.post("/api/user/avatar", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+    withCredentials: true,
+  });
+  return res.data;
+};

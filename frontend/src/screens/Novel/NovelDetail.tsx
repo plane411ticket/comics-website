@@ -143,7 +143,7 @@ return (
               story.genres.map((genre, index) => (
                 <span key={genre._id}>
                   <Link
-                  to={`/avsearch/${genre._id}`}
+                  to={`/avsearch?include_genres=${genre._id}`}
                   className="text-blue-600 hover:underline"
                 >
                   {genre.name}
