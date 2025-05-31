@@ -51,7 +51,16 @@ export const fetchMangaChapterDetail = async (chapterId: string) => {
       title: raw.title,
       chapter_number: raw.chapter_number,
       created_at: raw.created_at,
-      images: raw.chapterImages,
+      // images: raw.chapterImages.map((img: any) => ({
+      //   ...img,
+      //   image: img.image.replace(/^image\/upload\//, ''), // Bỏ chuỗi dư thừa
+      // })),
+      images: raw.chapterImages.map((img: any) => ({
+        ...img,
+        image: img.image.includes('res.cloudinary.com')
+          ? img.image.slice(img.image.indexOf('https://res.cloudinary.com'))
+          : img.image,
+      })),
       previousChapterId: raw.previousChapterId ?? null,
       nextChapterId: raw.nextChapterId ?? null,
     };
