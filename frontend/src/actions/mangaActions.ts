@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Manga } from '../types/manga/mangaDetails'; 
 import { MangaChapter } from '../types/manga/mangaChapters'; 
 import { AdvancedFilter } from "../types/search/advanceSearch";
-const baseURL = 'http://localhost:8000';
+const baseURL = import.meta.env.VITE_ADMIN_URL;
 
 // string id = "baa9a61e-35d5-4ac1-9d55-1fbfefbc21ef";
 
@@ -76,7 +76,7 @@ export const updateNumberFavoriteManga  = async (novelid: string) => {
     throw error;
   }
 }
-const API_BASE_URL = 'http://127.0.0.1:8000/api/manga/'
+const API_BASE_URL = `${baseURL}/api/manga/`
 export const fetchManga = async (page=1): Promise<Manga[]> => {
     try {
             const response = await axios.get(API_BASE_URL+"?page="+page);

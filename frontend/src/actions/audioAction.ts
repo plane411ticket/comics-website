@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseURL = 'http://localhost:8000'
+const baseURL = import.meta.env.VITE_ADMIN_URL;
 export const audioText = async (nameFile: string) => {
     try {
           const config = {
