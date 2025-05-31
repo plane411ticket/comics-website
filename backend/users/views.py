@@ -293,17 +293,17 @@ class CommentViewSet(viewsets.ModelViewSet):
 
         instance.delete()
 
-# @authentication_classes([CookieJWTAuthentication])
-# class NotificationViewSet():
-#     queryset = Notification.objects.all()
-#     serializer = NotificationSerializer()
-#     permission_classes = [IsAuthenticated]
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    authentication_classes = [CookieJWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-#     def get_queryset(self):
-#         return Notification.objects.filter(user=self.request.user).order_by('created_at')
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('created_at')
 
-#     def perform_create(self, serializer):
-#         serializer.save(user=self.request.user)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 # @authentication_classes([CookieJWTAuthentication])
 # class MarkAsSeenViewSet():

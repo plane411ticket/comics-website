@@ -8,6 +8,7 @@ from rest_framework import status
 from .models import *
 from django.db.models import F
 from django.views.decorators.cache import cache_page
+from users.models import Notification, Favorite
 @cache_page(60)
 @api_view(['GET'])
 @permission_classes([AllowAny])

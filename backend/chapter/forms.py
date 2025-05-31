@@ -14,7 +14,11 @@ class MultipleFileField(forms.FileField):
         if not data:
             return []
         if isinstance(data, (list, tuple)):
-            return [super().clean(d, initial) for d in data]
+            # return [super().clean(d, initial) for d in data]
+            cleaned_data = []
+            for d in data:
+                cleaned_data.append(super().clean(d, initial))
+            return cleaned_data
         return [super().clean(data, initial)]
 
 class MangaChapterForm(forms.ModelForm):

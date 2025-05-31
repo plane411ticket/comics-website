@@ -17,7 +17,7 @@ const ThemeSwitcher = () => {
     <button onClick={() => setIsDarkMode(!isDarkMode)} 
             className={`p-4 rounded-full transition duration-300 sm:ml-0 dark:text-black dark:bg-white
               ${isDarkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-amber-200 hover:bg-stone-400"}`}>
-            {isDarkMode ? <FiSun size={20} className="text-yellow-400" /> : <FiMoon size={20} className="text-slate-700" />}
+            {isDarkMode ? <FiSun size={15} className="text-yellow-400" /> : <FiMoon size={15} className="text-slate-700" />}
     </button>
   );
 };
