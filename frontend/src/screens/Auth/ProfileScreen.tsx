@@ -81,6 +81,8 @@ export default function ProfileScreen() {
             }
         },[userInfo]);
 
+        
+
   return userInfo ? (
     <div className="bg-gray-100">
       <div className="container mx-auto py-8">
@@ -89,12 +91,15 @@ export default function ProfileScreen() {
           <div className="col-span-4 sm:col-span-3">
             <div className="bg-white shadow rounded-lg p-6">
               <div className="flex flex-col items-center">
-                <img
+               
+                  <img
                   src={profile?.cover}
                   className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
                   alt="Profile image"
                 />
-                <h1 className="text-xl font-bold">{profile?.first_name}</h1>
+
+
+                <h2 className="text-xl font-bold">{profile?.first_name}</h2>
 
                 <div className="mt-6 flex flex-wrap gap-4 justify-center">
                   <button className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">

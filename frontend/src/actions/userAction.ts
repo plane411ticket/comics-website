@@ -171,5 +171,8 @@ export const updateFavorite  = async ({ post_id, type }: LikeProp) => {
     console.error("Error update number favorite:", error);
     throw error;
   }
+
+  
 }
+
 
