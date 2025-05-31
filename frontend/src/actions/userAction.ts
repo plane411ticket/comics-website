@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import { login } from '../types/user/userSlice';
 import { LikeProp, User } from '../types/user/User';
 import { Comment } from '../types/user/User';
-const baseURL = 'http://localhost:8000'
-    
+const baseURL = import.meta.env.VITE_ADMIN_URL;
+
 export const registerUser = async (name: string, email: string, password: string) => {
     try {
         const config = {
@@ -206,7 +206,6 @@ export const updateFavorite  = async ({ post_id, type }: LikeProp) => {
     console.error("Error update number favorite:", error);
     throw error;
   }
-
   
 }
 

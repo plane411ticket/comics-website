@@ -15,14 +15,29 @@ django.setup()
 from novel.models import Novel
 from chapter.models import NovelChapter
 from genres.models import Genre
+# def download_image_to_file(url):
+#     try:
+#         response = requests.get(url)
+#         response.raise_for_status()
+#         file_name = os.path.basename(url)
+#         return ContentFile(response.content), file_name
+#     except Exception as e:
+#         print(f"❌ Failed to download image from {url}: {e}")
+#         return None, None
 def download_image_to_file(url):
     try:
-        response = requests.get(url)
-        response.raise_for_status()
-        file_name = os.path.basename(url)
-        return ContentFile(response.content), file_name
+        # Đường dẫn file ảnh Doraemon1.jpg trong thư mục hiện tại
+        file_path = os.path.join(os.getcwd(), "novel", "Doraemon1.jpg")
+
+        # Mở file ảnh và đọc nội dung
+        with open(file_path, "rb") as f:
+            content = f.read()
+
+        # Trả về ContentFile và tên file "Doraemon1.jpg"
+        return ContentFile(content), "Doraemon1.jpg"
+
     except Exception as e:
-        print(f"❌ Failed to download image from {url}: {e}")
+        print(f"❌ Failed to read image file Doraemon1.jpg: {e}")
         return None, None
     
 def delete_all_novels():
@@ -76,7 +91,7 @@ if __name__ == '__main__':
     delete_all_novels()
     for i in range(2):
         for j in range(26):
-            json_file_path = os.path.join(project_path, 'novel', 'truyen-save-2', f'page{i+1}_truyen{j+1}.json')
+            json_file_path = os.path.join(project_path, 'novel', 'truyen-save', f'page{i+1}_truyen{j+1}.json')
             if os.path.isfile(json_file_path): 
                 import_novel(json_file_path)
             else:

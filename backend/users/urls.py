@@ -12,6 +12,9 @@ urlpatterns = [
     path('login/', LoginUser,name='token_obtain_pair'),
     path('register/',RegisterUser ,name='register'),
     path('logout/',LogoutUser ,name='logout'),
+    # path('notifications/', NotificationViewSet, name='notification-list'),
+    # path('notifications/mark-as-seen/', MarkAsSeenViewSet, name='notification-mark-seen'),
+    # path('notifications/<int:pk>/', NotificationDeleteViewSet, name='notification-delete'),
     
     path('', include(router.urls)),
     # to be continued

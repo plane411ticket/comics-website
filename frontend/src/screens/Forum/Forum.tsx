@@ -18,19 +18,19 @@ type Comment = {
   content: string;
   created_at: string;
 };
-
+const baseUrl = import.meta.env.VITE_ADMIN_URL;
 const Forum = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [newPost, setNewPost] = useState({ title: "", content: "" });
-  const [newComment, setNewComment] = useState("");
-  const user = useSelector(selectUser);
-  const navigate = useNavigate();
+const [posts, setPosts] = useState<Post[]>([]);
+const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+const [newPost, setNewPost] = useState({ title: "", content: "" });
+const [newComment, setNewComment] = useState("");
+const user = useSelector(selectUser);
+const navigate = useNavigate();
 
   // Fetch posts from backend
   const fetchPosts = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/posts/", {
+      const res = await axios.get(`${baseUrl}/api/posts/`, {
         withCredentials: true, // Gửi cookie kèm theo yêu cầu
       });
       setPosts(res.data);
@@ -53,7 +53,7 @@ const Forum = () => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/posts/",
+        `${baseUrl}/api/posts/`,
         newPost,
         { withCredentials: true }
       );
@@ -74,7 +74,7 @@ const Forum = () => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/comments/",
+        `${baseUrl}/api/comments/`,
         { content: newComment, post: postId },
         { withCredentials: true }
       );

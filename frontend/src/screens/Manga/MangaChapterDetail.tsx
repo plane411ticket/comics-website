@@ -8,7 +8,7 @@ const ChapterMangaDetailPage = () => {
   const { chapterId } = useParams();
   const navigate = useNavigate();
   const [chapter, setChapter] = useState<MangaChapter | null>(null);
-
+  const baseUrl = import.meta.env.VITE_ADMIN_URL;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -86,7 +86,7 @@ const ChapterMangaDetailPage = () => {
           (
             <img
               key={index}
-              src={`http://localhost:8000${img.image}`}
+              src={`${baseUrl}/${img.image}`}
               alt={`Page ${img.page}`}
               className="max-w-full h-auto rounded-lg shadow-md"
             />
