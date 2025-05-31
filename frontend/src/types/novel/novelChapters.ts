@@ -4,11 +4,10 @@ export interface NovelChapter {
     novel: Novel;
     title: string;
     chapter_number: number;
-    content: string;
+    content?: string;
     created_at: string;
-     // Thêm 2 trường optional cho điều hướng
-  previousChapterId?: string | null;
-  nextChapterId?: string | null;
+    previousChapterId?: string | null;
+    nextChapterId?: string | null;
 }
 
   

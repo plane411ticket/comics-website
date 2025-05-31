@@ -2,9 +2,8 @@ import {useEffect, useState, useRef} from 'react';
 import { faForwardFast ,faBackwardFast} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { audioText } from '../actions/audioAction';
-// import { useNavigate } from 'react-router-dom';
-//Interface 
-const baseURL = 'http://localhost:8000'
+
+const baseURL = import.meta.env.VITE_ADMIN_URL;
 interface AudioPlayProps {
     audioTitle: string;
     nextAudio?: string|null;

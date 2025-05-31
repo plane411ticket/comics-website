@@ -8,7 +8,7 @@ from django.conf import settings
 # from django.contrib.auth.models import User
 
 class CustomUser(AbstractUser):
-    cover = models.ImageField(upload_to='covers/', default='covers/default.jpg')
+    cover = models.ImageField(upload_to='covers/', null=False ,default='covers/default.jpg')
 
     def __str__(self):
         return self.username
@@ -40,17 +40,17 @@ class Comments(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # Đối tượng cha (post chính): Manga, Novel, Audio, Forum
+    # For any type of post
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, 
                                      related_name='comment_post_type', 
                                      null=True,  
                                      blank=True )
-    object_id = models.CharField(max_length=255, null=True,blank=True)
+    object_id = models.UUIDField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 
-    # Nếu comment nằm trong chapter cụ thể nào đó (ChapterManga, ChapterNovel,...)
+    # For any model Chapter
     chapter_content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, null=True, blank=True, related_name='comment_chapter_type')
-    chapter_object_id = models.CharField(max_length=255, null=True, blank=True)
+    chapter_object_id = models.UUIDField(null=True, blank=True)
     chapter = GenericForeignKey('chapter_content_type', 'chapter_object_id')
 
     def __str__(self):

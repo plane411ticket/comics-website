@@ -2,7 +2,7 @@ import axios from 'axios';
 //import { Dispatch } from 'redux';
 import { Novel } from '../types/novel/novelDetails';
 
-const baseURL = 'http://localhost:8000';
+const baseURL = import.meta.env.VITE_ADMIN_URL;
 
 export const fetchStoryDetails = async (novelid: string) => {
     try{
@@ -21,7 +21,7 @@ export const fetchStoryChapters = async (novelid: string) => {
   try {
     const response = await axios.get(`${baseURL}/api/novel/${novelid}/chapters`);
     console.log("list chapters:");
-    console.log(response.data);
+    console.log(response);
     return response.data;
   }
 

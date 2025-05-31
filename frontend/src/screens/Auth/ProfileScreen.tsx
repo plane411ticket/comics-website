@@ -1,83 +1,332 @@
 import { useSelector } from "react-redux";
 import { selectUser } from "../../types/user/userSlice";
-import { useEffect,useState } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
+import { motion } from "framer-motion";
+import React from "react";
+import { useSearchParams } from "react-router-dom";
+import {fetchProfile} from "../../actions/userAction";
+import { User } from "../../types/user/User";
+import { FaEdit } from "react-icons/fa";
+// 1. Define the tab keys and their content types
+type TabKey = "info" | "uploads" | "mdlists";
+
+
+interface TabContent {
+    title: string;
+    component: React.ReactNode;
+}
 
 export default function ProfileScreen() {
-    const userInfo = useSelector(selectUser);
-    const tabs = ['info', 'uploads', 'mdlists'];
-    const [activeTab, setActiveTab] = useState('info');
-    useEffect(()=>{
+        const userInfo = useSelector(selectUser);
+        const [searchParams, setSearchParams] = useSearchParams();
+        const tabRefs = useRef<{ [key in TabKey]?: HTMLAnchorElement | null }>({});
+        // Define tabs with their content
+        const tabsConfig: Record<TabKey, TabContent> = {
+            info: {
+                title: "Information",
+                component: <div>Overview content</div>
+            },
+            uploads: {
+                title: "My Uploads",
+                component: <div>Uploads content</div>
+            },
+            mdlists: {
+                title: "My Lists",
+                component: <div>MDLists content</div>
+            }
+        };
+
+        const tabs = Object.keys(tabsConfig) as TabKey[];
         
-    },[])
-    return (
-        userInfo ? (
-            <>
-                <div className="bg-gray-100">
-                    <div className="container mx-auto py-8">
-                        <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
-                            {/* Phần thông tin bên trái */}
-                            <div className="col-span-4 sm:col-span-3">
-                                <div className="bg-white shadow rounded-lg p-6">
-                                    <div className="flex flex-col items-center">
-                                        <img
-                                            src="https://polywork-images-proxy.imgix.net/https%3A%2F%2Fwww.polywork.com%2Ffabform%2Favatar%3Fversion%3D0cff680649e03a4ca971c6e9ee8a2496?ixlib=rails-4.3.1&w=512&h=512&fit=crop&auto=format&s=b097b0d3e3db5a783064dd30ba909612"
-                                            className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
-                                            alt="Profile image"
-                                        />
+        // Get active tab from URL or default to 'info'
+        const [activeTab, setActiveTab] = useState<TabKey>(() => {
+            const tabParam = searchParams.get("tab") as TabKey;
+            return tabs.includes(tabParam) ? tabParam : "info";
+        });
 
-                                        <h1 className="text-xl font-bold">Geoffrey Callaghan</h1>
-                                        <p className="text-gray-700">Software Developer</p>
-                                        <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                                            <a href="https://veilmail.io/irish-geoff"
-                                                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">veilmail.io/irish-geoff</a>
-                                            <a href="#"
-                                                className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a>
-                                        </div>
-                                    </div>
+        const [selectorStyles, setSelectorStyles] =  useState<{ left: number; width: number } | null>(null);
+        const [selectorReady, setSelectorReady] = useState(false);
+        // Update URL when tab changes
+        useEffect(() => {
+            setSearchParams({ tab: activeTab });
+        }, [activeTab, searchParams]);
 
-                                    <hr className="my-6 border-t border-gray-300" />
+        const tabContent = Object.fromEntries(
+            Object.entries(tabsConfig).map(([key, { component }]) => [key, component])
+        ) as Record<TabKey, React.ReactNode>;
+        useLayoutEffect(() => {
+            const timer = setTimeout(() => {
+                const el = tabRefs.current[activeTab];
+                if (el) {
+                const { offsetLeft, offsetWidth } = el;
+                setSelectorStyles({ left: offsetLeft, width: offsetWidth });
+                setSelectorReady(true);
+                }
+            }, 0);
 
-                                    <div className="flex flex-col">
-                                        <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">Skills</span>
-                                        <ul>
-                                            <li className="mb-2">JavaScript</li>
-                                            <li className="mb-2">React</li>
-                                            <li className="mb-2">Node.js</li>
-                                            <li className="mb-2">HTML/CSS</li>
-                                            <li className="mb-2">Tailwind CSS</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            {/* Phần thông tin bên phải */}
-                            <div className="col-span-4 sm:col-span-9">
-                                <div className="bg-white shadow rounded-lg p-6">
-                                    <div className="relative inline-flex items-center bg-gray-100 rounded-lg p-1 space-x-1">
-                                        {tabs.map((tab) => (
-                                        <a
-                                            key={tab}
-                                            href={`?tab=${tab}`}
-                                            onClick={() => setActiveTab(tab)}
-                                            className={`px-4 py-2 font-bold rounded-md transition-colors ${
-                                            activeTab === tab
-                                                ? 'bg-black text-white'
-                                                : 'text-gray-300 hover:text-black'
-                                            }`}
-                                        >
-                                            <span className="capitalize">{tab}</span>
-                                        </a>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        return () => clearTimeout(timer);
+        }, [activeTab, userInfo]);
+
+        const [profile, setProfile] = useState<User | null>(null);
+        useEffect(()=>{
+            if(userInfo)
+            {
+                const fetchData = async ()=>{
+                    try {
+                        const profileData = await fetchProfile();
+                        setProfile(profileData);
+                    } catch (error) {
+                        console.error("Error fetching profile:", error);
+                    }
+                }
+                fetchData();
+            }
+        },[userInfo]);
+
+
+
+        // Thêm state cho chế độ chỉnh sửa
+        const [editMode, setEditMode] = useState(false);
+        const [editProfile, setEditProfile] = useState<User | null>(null);
+
+        // Khi nhấn chỉnh sửa, copy dữ liệu profile sang editProfile
+        const handleEdit = () => {
+          setEditProfile(profile);
+          setEditMode(true);
+        };
+
+        // Khi lưu chỉnh sửa
+        const handleSave = async () => {
+          // TODO: Gọi API cập nhật thông tin profile ở backend
+          // await updateProfile(editProfile);
+          setProfile(editProfile);
+          setEditMode(false);
+        };
+
+        // Khi hủy chỉnh sửa
+        const handleCancel = () => {
+          setEditMode(false);
+          setEditProfile(null);
+        };
+
+        // Khi thay đổi trường dữ liệu
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          if (!editProfile) return;
+          setEditProfile({ ...editProfile, [e.target.name]: e.target.value });
+        };
+
+
+        
+
+  return userInfo ? (
+    <div className="bg-gray-100">
+      <div className="container mx-auto py-8">
+        <div className="w-full grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
+          {/* Left column */}
+          <div className="col-span-4 sm:col-span-3">
+            <div className="bg-white shadow rounded-lg p-6">
+              <div className="flex flex-col items-center">
+               
+                  <img
+                  src={profile?.cover}
+                  className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
+                  alt="Profile image"
+                />
+
+
+                <h2 className="text-xl font-bold">{profile?.first_name}</h2>
+
+                <div className="mt-6 flex flex-wrap gap-4 justify-center">
+                  <button className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">
+                    Theo dõi
+                  </button>
                 </div>
-            </>
-        ) : (
-            <div className="flex items-center justify-center h-screen mt-1">
-                <h1 className="text-xl font-bold text-center">Vui lòng đăng nhập</h1>
+              </div>
+              <hr className="my-6 border-t border-gray-300" />
+              <div className="flex flex-col">
+                <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">
+                 {profile?.group ? profile.group : "Đã đăng nhập"}
+                </span>
+                
+              </div>
             </div>
-        )
-    );
+          </div>
+
+          {/* Right column */}
+          <div className="col-span-4 sm:col-span-9">
+            <div className="bg-white shadow rounded-lg p-6">
+                {/* Animated Tabs */}
+                <div className="relative inline-flex items-center bg-gray-100 rounded-lg p-1 space-x-1">
+                {/* Animated background */}
+                <motion.div
+                    layout
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    className="absolute top-1 bottom-1 bg-black rounded-md z-0"
+                    style={{
+                    left: selectorStyles?.left,
+                    width: selectorStyles?.width,
+                    }}
+                />
+                {tabs.map((tab) => (
+                    <a
+                    key={tab}
+                    href={`?tab=${tab}`}
+                    ref={(el) => {
+                        tabRefs.current[tab] = el;
+                    }}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setActiveTab(tab);
+                    }}
+                    className={`relative z-10 px-4 py-2 font-bold rounded-md transition-colors ${
+                        activeTab === tab && selectorReady
+                        ? "text-white"
+                        : "text-gray-400 hover:text-black"
+                    }`}
+                    >
+                    <span className="capitalize">{tab}</span>
+                    </a>
+                ))}
+                </div>
+
+                  {/* Content */}
+              <div className="items-start mt-6 min-h-[200px]">
+                {activeTab === "info" ? (
+                  <div className="relative">
+                    {/* Nút chỉnh sửa */}
+                    {!editMode && (
+                      <button
+                        className="absolute top-0 right-0 text-gray-500 hover:text-blue-600"
+                        onClick={handleEdit}
+                        title="Chỉnh sửa thông tin"
+                      >
+                        <FaEdit size={20} />
+                      </button>
+                    )}
+                    <form className="w-full max-w-lg flex flex-col gap-4 ">
+                      {/* Trạng thái */}
+                      <div className="flex flex-col sm:flex-row items-start gap-2 ">
+                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="status">
+                          Trạng thái:
+                        </label>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            id="status"
+                            name="status"
+                            value={editProfile?.status || ""}
+                            onChange={handleChange}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        ) : (
+                          <span className="text-gray-800 break-words whitespace-pre-line w-full text-left">{profile?.status || "Chưa có"}</span>
+                        )}
+                      </div>
+                      {/* Tên đăng nhập */}
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="first_name">
+                          Tên đăng nhập:
+                        </label>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            id="first_name"
+                            name="first_name"
+                            value={editProfile?.first_name || ""}
+                            onChange={handleChange}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        ) : (
+                          <span className="text-gray-800">{profile?.first_name}</span>
+                        )}
+                      </div>
+                      {/* Mật khẩu */}
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="password">
+                          Mật khẩu:
+                        </label>
+                        {editMode ? (
+                          <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={editProfile?.password || ""}
+                            onChange={handleChange}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        ) : (
+                          <span className="text-gray-800">*******</span>
+                        )}
+                      </div>
+                      {/* Email */}
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="email">
+                          Email:
+                        </label>
+                        {editMode ? (
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={editProfile?.email || ""}
+                            onChange={handleChange}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        ) : (
+                          <span className="text-gray-800">{profile?.email}</span>
+                        )}
+                      </div>
+                      {/* Ngày sinh */}
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="birthday">
+                          Ngày sinh:
+                        </label>
+                        {editMode ? (
+                          <input
+                            type="date"
+                            id="birthday"
+                            name="birthday"
+                            value={editProfile?.birthday || ""}
+                            onChange={handleChange}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        ) : (
+                          <span className="text-gray-800">{profile?.birthday}</span>
+                        )}
+                      </div>
+                      {/* Nút lưu/hủy */}
+                      {editMode && (
+                        <div className="flex gap-4 mt-2">
+                          <button
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            onClick={handleSave}
+                            type="button"
+                          >
+                            Lưu
+                          </button>
+                          <button
+                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                            onClick={handleCancel}
+                            type="button"
+                          >
+                            Hủy
+                          </button>
+                        </div>
+                      )}
+                    </form>
+                  </div>
+                ) : (
+                  tabContent[activeTab]
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="flex items-center justify-center h-screen mt-1">
+      <h1 className="text-xl font-bold text-center">Vui lòng đăng nhập</h1>
+    </div>
+  );
 }

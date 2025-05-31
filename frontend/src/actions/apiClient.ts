@@ -1,7 +1,8 @@
 import axios from "axios";
+const baseURL = import.meta.env.VITE_ADMIN_URL;
 
 const API = axios.create({
-  baseURL: "http://localhost:8000", //URL backend 
+  baseURL: baseURL,
   withCredentials: true, // cookie HttpOnly
   headers: { "Content-Type": "application/json" },
 });

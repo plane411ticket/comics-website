@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white text-black font-Nurito" id="navtop">
       {/* Nav Top */}
-      <div className="w-full flex items-center justify-between px-4 py-2 space-x-4">
+      <div className="w-full flex items-center justify-between px-4 py-0 space-x-4">
       <div className="flex-shrink-0">
       <Logo />
     </div>
@@ -63,7 +63,7 @@ const Navbar = () => {
             <li key={index} className="h-full flex-1 p-0">
               <Link
                 to={item.path}
-                className="h-full flex items-center text-black justify-center dark:bg-black px-2 py-1 min-w-[100px] hover:text-black hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
+                className="h-full flex items-center text-black justify-center dark:bg-black px-0 py-0 min-w-[100px] hover:text-black hover:bg-yellow-400 hover:border-yellow-500 hover:rounded-lg transition duration-300"
               >
                 {item.name}
               </Link>

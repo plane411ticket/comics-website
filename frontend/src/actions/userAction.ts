@@ -2,10 +2,10 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { login } from '../types/user/userSlice';
-import { CommentPayload } from '../types/user/User';
-import { LikeProp } from '../types/user/User';
-const baseURL = 'http://localhost:8000'
-    
+import { LikeProp, User } from '../types/user/User';
+import { Comment } from '../types/user/User';
+const baseURL = import.meta.env.VITE_ADMIN_URL;
+
 export const registerUser = async (name: string, email: string, password: string) => {
     try {
         const config = {
@@ -57,19 +57,19 @@ export const logoutUser = async () => {
 };
 
 
-export const fetchProfile = async () => {
+export const fetchProfile = async (): Promise<User | null> => {
     try {
         const config = {
             headers: { 'Content-Type': 'Application/json' },
             withCredentials:true,
         }
-        const response = await axios.post(
-            `${baseURL}/api/me/`,
-            {},  
+        const response = await axios.get(
+            `${baseURL}/api/me/`,  
             config
         );
-        console.log(response.data); // Debug kết quả
-        return response.data;
+        const user = response.data?.results?.[0];
+        console.log("User profile fetched:", user);
+        return user ? (user as User) : null;
         
     } catch (error) {
         console.error("Cần đăng nhập/đăng ký:", error);
@@ -79,42 +79,90 @@ export const fetchProfile = async () => {
 
 export const useAutoLogin = () => {
     const dispatch = useDispatch();
-    console.log("AutoLogin chạy!");
-    console.log(`${baseURL}/api/refresh/`);
+
     useEffect(() => {
-        const refreshToken = async () => {
-            const config = {
-                withCredentials:true}
+        const autoLogin = async () => {
+            const config = { withCredentials: true };
             try {
-                await axios.post(
-                    `${baseURL}/api/refresh/`,
-                    {}, 
-                    config);
-                dispatch(login({Islogin:true}));
+                // Bước 1: Refresh token
+                await axios.post(`${baseURL}/api/refresh/`, {}, config);
+                console.log("Refresh token thành công");
+
+                // Bước 2: Gọi fetchProfile để lấy user info
+                const profile = await fetchProfile();
+
+                if (profile) {
+                    dispatch(
+                        login({
+                            first_name: profile.first_name,
+                            cover: profile.cover,
+                            isLogin: true,
+                        })
+                    );
+                } else {
+                    console.log("Không lấy được profile");
+                }
+
             } catch (error) {
-                console.log("Không thể refresh token", error);}
+                console.error("Tự động đăng nhập thất bại:", error);
+            }
         };
-        refreshToken();
+
+        autoLogin();
     }, [dispatch]);
 };
-
-export const useComment = async (payload: CommentPayload): Promise<void> => {
+export const postComment = async (post_id:string, content:string, type:string, parent:number | null) => {
   try{
     const config = {
       headers: {'Content-Type': 'Application/json'},
       withCredentials:true,
     };
+    console.log("Post ID:", post_id);
     const response = await axios.post(
       `${baseURL}/api/comment/`,
-        payload,
+        {
+            content: content,
+            content_type: post_id,
+            parent: parent || null, // Nếu không có parent thì để là null
+            target_model: type,
+            target_object_id: post_id,
+        },
         config
     );
     return response.data;
   } catch (error) {
-    console.error("Error sending comment:", error);
+    console.error("Vui lòng đăng nhập trước khi gửi:", error);
     throw error;
   }
 }
+interface FetchCommentsOptions {
+  chapter_type?: string;
+  chapter_id?: string;
+  content_type?: string;
+  object_id?: string;
+}
+export const fetchComments = async (options: FetchCommentsOptions): Promise<Comment[]> => {
+
+    const config = {
+      headers: {'Content-Type': 'Application/json'},
+      withCredentials:true,
+    };
+    const url = new URL(`${baseURL}/api/comment/`);
+    if (options.chapter_type && options.chapter_id) {
+        url.searchParams.append("chapter_type", options.chapter_type);
+        url.searchParams.append("chapter_id", options.chapter_id);
+    } else if (options.content_type && options.object_id) {
+        url.searchParams.append("content_type", options.content_type);
+        url.searchParams.append("object_id", options.object_id);
+    } else {
+        throw new Error("Missing required query parameters");
+    }
+
+    const response = await axios.get(url.toString(), config);
+    console.log("Comments fetched:", response.data.results);
+    return response.data.results || [];
+}
+
 
 export const updateLike  = async ({ post_id, type }: LikeProp) => {
   try{
@@ -158,5 +206,7 @@ export const updateFavorite  = async ({ post_id, type }: LikeProp) => {
     console.error("Error update number favorite:", error);
     throw error;
   }
+  
 }
+
 
