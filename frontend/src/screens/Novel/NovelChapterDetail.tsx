@@ -3,9 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { NovelChapter } from '../../types/novel/novelChapters';
 import { fetchChapterDetail, fetchStoryChapters } from '../../actions/novelAction';
-import CommentSection from './CommentChapter';
 import AudioPlay from '../../components/AudioPlay';
-import { slugifyVietnamese } from '../../actions/audioAction';
 const ChapterDetailPage = () => {
   const { chapterId } = useParams();
   const navigate = useNavigate();
@@ -155,10 +153,7 @@ const ChapterDetailPage = () => {
         Chương sau ➡
       </button>
       </div>
-      
-        {/* Bình luận chương */}
-        <CommentSection postId={chapter.novel._id} type="novel" />
-        {/* <CommentSection/> */}
+
     </div>
     
   );

@@ -6,8 +6,10 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import {fetchProfile} from "../../actions/userAction";
 import { User } from "../../types/user/User";
+import { FaEdit } from "react-icons/fa";
 // 1. Define the tab keys and their content types
 type TabKey = "info" | "uploads" | "mdlists";
+
 
 interface TabContent {
     title: string;
@@ -81,12 +83,45 @@ export default function ProfileScreen() {
             }
         },[userInfo]);
 
+
+
+        // Thêm state cho chế độ chỉnh sửa
+        const [editMode, setEditMode] = useState(false);
+        const [editProfile, setEditProfile] = useState<User | null>(null);
+
+        // Khi nhấn chỉnh sửa, copy dữ liệu profile sang editProfile
+        const handleEdit = () => {
+          setEditProfile(profile);
+          setEditMode(true);
+        };
+
+        // Khi lưu chỉnh sửa
+        const handleSave = async () => {
+          // TODO: Gọi API cập nhật thông tin profile ở backend
+          // await updateProfile(editProfile);
+          setProfile(editProfile);
+          setEditMode(false);
+        };
+
+        // Khi hủy chỉnh sửa
+        const handleCancel = () => {
+          setEditMode(false);
+          setEditProfile(null);
+        };
+
+        // Khi thay đổi trường dữ liệu
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          if (!editProfile) return;
+          setEditProfile({ ...editProfile, [e.target.name]: e.target.value });
+        };
+
+
         
 
   return userInfo ? (
     <div className="bg-gray-100">
       <div className="container mx-auto py-8">
-        <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
+        <div className="w-full grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
           {/* Left column */}
           <div className="col-span-4 sm:col-span-3">
             <div className="bg-white shadow rounded-lg p-6">
@@ -154,10 +189,136 @@ export default function ProfileScreen() {
                 ))}
                 </div>
 
-                {/* Content */}
-                <div className="mt-6 min-h-[100px]">
-                {tabContent[activeTab]}
-                </div>
+                  {/* Content */}
+              <div className="items-start mt-6 min-h-[200px]">
+                {activeTab === "info" ? (
+                  <div className="relative">
+                    {/* Nút chỉnh sửa */}
+                    {!editMode && (
+                      <button
+                        className="absolute top-0 right-0 text-gray-500 hover:text-blue-600"
+                        onClick={handleEdit}
+                        title="Chỉnh sửa thông tin"
+                      >
+                        <FaEdit size={20} />
+                      </button>
+                    )}
+                    <form className="w-full max-w-lg flex flex-col gap-4 ">
+                      {/* Trạng thái */}
+                      <div className="flex flex-col sm:flex-row items-start gap-2 ">
+                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="status">
+                          Trạng thái:
+                        </label>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            id="status"
+                            name="status"
+                            value={editProfile?.status || ""}
+                            onChange={handleChange}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        ) : (
+                          <span className="text-gray-800 break-words whitespace-pre-line w-full text-left">{profile?.status || "Chưa có"}</span>
+                        )}
+                      </div>
+                      {/* Tên đăng nhập */}
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="first_name">
+                          Tên đăng nhập:
+                        </label>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            id="first_name"
+                            name="first_name"
+                            value={editProfile?.first_name || ""}
+                            onChange={handleChange}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        ) : (
+                          <span className="text-gray-800">{profile?.first_name}</span>
+                        )}
+                      </div>
+                      {/* Mật khẩu */}
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="password">
+                          Mật khẩu:
+                        </label>
+                        {editMode ? (
+                          <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={editProfile?.password || ""}
+                            onChange={handleChange}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        ) : (
+                          <span className="text-gray-800">*******</span>
+                        )}
+                      </div>
+                      {/* Email */}
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="email">
+                          Email:
+                        </label>
+                        {editMode ? (
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={editProfile?.email || ""}
+                            onChange={handleChange}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        ) : (
+                          <span className="text-gray-800">{profile?.email}</span>
+                        )}
+                      </div>
+                      {/* Ngày sinh */}
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="birthday">
+                          Ngày sinh:
+                        </label>
+                        {editMode ? (
+                          <input
+                            type="date"
+                            id="birthday"
+                            name="birthday"
+                            value={editProfile?.birthday || ""}
+                            onChange={handleChange}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        ) : (
+                          <span className="text-gray-800">{profile?.birthday}</span>
+                        )}
+                      </div>
+                      {/* Nút lưu/hủy */}
+                      {editMode && (
+                        <div className="flex gap-4 mt-2">
+                          <button
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            onClick={handleSave}
+                            type="button"
+                          >
+                            Lưu
+                          </button>
+                          <button
+                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                            onClick={handleCancel}
+                            type="button"
+                          >
+                            Hủy
+                          </button>
+                        </div>
+                      )}
+                    </form>
+                  </div>
+                ) : (
+                  tabContent[activeTab]
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -4,6 +4,9 @@ export interface User{
     email:string,
     cover?:string,
     group?:string,
+    birthday?: string,
+    status?: string,
+    password?: string,
 }
 export interface typeContent{
     type: 'novel' | 'manga' | 'audio' | 'forum'
