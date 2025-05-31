@@ -51,10 +51,7 @@ export const fetchMangaChapterDetail = async (chapterId: string) => {
       title: raw.title,
       chapter_number: raw.chapter_number,
       created_at: raw.created_at,
-      images: raw.chapterImages.map((img: any) => ({
-        ...img,
-        image: img.image.replace(/^image\/upload\//, ''), // Bỏ chuỗi dư thừa
-      })),
+      images: raw.chapterImages,
       previousChapterId: raw.previousChapterId ?? null,
       nextChapterId: raw.nextChapterId ?? null,
     };
