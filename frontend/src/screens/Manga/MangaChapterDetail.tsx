@@ -86,7 +86,7 @@ const ChapterMangaDetailPage = () => {
           (
             <img
               key={index}
-              src={`http://localhost:8000${img.image}`}
+              src={`${img.image}`}
               alt={`Page ${img.page}`}
               className="max-w-full h-auto rounded-lg shadow-md"
             />
