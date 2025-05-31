@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import {fetchProfile} from "../../actions/userAction";
+import {fetchProfile, updateAvatar} from "../../actions/userAction";
 import { User } from "../../types/user/User";
 import { FaEdit } from "react-icons/fa";
 import { useParams } from "react-router-dom";
@@ -122,7 +122,7 @@ export default function ProfileScreen() {
         };
 
         // Khi thay đổi trường dữ liệu
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
           if (!editProfile) return;
           setEditProfile({ ...editProfile, [e.target.name]: e.target.value });
         };
@@ -136,14 +136,28 @@ export default function ProfileScreen() {
         <div className="w-full grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
           {/* Left column */}
           <div className="col-span-4 sm:col-span-3">
-            <div className="bg-white shadow rounded-lg p-6">
+            <div className="bg-white shadow rounded-lg p-6 min-h-[400px] flex flex-col">
               <div className="flex flex-col items-center">
+                <div className="relative">
                
                   <img
                   src={profile?.cover}
                   className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
                   alt="Profile image"
-                />
+                  />
+
+                {/* Nút đổi avatar */}
+                <label className="absolute bottom-2 right-2 bg-black bg-opacity-60 rounded-full p-2 cursor-pointer hover:bg-opacity-80 transition">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    // onChange={handleAvatarChange}
+                    // disabled={uploading}
+                  />
+                  {/* <span className="text-white text-xs">{uploading ? "..." : "🖊️"}</span> */}
+                </label>
+              </div>
 
 
                 <h2 className="text-xl font-bold">{profile?.first_name}</h2>
@@ -166,7 +180,7 @@ export default function ProfileScreen() {
 
           {/* Right column */}
           <div className="col-span-4 sm:col-span-9">
-            <div className="bg-white shadow rounded-lg p-6">
+            <div className="bg-white shadow rounded-lg p-6 h-full min-h-[400px] max-h-[400px] overflow-y-auto">
                 {/* Animated Tabs */}
                 <div className="relative inline-flex items-center bg-gray-100 rounded-lg p-1 space-x-1">
                 {/* Animated background */}
@@ -222,14 +236,14 @@ export default function ProfileScreen() {
                           Trạng thái:
                         </label>
                         {editMode ? (
-                          <input
-                            type="text"
-                            id="status"
-                            name="status"
-                            value={editProfile?.status || ""}
-                            onChange={handleChange}
-                            className="border rounded px-2 py-1 flex-1"
-                          />
+                          <textarea
+      id="status"
+      name="status"
+      value={editProfile?.status || ""}
+      onChange={handleChange}
+      className="border rounded px-2 py-1 flex-1 resize-y"
+      rows={3} // bạn có thể chỉnh số dòng textarea mặc định
+    />
                         ) : (
                           <span className="text-gray-800 break-words whitespace-pre-line w-full text-left">{profile?.status || "Chưa có"}</span>
                         )}
@@ -252,24 +266,7 @@ export default function ProfileScreen() {
                           <span className="text-gray-800">{profile?.first_name}</span>
                         )}
                       </div>
-                      {/* Mật khẩu */}
-                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
-                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="password">
-                          Mật khẩu:
-                        </label>
-                        {editMode ? (
-                          <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={editProfile?.password || ""}
-                            onChange={handleChange}
-                            className="border rounded px-2 py-1 flex-1"
-                          />
-                        ) : (
-                          <span className="text-gray-800">*******</span>
-                        )}
-                      </div>
+                      
                       {/* Email */}
                       <div className="flex flex-col sm:flex-row sm:items-start gap-2">
                         <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="email">

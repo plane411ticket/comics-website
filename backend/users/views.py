@@ -23,6 +23,8 @@ from .serializers import CommentsSerializer
 from users.authentication import CookieJWTAuthentication
 from rest_framework.decorators import authentication_classes
 from django.shortcuts import get_object_or_404
+# from .models import Notification
+# from .serializers import NotificationSerializer
 User = get_user_model()
 # ============================
 # Authentication with user
@@ -305,3 +307,36 @@ class CommentViewSet(viewsets.ModelViewSet):
             obj.save(update_fields=['numComments'])
 
         instance.delete()
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    authentication_classes = [CookieJWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('created_at')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+# @authentication_classes([CookieJWTAuthentication])
+# class MarkAsSeenViewSet():
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request):
+#         Notification.objects.filter(user=request.user, seen = False).update(seen=True)
+#         return response({'status: 200 OK'}, status=200)
+
+# @authentication_classes([CookieJWTAuthentication])
+# class NotificationDeleteViewSet():
+#     permission_classes = [IsAuthenticated]
+    
+#     def perform_destroy(self, instance):
+#         user = self.request.user
+
+#         if not (user.is_staff or user.is_superuser or instance.user == user):
+#             raise PermissionDenied("Bạn chỉ có thể xóa thông báo của chính mình.")
+
+#         # Xoá thông báo
+#         instance.delete()

@@ -18,6 +18,7 @@ import kid from "../../assets/kid.jpg";
 import book from "../../assets/book.jpg";
 import magazine from "../../assets/magazine.jpg";
 import video from "../../assets/trailer_web.mp4";
+import { Link } from "react-router-dom";
 {/*}
 import japan from "../../assets/japan.png";
 import hanquoc from "../../assets/HQ_charater.png";
@@ -93,9 +94,14 @@ const HomePage = () => {
       <div className="min-h-screen flex flex-col md:flex-row items-start justify-between px-6 pt-10">
         {/* Phần trái: Giới thiệu */}
         <div className="w-full md:w-1/2 flex flex-col items-start text-left space-y-6">
-          <button className="bg-gray-800 text-white px-4 py-2 rounded-full flex items-center space-x-2">
-            <span>🔧 Không thể bỏ qua</span>
+          <button className="relative inline-block overflow-hidden px-4 py-2 bg-gray-600 text-white font-semibold rounded">
+            <span className="relative z-10">🔧 Không thể bỏ qua</span>
+            <span
+              className="absolute top-0 left-[-100%] w-full h-full bg-amber-100 opacity-20
+                        transform skew-x-[-20deg] animate-shine pointer-events-none"
+            />
           </button>
+
 
           <h1 className="text-4xl md:text-5xl font-bold text-white ">
             {title.map((word, index) => (
@@ -113,12 +119,16 @@ const HomePage = () => {
    
 
           <p className="text-lg text-gray-300">
-            Là món ăn tinh thần không thể bỏ lỡ cho các fan chân chính của comic-chan!!!!
+            Là món ăn tinh thần không thể bỏ lỡ cho các fan chân chính!!!!
+            <br />
+            Nơi bạn có thể giải trí, tìm hiểu và khám phá thế giới Comic đa dạng.
           </p>
 
+          <Link to="/avsearch" className="text-lg text-orange-500">
           <a href="#" className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:opacity-80 transition">
             Tham gia ngay →
           </a>
+          </Link>
         </div>
 
         {/* Phần phải: Mockups */}
@@ -209,7 +219,11 @@ const HomePage = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Khám phá ngay
+                <Link to="/genre" className="flex items-center justify-center">
+                  <span className="flex items-center justify-center">
+                    <span className="text-white">Khám phá ngay</span>
+                  </span>
+                </Link>
               </motion.button>
 
               <motion.button

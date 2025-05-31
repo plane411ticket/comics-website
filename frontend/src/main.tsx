@@ -7,7 +7,7 @@ import Error from "./screens/Error";
 import UserProfilePage from "./screens/Auth/ProfileScreen";
 import MangaList from "./screens/Manga/MangaList.tsx";
 import NovelList from "./screens/Novel/NovelList.tsx";
-import Forum from "./screens/Forum/Forum";
+// import Forum from "./screens/Forum/Forum";
 import Genre from "./screens/Genre/Genre.tsx";
 import Leaderboard from "./screens/Leaderboard/Leaderboard";
 import AdvanceSearch from "./screens/Search/AdvanceSearch.tsx";
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       { path: "/manga", element: <MangaList /> },
       { path: "/novel", element: <NovelList /> },
       { path: "/leaderboard", element: <Leaderboard /> },
-      { path: "/forum", element: <Forum /> },
+      // { path: "/forum", element: <Forum /> },
       { path: "/genre", element: <Genre /> },
       { path: "/avsearch", element: <AdvanceSearch /> },
       { path: "/auth/*", element: <AuthRoutes /> },

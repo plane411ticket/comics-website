@@ -11,6 +11,7 @@ import SearchBar from "./SearchBar";
 import ThemeSwitcher from "./ThemeSwitcher";
 import UserMenu from "./UserMenu";
 import MobileMenu from "./MobileMenu";
+import Notify from "./Notify";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +26,9 @@ const Navbar = () => {
     </div>
     <div className="flex-1 flex justify-center">
       <SearchBar isMobile = {false} />
+    </div>
+    <div className="flex-shrink-0">
+      <Notify />
     </div>
     <div className="flex-shrink-0">
       <ThemeSwitcher />

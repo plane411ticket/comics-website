@@ -32,6 +32,7 @@ pnpm-lock.yaml
 staticfiles/
 # media/
 static/
+
 covers/
 managa_covers/
 managa_images/

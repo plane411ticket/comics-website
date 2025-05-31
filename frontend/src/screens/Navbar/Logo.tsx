@@ -1,5 +1,5 @@
 import LogoWeb from "@/assets/Logo_real.png";
-import MobileLogo from "@/assets/mobilelogo.png";
+import MobileLogo from "@/assets/MobileLogo.png";
 import {Link} from "react-router-dom";
 const Logo = () => {
   return (
@@ -15,7 +15,7 @@ const Logo = () => {
         src={MobileLogo}
         alt="Mobile Logo"
         className="sm:hidden"
-        style={{ width: 75, height: 60 }}
+        style={{ width: 45, height: 40 }}
       />
 
     </Link>
