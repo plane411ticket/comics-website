@@ -1,6 +1,6 @@
 // import { Link, Outlet } from "react-router-dom";
-import bglogin from "@/assets/backlogin.png";
-import LogoWeb from "@/assets/logo.png";
+import bglogin from "@/assets/Logo_real.png";
+
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { loginUser } from "../../actions/userAction";
@@ -47,7 +47,7 @@ export default function LoginScreen() {
         }  
     }
     return (
-        <div className="bg-black text-white font-Nurito flex items-center justify-center h-screen">
+        <div className="bg-orange-800 text-white font-Nurito flex items-center justify-center h-screen">
             {success ? (
                 <section>
                     <h1>Success!</h1>
@@ -57,22 +57,22 @@ export default function LoginScreen() {
                 </section>
             ) : (
                 <>
-                    <div className="bg-black text-white font-Nurito flex flex-col md:flex-row items-center justify-center min-h-screen px-4">
+                    <div className="bg-white text-white font-Nurito flex flex-col md:flex-row items-center justify-center min-h-screen px-4">
                     {/* Cột bên trái (Ảnh) */}
                         <div className="hidden md:flex md:w-2/5 lg:w-2/5 h-auto items-center justify-center">
-                            <img src={bglogin} alt="loginbackground" className="max-w-full h-auto" />
+                            <Link to="/"> 
+                                <img src={bglogin} alt="loginbackground" className="max-w-full h-auto" />
+                            </Link>
                         </div>
 
                         {/* Cột bên phải (Form đăng nhập) */}
                         
-                        <div className="w-full md:w-3/5 lg:w-3/5 p-6 md:p-8 rounded-lg shadow-lg md:mr-10">
-                                <div className="flex justify-center mb-4 md:w-full lg:w-full md:text-base">
-                                    <Link to="/"><img src={LogoWeb} alt="loginbackground" className="max-w-full h-auto" /></Link>
-                                </div>
+                        <div className=" bg-orange-800 w-full md:w-3/5 lg:w-3/5 p-6 md:p-8 rounded-lg shadow-lg md:mr-10">
                                 
-                                <div className="bg-gray-800 w-5/5 md:w-full md:text-base lg:w-full mr-10 border-t-orange-500 border-t-5">
+                                
+                                <div className="bg-orange-900 w-5/5 md:w-full md:text-base lg:w-full mr-10 border-t-orange-800 border-t-5">
                                     <div className="h-4 "></div>
-                                    <form className="bg-gray-800 ml-10 mr-10 " onSubmit={handleSubmit}>
+                                    <form className="bg-orange-900 ml-10 mr-10 " onSubmit={handleSubmit}>
                                         <h1 className="text-2xl font-bold mb-4 flex items-center justify-center">Đăng nhập</h1>
                                         <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
 
@@ -111,12 +111,12 @@ export default function LoginScreen() {
                                         </div>
 
                                         <div className="h-4"></div>
-                                        <button type="submit" className="w-full  bg-orange-500 text-white p-2 rounded hover:bg-yellow-400">Đăng nhập</button>
+                                        <button type="submit" className="w-full  bg-red-700 text-white p-2 rounded hover:bg-yellow-400">Đăng nhập</button>
                                         <div className="h-4"></div>
 
                                         <div className="flex flex-row justify-center items-center mt-6 space-x-2 whitespace-nowrap pb-4">
                                             <span>New user?</span>
-                                            <Link to="/auth/register" className="text-orange-500 hover:text-yellow-400">Register</Link>
+                                            <Link to="/auth/register" className="text-red-600 hover:text-yellow-400">Register</Link>
                                             <span className="h-3"></span>
                                         </div>
 

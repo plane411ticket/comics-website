@@ -1,9 +1,10 @@
-import LogoWeb from "@/assets/logo.png";
+import LogoWeb from "@/assets/Logo_real.png";
 import MobileLogo from "@/assets/mobilelogo.png";
-
+import {Link} from "react-router-dom";
 const Logo = () => {
   return (
-    <div className="flex items-center justify-center">
+    <Link to="/" className="flex items-center justify-center">
+    
       <img
         src={LogoWeb}
         alt="Logo"
@@ -16,7 +17,8 @@ const Logo = () => {
         className="sm:hidden"
         style={{ width: 75, height: 60 }}
       />
-    </div>
+
+    </Link>
   );
 };
 

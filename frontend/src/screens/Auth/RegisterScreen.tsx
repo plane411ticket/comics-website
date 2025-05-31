@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import bglogin from "@/assets/backlogin.png";
+import bglogin from "@/assets/Logo_real.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { registerUser } from "../../actions/userAction";
-import LogoWeb from "@/assets/logo.png";
 import { login } from "../../types/user/userSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store";
@@ -107,7 +106,7 @@ export default function RegisterScreen() {
     };
 
     return (
-        <div className="bg-black text-white font-Nurito flex flex-col md:flex-row items-center justify-center min-h-screen px-4">
+        <div className="bg-orange-200 text-white font-Nurito flex flex-col md:flex-row items-center justify-center min-h-screen px-4">
             {success ? (
                 <section>
                     <h1>Success!</h1>
@@ -119,19 +118,18 @@ export default function RegisterScreen() {
                 <>
                     {/* Left Column (Image) */}
                     <div className="hidden md:flex w-1/2 h-auto items-center justify-center">
+                        <Link to="/"> 
                         <img src={bglogin} alt="loginbackground" className="max-w-full h-auto" />
+                        </Link>
                     </div>
 
                     {/* Right Column (Form) */}
-                    <div className="w-80 md:w-1/2 p-6 md:p-8 rounded-lg shadow-lg md:mr-10">
-                    <div className="flex justify-center mb-4">
-
-                            <Link to="/"><img src={LogoWeb} alt="loginbackground" className="max-w-full h-auto" /></Link>
-                        </div>
+                    <div className="bg-orange-800 w-80 md:w-1/2 p-6 md:p-8 rounded-lg shadow-lg md:mr-10">
+                    
                         
-                        <div className="bg-gray-800 w-5/5 mr-10 border-t-orange-500 border-t-5">
+                        <div className="bg-orange-900 w-5/5 mr-10 border-t-orange-900 border-t-5">
                             <div className="h-4"></div>
-                            <form className="bg-gray-800 ml-10 mr-10" onSubmit={handleSubmit}>
+                            <form className="bg-orange-900 ml-10 mr-10" onSubmit={handleSubmit}>
                                 <h1 className="text-2xl font-bold mb-4 flex items-center justify-center">Đăng ký</h1>
                                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
 
@@ -237,7 +235,7 @@ export default function RegisterScreen() {
                                 <div className="h-4"></div>
                                 <button
                                     type="submit"
-                                    className="w-full bg-orange-500 text-white p-2 rounded hover:bg-yellow-400"
+                                    className="w-full bg-red-700 text-white p-2 rounded hover:bg-yellow-400"
                                     disabled={!validName || !validPwd || !validMatch}
                                 >
                                     Đăng ký
@@ -246,7 +244,7 @@ export default function RegisterScreen() {
                                 <div className="h-4"></div>
                                 <div className="flex flex-row justify-center items-center mt-6 space-x-2 whitespace-nowrap pb-4">
                                     <h2>Old user?</h2>
-                                    <Link to="/auth/login" className="text-orange-500 hover:text-yellow-400">Login</Link>
+                                    <Link to="/auth/login" className="text-red-500 hover:text-yellow-400">Login</Link>
                                 </div>
                             </form>
                         </div>
