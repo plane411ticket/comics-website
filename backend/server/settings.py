@@ -29,6 +29,8 @@ import cloudinary_storage
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
 
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
@@ -283,3 +285,5 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+SECURE_SSL_REDIRECT = False
