@@ -16,7 +16,7 @@ urlpatterns = [
     path('api/', include('novel.urls')),
     path('api/', include('forum.urls')),
 
-    path('', home),
+    # path('', home),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
