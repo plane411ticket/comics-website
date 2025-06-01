@@ -121,9 +121,8 @@ const HomePage = () => {
           <p className="text-lg text-gray-300">
             Là món ăn tinh thần không thể bỏ lỡ cho các fan chân chính!!!!
             <br />
-            Nơi bạn có thể giải trí, tìm hiểu và khám phá thế giới Comic đa dạng.
+            Nơi bạn có thể giải trí, tìm hiểu và khám phá thế giới Compytho
           </p>
-
           <Link to="/avsearch" className="text-lg text-orange-500">
           <a href="#" className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:opacity-80 transition">
             Tham gia ngay →
@@ -230,6 +229,12 @@ const HomePage = () => {
                 className="w-full max-w-[260px] bg-gray-800 text-white px-4 sm:px-6 py-3 rounded-md text-base sm:text-lg font-semibold shadow-lg hover:bg-gray-700 transition"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                const aboutSection = document.getElementById("about-us-section");
+                if (aboutSection) {
+                  aboutSection.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
               >
                 Tìm hiểu thêm
               </motion.button>
@@ -320,12 +325,22 @@ const HomePage = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Tham gia ngay
+                <Link to="/manga" className="flex items-center justify-center">
+                  <span className="flex items-center justify-center">
+                    <span className="text-white">Tham gia ngay</span>
+                  </span>
+                </Link>
               </motion.button>
               <motion.button
                 className="bg-gray-800 text-white px-5 sm:px-6 py-3 rounded-md text-base sm:text-lg font-semibold shadow-lg hover:bg-gray-700 transition"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                const aboutSection = document.getElementById("about-us-section");
+                if (aboutSection) {
+                  aboutSection.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
               >
                 Tìm hiểu thêm
               </motion.button>
@@ -363,6 +378,7 @@ const HomePage = () => {
               key={index}
               className="inline-block mr-2"
               initial="hidden"
+              id="about-us-section"
               animate={controls3}
               variants={{
                 hidden: { opacity: 0, y: 20 },
