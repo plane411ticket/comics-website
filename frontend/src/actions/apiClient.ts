@@ -1,6 +1,6 @@
 import axios from "axios";
 const baseURL = import.meta.env.VITE_ADMIN_URL;
-import { autoLogin  } from "./userAction";
+// import { autoLogin  } from "./userAction";
 
 const axiosAuth = axios.create({
   baseURL: baseURL,
