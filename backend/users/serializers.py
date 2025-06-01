@@ -28,7 +28,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
         fields = '__all__'
     def get_user(self,obj):
         user = obj.user
-        serializers = UserSerializer(user,many=False)
+        serializers = UserSerializer(user,many=False,context=self.context)
         return serializers.data
 class CommentsSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField(read_only=True)
@@ -67,7 +67,7 @@ class LikeSerializer(serializers.ModelSerializer):
         fields = '__all__'
     def get_user(self,obj):
         user = obj.user
-        serializers = UserSerializer(user,many=False)
+        serializers = UserSerializer(user,many=False,context=self.context)
         return serializers.data
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -77,5 +77,5 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = '__all__'
     def get_user(self, obj):
         user = obj.user
-        serializers = UserSerializer(user, many=False)
+        serializers = UserSerializer(user, many=False, context=self.context)
         return serializers.data
