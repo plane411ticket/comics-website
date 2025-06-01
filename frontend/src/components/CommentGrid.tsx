@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Comment, CommentFormProps, CommentItemProps, CommentListProps } from '../types/user/User';
+import { Comment, CommentFormProps, CommentItemProps} from '../types/user/User';
 import { fetchComments, postComment } from '../actions/userAction';
-
+import { useContentInfo } from '../hooks/useContentInfo';
 // CommentForm component (giữ nguyên)
 export const CommentForm: React.FC<CommentFormProps> = ({
   onSubmit = () => {},
@@ -52,7 +52,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
             className="w-6 h-6 rounded-full"
           />
         )}
-        <span className="text-sm font-semibold">{comment.user.first_name}</span>
+        <Link to = {`/profiles/${comment.user.username}`} className="text-sm font-semibold">{comment.user.username}</Link>
         <span className="text-xs text-gray-500 ml-2">{new Date(comment.created_at).toLocaleString()}</span>
       </div>
 
@@ -82,13 +82,15 @@ export const CommentItem: React.FC<CommentItemProps> = ({
   );
 };
 
-export const CommentList: React.FC<CommentListProps> = ({ type, post_id }) => {
+export const CommentList: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
+  const { type, objectId } = useContentInfo();
 
+  
   const fetchData = async () => {
     try {
-      const fetchedComments = await fetchComments({ object_id: post_id, content_type: type });
+      const fetchedComments = await fetchComments({ object_id: objectId, content_type: type });
       setComments(fetchedComments);
     } catch (error) {
       console.error('Failed to fetch comments:', error);
@@ -99,18 +101,19 @@ export const CommentList: React.FC<CommentListProps> = ({ type, post_id }) => {
 
   useEffect(() => {
     fetchData();
-  }, [post_id, type]);
+  }, []);
 
   const addComment = async (content: string, parent: number | null = null) => {
     try {
-      const info = await postComment(post_id, content, type, parent);
+      if (!objectId || !type) return;
+      const info = await postComment(objectId, content, type, parent);
       // Tạo comment mới từ dữ liệu trả về
       const newComment: Comment = {
         id: info.id,
         parent,
         user: info.user,
         target_model: type,
-        target_object_id: post_id,
+        target_object_id: objectId,
         content,
         created_at: info.created_at || new Date(),
       };

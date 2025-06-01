@@ -12,7 +12,7 @@ import { CommentList } from "../../components/CommentGrid";
 
 
 const StoryDetailPage = () => {
-  const { storyId } = useParams(); // từ URL /story/:storyId
+  const { postId } = useParams(); // từ URL /story/:postId
   const [story, setStory] = useState<Novel | null>(null);
   const [chapters, setChapters] = useState<NovelChapter[]>([]);
   // const [numFavorites, setNumFavorites] = useState(null);
@@ -31,7 +31,7 @@ const StoryDetailPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const detail = await fetchStoryDetails(String(storyId));
+        const detail = await fetchStoryDetails(String(postId));
 
         setStory(detail);
       } catch (error) {
@@ -40,12 +40,12 @@ const StoryDetailPage = () => {
     };
 
     fetchData();
-  }, [storyId]);
+  }, [postId]);
 
   useEffect(() => {
     const fetchChapter = async () => {
       try {
-        const chapterList = await fetchStoryChapters(String(storyId));
+        const chapterList = await fetchStoryChapters(String(postId));
         setChapters(chapterList);
       } catch (error) {
         console.error("Lỗi khi load chương:", error);
@@ -53,7 +53,7 @@ const StoryDetailPage = () => {
     };
   
     fetchChapter();
-  }, [storyId]);
+  }, [postId]);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -70,11 +70,11 @@ const StoryDetailPage = () => {
 
   const handleFavoriteClick = async () => {
     try {
-      if (!storyId) {
-        console.error("Lỗi khi cập nhật số fav: storyID null");
+      if (!postId) {
+        console.error("Lỗi khi cập nhật số fav: postId null");
         return
       }
-      const updated = await updateFavorite({post_id:storyId, type: "novel"});
+      const updated = await updateFavorite({post_id:postId, type: "novel"});
       if (story) {
         setStory({ ...story, numFavorites: updated.numFavorites });
       }
@@ -86,11 +86,11 @@ const StoryDetailPage = () => {
 
   const handleLikeClick = async () => {
     try {
-      if (!storyId) {
+      if (!postId) {
         console.error("Lỗi khi cập nhật số lượt thích:");
         return
       }
-      const updated = await updateLike({post_id:storyId, type: "novel"});
+      const updated = await updateLike({post_id:postId, type: "novel"});
       console.log(updated.numLikes)
       if (story) {
         setStory({ ...story, numLikes: updated.numLikes });
@@ -269,7 +269,7 @@ return (
           </div>
         </div>
         <div className="flex-1 mt-10">
-          <CommentList type="novel" post_id={String(storyId)} />
+          <CommentList/>
         </div>
       </div>
 

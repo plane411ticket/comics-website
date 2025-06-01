@@ -11,10 +11,9 @@ import { useMemo } from "react";
 import { CommentList } from "../../components/CommentGrid";
 
 const StoryDetailPage = () => {
-  const { mangaId } = useParams(); // từ URL /story/:mangaId
+  const { postId } = useParams(); // từ URL /story/:postId
   const [story, setStory] = useState<Manga | null>(null);
   const [chapters, setChapters] = useState<MangaChapter[]>([]);
-  // const [numFavorites, setNumFavorites] = useState(null);
   const firstChapter = chapters[0];
   const lastChapter = chapters[chapters.length - 1];
   const [allMangas, setAllMangas] = useState<Manga[]>([]);
@@ -28,7 +27,7 @@ const StoryDetailPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const detail = await fetchMangaDetails(String(mangaId));
+        const detail = await fetchMangaDetails(String(postId));
 
         setStory(detail);
       } catch (error) {
@@ -37,12 +36,12 @@ const StoryDetailPage = () => {
     };
 
     fetchData();
-  }, [mangaId]);
+  }, [postId]);
 
   useEffect(() => {
     const fetchChapter = async () => {
       try {
-        const chapterList = await fetchMangaChapters(String(mangaId));
+        const chapterList = await fetchMangaChapters(String(postId));
         setChapters(chapterList);
       } catch (error) {
         console.error("Lỗi khi load chương:", error);
@@ -50,13 +49,13 @@ const StoryDetailPage = () => {
     };
   
     fetchChapter();
-  }, [mangaId]);
+  }, [postId]);
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const novels = await fetchManga(1); // lấy trang 1, hoặc sửa lại API để lấy nhiều hơn nếu cần
-        setAllMangas(novels);
+        const mangas = await fetchManga(1); // lấy trang 1, hoặc sửa lại API để lấy nhiều hơn nếu cần
+        setAllMangas(mangas);
       } catch (error) {
         console.error("Lỗi khi load danh sách truyện:", error);
       }
@@ -66,11 +65,11 @@ const StoryDetailPage = () => {
 
   const handleFavoriteClick = async () => {
     try {
-      if (!mangaId) {
+      if (!postId) {
         console.error("Lỗi khi cập nhật số fav: storyID null");
         return
       }
-      const updated = await updateFavorite({post_id:mangaId, type: "manga"});
+      const updated = await updateFavorite({post_id:postId, type: "manga"});
       if (story) {
         setStory({ ...story, numFavorites: updated.numFavorites });
       }
@@ -81,11 +80,11 @@ const StoryDetailPage = () => {
 
   const handleLikeClick = async () => {
       try {
-        if (!mangaId) {
+        if (!postId) {
           console.error("Lỗi khi cập nhật số lượt thích:");
           return
         }
-        const updated = await updateLike({post_id:mangaId, type: "novel"});
+        const updated = await updateLike({post_id:postId, type: "manga"});
         console.log(updated.numLikes)
         if (story) {
           setStory({ ...story, numLikes: updated.numLikes });
@@ -192,20 +191,20 @@ const StoryDetailPage = () => {
                   <div className="bg-white rounded-xl shadow p-4 w-full h-full">
                     <h3 className="font-bold text-lg mb-4">Gợi ý cho bạn</h3>
                     <div className="space-y-4">
-                      {recommends.map(novel => (
+                      {recommends.map(manga => (
                         <Link
-                          to={`/novel/${novel._id}`}
-                          key={novel._id}
+                          to={`/manga/${manga._id}`}
+                          key={manga._id}
                           className="flex items-center gap-3 hover:bg-sky-100 rounded p-2 transition"
                         >
                           <img
-                            src={novel.cover_image}
-                            alt={novel.title}
+                            src={manga.cover_image}
+                            alt={manga.title}
                             className="w-20 h-28 md:w-24 md:h-32 object-cover rounded shadow"
                           />
                           <div className="flex-1">
-                            <div className="font-semibold text-sm line-clamp-2">{novel.title}</div>
-                            <div className="text-xs text-gray-500">{novel.author}</div>
+                            <div className="font-semibold text-sm line-clamp-2">{manga.title}</div>
+                            <div className="text-xs text-gray-500">{manga.author}</div>
                           </div>
                         </Link>
                       ))}
@@ -228,7 +227,7 @@ const StoryDetailPage = () => {
                           {chapters.slice(rowIndex * 3, rowIndex * 3 + 3).map((chapter, colIndex) => (
                             <div key={colIndex}>
                               <Link
-                                to={`/novel/chapter/${chapter._id}`}
+                                to={`/manga/chapter/${chapter._id}`}
                                 className="text-neutral-700 hover:text-orange-500 dark:text-white"
                               >
                                 Chương {chapter.chapter_number}
@@ -242,7 +241,7 @@ const StoryDetailPage = () => {
                 </div>
               </div>
               <div className="flex-1 mt-10">
-                <CommentList type="novel" post_id={String(mangaId)} />
+                <CommentList/>
               </div>
     </div>
   );

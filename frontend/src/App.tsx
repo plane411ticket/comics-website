@@ -2,10 +2,8 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./screens//Navbar/Navbar.tsx";
 import Footer from "./screens//Footer/Footer.tsx";
 import "./index.css";
-import {useAutoLogin} from "./actions/userAction.ts";
 import ScrollToTop from "./actions/routerAction.ts";
 const App = () => {
-  useAutoLogin();
   const location = useLocation();  // Lấy thông tin URL hiện tại
   const hideNavbar = location.pathname === "/auth/login";  // Kiểm tra nếu đang ở trang login
   const hideNavbar02 = location.pathname === "/auth/register";

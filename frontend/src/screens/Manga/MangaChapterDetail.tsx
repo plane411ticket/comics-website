@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { MangaChapter} from '../../types/manga/mangaChapters';
 import { fetchMangaChapterDetail, fetchMangaChapters } from '../../actions/mangaActions';
-
+import { CommentList } from '../../components/CommentGrid';
 const ChapterMangaDetailPage = () => {
   const { chapterId } = useParams();
   const navigate = useNavigate();
@@ -126,6 +126,9 @@ const ChapterMangaDetailPage = () => {
       >
         Chương sau ➡
       </button>
+      </div>
+      <div className="flex-1 mt-10">
+        <CommentList/>
       </div>
     </div>
   );

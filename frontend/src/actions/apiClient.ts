@@ -1,23 +1,27 @@
 import axios from "axios";
 const baseURL = import.meta.env.VITE_ADMIN_URL;
+import { autoLogin  } from "./userAction";
 
-const API = axios.create({
+const axiosAuth = axios.create({
   baseURL: baseURL,
   withCredentials: true, // cookie HttpOnly
   headers: { "Content-Type": "application/json" },
 });
 
-API.interceptors.response.use(
+axiosAuth.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
     // 401 & chưa thử refresh token
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    console.log("Error response:", error.response);
+    const errorStatus = error.response?.status;
+    if ((errorStatus === 401|| (errorStatus === 403) && !originalRequest._retry)) {
       originalRequest._retry = true;
       try {
-        await API.get("/api/refresh"); // Backend set lại cookie
-        return API(originalRequest); // Thử lại request ban đầu
+        const res = await autoLogin(); // Backend set lại cookie
+        console.log("Token refreshed:", res);
+        return axiosAuth(originalRequest); // Thử lại request ban đầu
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
       }
@@ -27,4 +31,4 @@ API.interceptors.response.use(
   }
 );
 
-export default API;
+export default axiosAuth;
