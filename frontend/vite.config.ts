@@ -5,22 +5,20 @@ import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       "@": "/src",
     },
   },
-  // server: {
-  //   proxy: {
-  //     '/api': {
-  //       target: 'https://comics-website-backend.onrender.com',  
-  //       changeOrigin: true,
-  //       secure: false,
-  //     }
-  //   },
-  //   allowedHosts: ['https://mangadak.onrender.com'],
-  // }
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',  
+        changeOrigin: true,
+        secure: false,
+      }
+    },
+  }
 });
 
