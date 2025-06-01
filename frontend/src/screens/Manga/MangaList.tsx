@@ -11,7 +11,9 @@ const MangaList = () => {
 
   // tải dữ liệu khi page thay đổi nếu chưa có trong cache
   useEffect(() => {
-    const loadMangas = async () => {
+    let mounted = true; // Biến để kiểm tra component đã unmount chưa
+    const loadMangas = async () => 
+    {
       if (mangasCache[page]) {
         // đã có cache, không fetch nữa
         return;
@@ -21,14 +23,15 @@ const MangaList = () => {
         const data = await fetchManga(page);
         setMangasCache(prev => ({ ...prev, [page]: data }));
       }
-    } catch (error) {
-      if (mounted) {
-        console.error("Lỗi tải truyện:", error);
+      catch (error) 
+      {
+        if (mounted) {
+          console.error("Lỗi tải truyện:", error);
+        }
       }
-    }
-    if (mounted) {
-      setIsLoading(false);
-    }
+      if (mounted) {
+        setIsLoading(false);
+      }
   };
 
     loadMangas();

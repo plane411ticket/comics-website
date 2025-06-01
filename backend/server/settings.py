@@ -122,7 +122,6 @@ CLOUDINARY_STORAGE = {
     'API_KEY': config('CLOUD_API_KEY'),
     'API_SECRET': config('CLOUD_API_SECRET'),
 }
-]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
