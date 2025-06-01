@@ -8,6 +8,8 @@ import {fetchProfile} from "../../actions/userAction";
 import { User } from "../../types/user/User";
 import { FaEdit } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import { updateAvatar, updateProfile } from "../../actions/userAction";
+
 // 1. Define the tab keys and their content types
 type TabKey = "info" | "uploads" | "mdlists";
 
@@ -23,6 +25,27 @@ export default function ProfileScreen() {
         const tabRefs = useRef<{ [key in TabKey]?: HTMLAnchorElement | null }>({});
         const { username } = useParams();
         const [isValid,setValid] = useState<boolean>(false);
+        const [selectorStyles, setSelectorStyles] =  useState<{ left: number; width: number } | null>(null);
+        const [selectorReady, setSelectorReady] = useState(false);
+        const [profile, setProfile] = useState<User | null>(null);
+        const isOwner = !username || username === userInfo?.name;
+        const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("avatar", file);
+
+            try {
+                await updateAvatar(formData);
+                const updatedProfile = await fetchProfile();
+                setEditProfile(updatedProfile);
+                console.log("Avatar updated successfully", updatedProfile?.cover);
+            } catch (error) {
+                console.error("Error updating avatar:", error);
+            }
+        };
+
         // Define tabs with their content
         const tabsConfig: Record<TabKey, TabContent> = {
             info: {
@@ -47,11 +70,6 @@ export default function ProfileScreen() {
             return tabs.includes(tabParam) ? tabParam : "info";
         });
 
-        const [selectorStyles, setSelectorStyles] =  useState<{ left: number; width: number } | null>(null);
-        const [selectorReady, setSelectorReady] = useState(false);
-        const [profile, setProfile] = useState<User | null>(null);
-        const isOwner = !username || username === userInfo?.name;
-        // Update URL khi tab thay đổi //
         useEffect(() => {
             setSearchParams({ tab: activeTab });
         }, [activeTab, searchParams]);
@@ -77,11 +95,10 @@ export default function ProfileScreen() {
           const fetchData = async () =>{
               try {
                 var profileData = null;
-                  console.log("Fetching profile for user:", username);
+                  console.log("Fetching profile for user:", username," userInfo:", userInfo);
                   if(username) 
                     profileData = await fetchProfile(username);
                   else profileData = await fetchProfile();
-                  
                   if(profileData === null) setValid(false);
                   else {
                     setProfile(profileData);
@@ -95,7 +112,7 @@ export default function ProfileScreen() {
               }
           }
             fetchData();
-        },[userInfo, searchParams]);
+        },[searchParams]);
 
         // Thêm state cho chế độ chỉnh sửa //
         const [editMode, setEditMode] = useState(false);
@@ -124,6 +141,13 @@ export default function ProfileScreen() {
         // Khi thay đổi trường dữ liệu
         const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
           if (!editProfile) return;
+          const res = updateProfile(editProfile);
+          if (res) {
+            console.log("Profile updated successfully:", res);
+          } else {
+            console.error("Failed to update profile");
+          }
+
           setEditProfile({ ...editProfile, [e.target.name]: e.target.value });
         };
 
@@ -147,20 +171,28 @@ export default function ProfileScreen() {
                   />
 
                 {/* Nút đổi avatar */}
-                <label className="absolute bottom-2 right-2 bg-black bg-opacity-60 rounded-full p-2 cursor-pointer hover:bg-opacity-80 transition">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    // onChange={handleAvatarChange}
-                    // disabled={uploading}
-                  />
-                  {/* <span className="text-white text-xs">{uploading ? "..." : "🖊️"}</span> */}
-                </label>
-              </div>
+                {editMode && (
+              <>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="avatar-upload"
+                  className="hidden"
+                  onChange={handleAvatarChange}
+                />
+                  <label
+                    htmlFor="avatar-upload"
+                    className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow cursor-pointer hover:bg-gray-200"
+                    title="Đổi ảnh đại diện"
+                  >
+                    <FaEdit size={20} className="text-gray-700" />
+                  </label>
+                  </>
+                        )}
+                      </div>
 
 
-                <h2 className="text-xl font-bold">{profile?.first_name}</h2>
+                <h2 className="text-xl font-bold">{profile?.username}</h2>
 
                 <div className="mt-6 flex flex-wrap gap-4 justify-center">
                   <button className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">
@@ -179,7 +211,7 @@ export default function ProfileScreen() {
           </div>
 
           {/* Right column */}
-          <div className="col-span-4 sm:col-span-9">
+          <div className="col-span-4 justify-center sm:col-span-9 items-center">
             <div className="bg-white shadow rounded-lg p-6 h-full min-h-[400px] max-h-[400px] overflow-y-auto">
                 {/* Animated Tabs */}
                 <div className="relative inline-flex items-center bg-gray-100 rounded-lg p-1 space-x-1">
@@ -213,10 +245,13 @@ export default function ProfileScreen() {
                     <span className="capitalize">{tab}</span>
                     </a>
                 ))}
+
+
+                
                 </div>
 
                   {/* Content */}
-              <div className="items-start mt-6 min-h-[200px]">
+              <div className="items-center mt-6 min-h-[200px]">
                 {activeTab === "info" ? (
                   <div className="relative">
                     {/* Nút chỉnh sửa */}
@@ -229,80 +264,45 @@ export default function ProfileScreen() {
                         <FaEdit size={20} />
                       </button>
                     )}
-                    <form className="w-full max-w-lg flex flex-col gap-4 ">
-                      {/* Trạng thái */}
-                      <div className="flex flex-col sm:flex-row items-start gap-2 ">
-                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="status">
-                          Trạng thái:
-                        </label>
-                        {editMode ? (
-                          <textarea
-      id="status"
-      name="status"
-      value={editProfile?.status || ""}
-      onChange={handleChange}
-      className="border rounded px-2 py-1 flex-1 resize-y"
-      rows={3} // bạn có thể chỉnh số dòng textarea mặc định
-    />
-                        ) : (
-                          <span className="text-gray-800 break-words whitespace-pre-line w-full text-left">{profile?.status || "Chưa có"}</span>
-                        )}
-                      </div>
-                      {/* Tên đăng nhập */}
-                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
-                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="first_name">
-                          Tên đăng nhập:
-                        </label>
-                        {editMode ? (
-                          <input
-                            type="text"
-                            id="first_name"
-                            name="first_name"
-                            value={editProfile?.first_name || ""}
-                            onChange={handleChange}
-                            className="border rounded px-2 py-1 flex-1"
-                          />
-                        ) : (
-                          <span className="text-gray-800">{profile?.first_name}</span>
-                        )}
-                      </div>
+                    
                       
-                      {/* Email */}
-                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
-                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="email">
-                          Email:
-                        </label>
-                        {editMode ? (
-                          <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={editProfile?.email || ""}
-                            onChange={handleChange}
-                            className="border rounded px-2 py-1 flex-1"
-                          />
-                        ) : (
-                          <span className="text-gray-800">{profile?.email}</span>
-                        )}
-                      </div>
-                      {/* Ngày sinh */}
-                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
-                        <label className="block font-semibold min-w-[120px] text-gray-700" htmlFor="birthday">
-                          Ngày sinh:
-                        </label>
-                        {editMode ? (
-                          <input
-                            type="date"
-                            id="birthday"
-                            name="birthday"
-                            value={editProfile?.birthday || ""}
-                            onChange={handleChange}
-                            className="border rounded px-2 py-1 flex-1"
-                          />
-                        ) : (
-                          <span className="text-gray-800">{profile?.birthday}</span>
-                        )}
-                      </div>
+                     {/* Tên đăng nhập */}
+<div className="flex flex-col items-center gap-2 w-full py-4">
+  <label className="block font-semibold text-gray-700 text-4xl text-center" htmlFor="username">
+    Tên đăng nhập:
+  </label>
+  {editMode ? (
+    <input
+      type="text"
+      id="username"
+      name="username"
+      value={editProfile?.username || ""}
+      onChange={handleChange}
+      className="border rounded px-2 py-1 text-center text-2xl w-full max-w-xs"
+    />
+  ) : (
+    <span className="text-gray-800 text-4xl text-center">{profile?.username}</span>
+  )}
+</div>
+{/* Email */}
+<div className="flex flex-col items-center gap-2 w-full py-4">
+  <label className="block font-semibold text-gray-700 text-4xl text-center" htmlFor="email">
+    Email:
+  </label>
+  {editMode ? (
+    <input
+      type="email"
+      id="email"
+      name="email"
+      value={editProfile?.email || ""}
+      onChange={handleChange}
+      className="border rounded px-2 py-1 text-center text-2xl w-full max-w-xs"
+    />
+  ) : (
+    <span className="text-gray-800 text-4xl text-center">{profile?.email}</span>
+  )}
+</div>
+                      
                       {/* Nút lưu/hủy */}
                       {editMode && (
                         <div className="flex gap-4 mt-2">
@@ -322,7 +322,7 @@ export default function ProfileScreen() {
                           </button>
                         </div>
                       )}
-                    </form>
+                 
                   </div>
                 ) : (
                   tabContent[activeTab]

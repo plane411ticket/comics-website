@@ -108,9 +108,11 @@ INSTALLED_APPS = [
     'novel',
     'audio',
     'genres',
+    'channels',
     'users',
     'forum',
     # For image uploads
+    'notify',
     'cloudinary_storage',
     'cloudinary',
 ]
@@ -120,21 +122,23 @@ CLOUDINARY_STORAGE = {
     'API_KEY': config('CLOUD_API_KEY'),
     'API_SECRET': config('CLOUD_API_SECRET'),
 }
+]
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
-CACHE_MIDDLEWARE_SECONDS = 60
+CACHE_MIDDLEWARE_SECONDS = 10
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
@@ -162,7 +166,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'server.wsgi.application'
-
+ASGI_APPLICATION = 'server.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -271,3 +275,12 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}

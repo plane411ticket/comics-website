@@ -1,15 +1,16 @@
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { login } from '../types/user/userSlice';
+import { login, logout } from '../types/user/userSlice';
 import { LikeProp, User } from '../types/user/User';
 import { Comment } from '../types/user/User';
+import store from '../store';
+import axiosAuth from './apiClient';
 const baseURL = import.meta.env.VITE_ADMIN_URL;
 
 export const registerUser = async (username: string, email: string, password: string) => {
     try {
         const config = {
-            headers: { 'Content-Type': 'Application/json' },
+            headers: { 'Content-Type': 'application/json' },
             withCredentials:true,
         }
         const response = await axios.post(
@@ -36,6 +37,17 @@ export const loginUser = async (username: string, password: string) => {
             {username, password}, 
             config
         );
+        const user = response.data.user;
+        store.dispatch(
+                login({
+                    id: String(user.id),
+                    email: user.email,
+                    name: user.username,
+                    first_name: user.first_name,
+                    cover: `${baseURL}${user.cover}`,
+                    isLogin: true,
+                })
+            );
         console.log(response); // Debug kết quả
         return response
     } catch (error) {
@@ -45,7 +57,7 @@ export const loginUser = async (username: string, password: string) => {
 
 export const logoutUser = async () => {
     const config = {
-        headers: { 'Content-Type': 'Application/json' },
+        headers: { 'Content-Type': 'application/json' },
         withCredentials:true,
     }
     const response = await axios.post(
@@ -53,14 +65,15 @@ export const logoutUser = async () => {
         {}, 
         config
     );
-    console.log(response); // Debug kết quả
+    store.dispatch(logout());
+    console.log("Logout",response); // Debug kết quả
 };
 
 
 export const fetchProfile = async (username?:string): Promise<User | null> => {
     try {
         const config = {
-            headers: { 'Content-Type': 'Application/json' },
+            headers: { 'Content-Type': 'application/json' },
             withCredentials:true,
         }
         var response = null, user = null;
@@ -72,13 +85,25 @@ export const fetchProfile = async (username?:string): Promise<User | null> => {
             user = response.data;
         }
         else {
-            response = await axios.get(
+            response = await axiosAuth.get(
                 `${baseURL}/api/me/`,  
                 config
             );
-            user = response.data?.results?.[0];
-        
+            user = response.data;
+            if(user.cover) user.cover = `${baseURL}${user.cover}`;
+            store.dispatch(
+                login({
+                    id: String(user.id),
+                    email: user.email,
+                    name: user.username,
+                    first_name: user.first_name,
+                    cover: user.cover,
+                    isLogin: true,
+                })
+            );
+            console.log("Me:", response);
         }
+        
         console.log("User profile fetched:", user);
         return user ? (user as User) : null;
         
@@ -88,49 +113,39 @@ export const fetchProfile = async (username?:string): Promise<User | null> => {
     }
 };
 
-export const useAutoLogin = () => {
-    const dispatch = useDispatch();
 
-    useEffect(() => {
-        const autoLogin = async () => {
-            const config = { withCredentials: true };
-            try {
-                // Bước 1: Refresh token
-                await axios.post(`${baseURL}/api/refresh/`, {}, config);
-                console.log("Refresh token thành công");
+export const autoLogin = async () => {
+    const config = { withCredentials: true };
+    try {
+        // Bước 1: Refresh token
+        await axios.post(`${baseURL}/api/refresh/`, {}, config);
+        console.log("Refresh token thành công");
 
-                // Bước 2: Gọi fetchProfile để lấy user info
-                const profile = await fetchProfile();
-                
-                if (profile) {
-                    dispatch(
-                        login({
-                            name: profile.first_name,
-                            first_name: profile.first_name,
-                            cover: profile.cover,
-                            isLogin: true,
-                        })
-                    );
-                } else {
-                    console.log("Không lấy được profile");
-                }
-
-            } catch (error) {
-                console.error("Tự động đăng nhập thất bại:", error);
-            }
-        };
-
-        autoLogin();
-    }, [dispatch]);
+        // Bước 2: Gọi fetchProfile để lấy user info
+        await fetchProfile();
+        
+        
+    } catch (error) {
+        console.error("Tự động đăng nhập thất bại:", error);
+    }
 };
+
+
+interface CommentsOptions {
+  chapter_type?: string;
+  chapter_id?: string;
+  content_type?: string;
+  object_id?: string;
+}
+
 export const postComment = async (post_id:string, content:string, type:string, parent:number | null) => {
   try{
     const config = {
-      headers: {'Content-Type': 'Application/json'},
+      headers: {'Content-Type': 'application/json'},
       withCredentials:true,
     };
     console.log("Post ID:", post_id);
-    const response = await axios.post(
+    const response = await axiosAuth.post(
       `${baseURL}/api/comment/`,
         {
             content: content,
@@ -147,16 +162,11 @@ export const postComment = async (post_id:string, content:string, type:string, p
     throw error;
   }
 }
-interface FetchCommentsOptions {
-  chapter_type?: string;
-  chapter_id?: string;
-  content_type?: string;
-  object_id?: string;
-}
-export const fetchComments = async (options: FetchCommentsOptions): Promise<Comment[]> => {
+
+export const fetchComments = async (options: CommentsOptions): Promise<Comment[]> => {
 
     const config = {
-      headers: {'Content-Type': 'Application/json'},
+      headers: {'Content-Type': 'application/json'},
       withCredentials:true,
     };
     const url = new URL(`${baseURL}/api/comment/`);
@@ -170,7 +180,7 @@ export const fetchComments = async (options: FetchCommentsOptions): Promise<Comm
         throw new Error("Missing required query parameters");
     }
 
-    const response = await axios.get(url.toString(), config);
+    const response = await axios.get(url.toString(),config);
     console.log("Comments fetched:", response.data.results);
     return response.data.results || [];
 }
@@ -181,7 +191,7 @@ export const updateLike  = async ({ post_id, type }: LikeProp) => {
       const config = {
             withCredentials:true,
         }
-      const response = await axios.post(`${baseURL}/api/like/`,
+      const response = await axiosAuth.post(`${baseURL}/api/like/`,
         {
           post_id: post_id,
           type: type
@@ -221,10 +231,57 @@ export const updateFavorite  = async ({ post_id, type }: LikeProp) => {
   
 }
 
-
- export const updateAvatar = async (formData: FormData) => {
-  const res = await axios.post("/api/user/avatar", formData, {
+export const updateAvatar = async (formData: FormData) => {
+  const res = await axiosAuth.post(`${baseURL}/api/me/avatar/`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
+    withCredentials: true,
+  });
+
+  const userInfo = store.getState().user.user;
+    if(userInfo)
+        store.dispatch(
+            login({
+                id: userInfo.id,
+                email:userInfo.email,
+                name: userInfo.name,
+                cover: `${baseURL}${userInfo.cover}`,
+                isLogin: true,
+            })
+        );
+  return res;
+};
+export const updateProfile = async (user:User) => {
+  try{
+    const config ={
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  }
+    const res = await axiosAuth.post(`${baseURL}/api/me/update/`, {
+      email: user.email,
+      username: user.username,
+      password: user.password,
+    }, config);
+    const dispatch = useDispatch();
+     dispatch(
+            login({
+                id: String(user.id),
+                email:user.email,
+                name: user.username,
+                cover: `${baseURL}${user.cover}`,
+                isLogin: true,
+            })
+        );
+    console.log("Update profile:", res);
+  return res;
+  }
+  catch (error) {
+    console.error("Error updating profile:", error);
+    throw error;
+  }
+};
+export const deleteProfile = async () => {
+  const res = await axiosAuth.post(`${baseURL}/api/me/delete/`,{}, {
+    headers: { "Content-Type": "application/json" },
     withCredentials: true,
   });
   return res.data;

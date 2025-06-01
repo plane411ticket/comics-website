@@ -13,7 +13,6 @@ const UserMenu = () => {
     await logoutUser();
     dispatch(logout());
   };
-
   return (
     <div className="relative">
       <img src={userInfo?.cover} alt="Avatar" className="w-10 h-10 rounded-full cursor-pointer" onClick={() => setIsOpen(!isOpen)} />

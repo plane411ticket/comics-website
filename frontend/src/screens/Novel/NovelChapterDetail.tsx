@@ -5,7 +5,7 @@ import { NovelChapter } from '../../types/novel/novelChapters';
 import { fetchChapterDetail, fetchStoryChapters } from '../../actions/novelAction';
 import AudioPlay from '../../components/AudioPlay';
 // Update the import path below to the correct relative path where CommentSection exists
-import CommentSection from './CommentChater'
+import { CommentList } from '../../components/CommentGrid';
 const ChapterDetailPage = () => {
   const { chapterId } = useParams();
   const navigate = useNavigate();
@@ -156,7 +156,9 @@ const ChapterDetailPage = () => {
       </button>
       </div>
       {/* Bình luận chương */}
-        <CommentSection postId={chapter.novel._id} type="novel" />
+        <div className="flex-1 mt-10">
+          <CommentList/>
+        </div>
         {/* <CommentSection/> */}
 
     </div>

@@ -4,9 +4,7 @@ import bglogin from "@/assets/Logo_real.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { registerUser } from "../../actions/userAction";
-import { login } from "../../types/user/userSlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../store";
+
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$]).{8,24}$/;
@@ -30,7 +28,6 @@ export default function RegisterScreen() {
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
 
-    const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
         userRef.current?.focus();
     }, []);
@@ -75,11 +72,6 @@ export default function RegisterScreen() {
             if(response?.status!==200) throw new Error("Registration Failed");
             
             setSuccess(true);
-            dispatch(login({
-                        _id:response.data.id,
-                        email:email,
-                        username:user,
-                        isLogin:true,}))
             setUser('');
             setPwd('');
         } catch (err: any) {

@@ -32,7 +32,7 @@ class Favorite(models.Model):
     ) # tăng tốc độ truy xuất 
     def __str__(self):
         return str(self.user)
-
+ 
 
 class Comments(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -48,13 +48,8 @@ class Comments(models.Model):
     object_id = models.UUIDField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 
-    # For any model Chapter
-    chapter_content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, null=True, blank=True, related_name='comment_chapter_type')
-    chapter_object_id = models.UUIDField(null=True, blank=True)
-    chapter = GenericForeignKey('chapter_content_type', 'chapter_object_id')
-
     def __str__(self):
-        return f"{self.user} - {self.content[:20]}..."
+        return f"{self.user} - {self.content[:100]}..."
         
 class Likes(models.Model):
     LIKE_PLACES = [

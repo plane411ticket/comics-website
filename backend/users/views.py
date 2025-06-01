@@ -23,6 +23,7 @@ from .serializers import CommentsSerializer
 from users.authentication import CookieJWTAuthentication
 from rest_framework.decorators import authentication_classes
 from django.shortcuts import get_object_or_404
+from notify.utils import sendNotifyComment
 # from .models import Notification
 # from .serializers import NotificationSerializer
 User = get_user_model()
@@ -69,8 +70,15 @@ def LoginUser(request):
         if user is not None:
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
-            info = {"user":({"username":user.username},{"_id":user.id})}
-            response = HttpResponse({"message": "Đăng nhập thành công!"}, info)
+            response = Response({
+                "message": "Đăng nhập thành công!",
+                "user": {
+                    "email": user.email,
+                    "username": user.username,
+                    "id": user.id,
+                    "cover": user.cover.url if user.cover else None,
+                }
+            }, status=status.HTTP_200_OK)
             response.set_cookie(
                 key="access_token", value=access_token, httponly=True, secure=True, samesite="Lax"
             )
@@ -134,35 +142,91 @@ def RefreshTokenView(request):
 # ============================
 #  User ViewSets
 # ============================
+@api_view(["GET"])
 @authentication_classes([CookieJWTAuthentication])
-class ProfileViewSet(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    def get_queryset(self):
-        user = self.request.user
-        if(user.is_staff or user.is_superuser):
-            return User.objects.all()
-        return User.objects.filter(id=user.id)
-    def retrieve(self, request, *args, **kwargs):
-        username = self.kwargs.get("username")
-        user = get_object_or_404(User, username=username)
-        # Optional: chỉ cho chính chủ hoặc admin xem
-        if user.is_superuser:
-            return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_403_FORBIDDEN)
+def MyProfile(request):
+    user = request.user
+    if not user or not user.is_authenticated:
+        raise PermissionDenied("Vui lòng đăng nhập để có thông tin này.")
+    serializer = UserSerializer(user)
+    return Response(serializer.data)
 
-        serializer = self.get_serializer(user)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def OtherProfile(request, username):
+    target_user = get_object_or_404(User, username=username)
+    if(target_user.is_superuser):
+        return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_404_NOT_FOUND)
+    serializers = UserSerializer(target_user)
+    return Response(serializers.data, status=status.HTTP_200_OK)
+@api_view(["POST"])
+@authentication_classes([CookieJWTAuthentication])
+def DeleteProfile(request):
+    user = request.user
+    if not user or not user.is_authenticated:
+        return Response({"detail": "Bạn cần đăng nhập để xóa tài khoản."}, status=status.HTTP_401_UNAUTHORIZED)
+    elif(user.is_superuser):
+        return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_404_NOT_FOUND)
+    elif(user != request.user or not (request.user.is_staff or request.user.is_superuser)):
+        raise PermissionDenied("Bạn không có quyền xóa tài khoản này.")
 
-    def perform_destroy(self, instance):
-        user = self.request.user
-        if not (user.is_staff or user.is_superuser or instance == user):
-            raise PermissionDenied("Bạn không có quyền xóa tài khoản này.")
-        instance.delete()
-    def perform_update(self, serializer):
-        user = self.request.user
-        if not (user.is_staff or user.is_superuser or self.get_object() == user):
-            raise PermissionDenied("Bạn không có quyền cập nhật tài khoản này.")
-        serializer.save()
+    user.delete()
+    return Response({"detail": "Xóa tài khoản thành công."}, status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+@authentication_classes([CookieJWTAuthentication])
+def UpdateAvatar(request):
+    user = request.user
+
+    if not user or not user.is_authenticated:
+        return Response({"detail": "Bạn cần đăng nhập để cập nhật ảnh đại diện."}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    if user.is_superuser:
+        return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_403_FORBIDDEN)
+    
+    avatar = request.FILES.get("avatar", None)
+    if not avatar:
+        return Response({"detail": "Bạn cần cung cấp ảnh đại diện mới."}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.cover = avatar
+    user.save()
+
+    return Response({"detail": "Cập nhật ảnh đại diện thành công."}, status=status.HTTP_200_OK)
+@api_view(["POST"])
+@authentication_classes([CookieJWTAuthentication])
+def UpdateProfile(request):
+    user = request.user
+
+    if not user or not user.is_authenticated:
+        return Response({"detail": "Bạn cần đăng nhập để cập nhật thông tin."}, status=status.HTTP_401_UNAUTHORIZED)
+
+    if user.is_superuser:
+        return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_403_FORBIDDEN)
+
+    username = request.data.get("username")
+    email = request.data.get("email")
+    password = request.data.get("password")
+
+    if not (username or email or password):
+        return Response({"detail": "Bạn cần cung cấp ít nhất một thông tin để cập nhật."}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Kiểm tra username/email đã tồn tại chưa (ngoại trừ bản thân)
+    if username:
+        if User.objects.filter(username=username).exclude(id=user.id).exists():
+            return Response({"detail": "Tên người dùng đã tồn tại."}, status=status.HTTP_400_BAD_REQUEST)
+        user.username = username
+
+    if email:
+        if User.objects.filter(email=email).exclude(id=user.id).exists():
+            return Response({"detail": "Email đã tồn tại."}, status=status.HTTP_400_BAD_REQUEST)
+        user.email = email
+
+    if password:
+        user.set_password(password)
+
+    user.save()
+    return Response({"detail": "Cập nhật tài khoản thành công."}, status=status.HTTP_200_OK)
+
 
 @api_view(["POST"])
 @authentication_classes([CookieJWTAuthentication])
@@ -238,7 +302,7 @@ def ToggleFavorite(request):
 def FindFavorite(request):
     user = request.user
     type = request.query_params.get("type")
-    if not user:
+    if not user or not user.is_authenticated:
         return Response({"error": "Missing user ID"}, status=status.HTTP_400_BAD_REQUEST)
     if(type == "novel"):
         try:
@@ -262,22 +326,10 @@ class CommentViewSet(viewsets.ModelViewSet):
     authentication_classes = [CookieJWTAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_queryset(self):
-        chapter_type = self.request.query_params.get('chapter_type')
-        chapter_id = self.request.query_params.get('chapter_id')
         content_type = self.request.query_params.get('content_type')
         object_id = self.request.query_params.get('object_id')
-
-        if chapter_type and chapter_id:
-            try:
-                chapter_model = ContentType.objects.get(model=chapter_type.lower())
-                return Comments.objects.filter(
-                    chapter_content_type=chapter_model,
-                    chapter_object_id=chapter_id
-                ).order_by('-created_at')
-            except ContentType.DoesNotExist:
-                return Comments.objects.none()
-
-        elif content_type and object_id:
+    
+        if content_type and object_id:
             try:
                 post_model = ContentType.objects.get(model=content_type.lower())
                 return Comments.objects.filter(
@@ -290,11 +342,12 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Comments.objects.none()
 
     def perform_create(self, serializer):
-        comment = serializer.save(user=self.request.user)
+        comment = serializer.save(user=self.request.user)        
         obj = comment.content_object
         if hasattr(obj, 'numComments'):
             obj.numComments = getattr(obj, 'numComments', 0) + 1
             obj.save(update_fields=['numComments'])
+        sendNotifyComment(comment)
 
     def perform_destroy(self, instance):
         user = self.request.user
@@ -320,23 +373,52 @@ class NotificationViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-# @authentication_classes([CookieJWTAuthentication])
-# class MarkAsSeenViewSet():
-#     permission_classes = [IsAuthenticated]
+@authentication_classes([CookieJWTAuthentication])
+class MarkAsSeenViewSet():
+    permission_classes = [IsAuthenticated]
 
-#     def post(self, request):
-#         Notification.objects.filter(user=request.user, seen = False).update(seen=True)
-#         return response({'status: 200 OK'}, status=200)
+    def post(self, request):
+        Notification.objects.filter(user=request.user, seen = False).update(seen=True)
+        return response({'status: 200 OK'}, status=200)
 
-# @authentication_classes([CookieJWTAuthentication])
-# class NotificationDeleteViewSet():
-#     permission_classes = [IsAuthenticated]
+@authentication_classes([CookieJWTAuthentication])
+class NotificationDeleteViewSet():
+    permission_classes = [IsAuthenticated]
     
-#     def perform_destroy(self, instance):
-#         user = self.request.user
+    def perform_destroy(self, instance):
+        user = self.request.user
 
-#         if not (user.is_staff or user.is_superuser or instance.user == user):
-#             raise PermissionDenied("Bạn chỉ có thể xóa thông báo của chính mình.")
+        if not (user.is_staff or user.is_superuser or instance.user == user):
+            raise PermissionDenied("Bạn chỉ có thể xóa thông báo của chính mình.")
 
-#         # Xoá thông báo
-#         instance.delete()
+        # Xoá thông báo
+        instance.delete()
+
+# Leaderboard for top liked novels and mangas
+# @api_view(["GET"])
+# @permission_classes([AllowAny])
+# def TopLikedPosts(request):
+#     novels = Novel.objects.all().order_by("-numLikes")[:20]
+#     mangas = Manga.objects.all().order_by("-numLikes")[:20]
+
+#     data = []
+#     for novel in novels:
+#         data.append({
+#             "id": novel._id,
+#             "title": novel.title,
+#             "numLikes": novel.numLikes,
+#             "type": "novel",
+#             "cover": novel.cover.url if novel.cover else None
+#         })
+#     for manga in mangas:
+#         data.append({
+#             "id": manga._id,
+#             "title": manga.title,
+#             "numLikes": manga.numLikes,
+#             "type": "manga",
+#             "cover": manga.cover.url if manga.cover else None
+#         })
+
+#     # Sắp xếp lại để lấy top 20 tổng hợp
+#     top_20 = sorted(data, key=lambda x: x["numLikes"], reverse=True)[:20]
+#     return Response(top_20, status=200)

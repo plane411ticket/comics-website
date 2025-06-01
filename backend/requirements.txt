@@ -18,3 +18,4 @@ dj-database-url
 cloudinary
 django-cloudinary-storage
 python-decouple
+channels

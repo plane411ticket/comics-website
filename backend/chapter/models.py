@@ -5,7 +5,6 @@ import uuid
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 import os
-from .notify import sendNotify
 def chapter_image_upload_path(instance, filename):
     """ Lưu ảnh vào thư mục `media/manga_images/id_chapter/` """
     filename = filename.replace(" ", "_")
@@ -32,6 +31,7 @@ class MangaChapter(models.Model):
                 self.manga.save()
         super().save(*args, **kwargs)
         if is_new:
+            from notify.utils import sendNotify
             sendNotify(self)
 class MangaChapterImage(models.Model):
     _id = models.UUIDField(default=uuid.uuid4,  unique=True,
@@ -64,6 +64,7 @@ class NovelChapter(models.Model):
                 self.novel.save()
         super().save(*args, **kwargs)
         if is_new:
+            from notify.utils import sendNotify
             sendNotify(self)
 
     def delete(self, *args, **kwargs):

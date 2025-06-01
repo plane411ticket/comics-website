@@ -4,9 +4,6 @@ import bglogin from "@/assets/Logo_real.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { loginUser } from "../../actions/userAction";
-import { AppDispatch } from "../../store";
-import { useDispatch } from "react-redux";
-import { login } from "../../types/user/userSlice";
 export default function LoginScreen() {
     const userRef = useRef<HTMLInputElement | null>(null);
     const errRef = useRef<HTMLInputElement | null>(null);
@@ -16,8 +13,6 @@ export default function LoginScreen() {
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
-    
-    const dispatch = useDispatch<AppDispatch>();
 
     useEffect(()=>{
         userRef.current?.focus();
@@ -31,7 +26,6 @@ export default function LoginScreen() {
         try{
             const response = await loginUser(username, pwd);
             if(response?.status!==200) throw Error("Login Failed");
-            dispatch(login({isLogin:true}))
             setSuccess(true);
             setUsername('');
             setPwd('');

@@ -9,7 +9,7 @@ from .models import *
 from django.db.models import F
 from django.views.decorators.cache import cache_page
 from users.models import Notification, Favorite
-@cache_page(60)
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getMangaChapter(request, pk):
@@ -24,7 +24,7 @@ def getMangaChapter(request, pk):
             return Response({'details': 'Manga chapter not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'details': f"An error occurred: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-@cache_page(60)
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getMangaChapterList(request, pk):
@@ -34,7 +34,7 @@ def getMangaChapterList(request, pk):
             return Response(serializer.data)
         except Exception as e:
             return Response({'details': f"{e}"}, status=status.HTTP_204_NO_CONTENT)   
-@cache_page(60)
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getNovelChapter(request, pk):
@@ -47,7 +47,7 @@ def getNovelChapter(request, pk):
         return Response(serializer.data)
     except Exception as e:
         return Response({'details': f"{e}"}, status=status.HTTP_204_NO_CONTENT)
-@cache_page(60)
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getNovelChapterList(request, pk):
