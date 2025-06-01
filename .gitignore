@@ -38,14 +38,14 @@ managa_covers/
 managa_images/
 novel_covers/
 # *.png
-*.jpg
-!default.jpg
-*.mp3
+# *.jpg
+# !default.jpg
+# *.mp3
 
-*.jpeg
-*.gif
-*.svg
-*.json
+# *.jpeg
+# *.gif
+# *.svg
+# *.json
 # Coverage & Testing
 .coverage
 htmlcov/
