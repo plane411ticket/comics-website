@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { login, logout } from '../types/user/userSlice';
+import { login, logout, selectUser } from '../types/user/userSlice';
 import { LikeProp, User } from '../types/user/User';
 import { Comment } from '../types/user/User';
 import store from '../store';
 import axiosAuth from './apiClient';
+import { useSelector } from 'react-redux';
 const baseURL = import.meta.env.VITE_ADMIN_URL;
 
 export const registerUser = async (username: string, email: string, password: string) => {
@@ -230,14 +231,13 @@ export const updateFavorite  = async ({ post_id, type }: LikeProp) => {
   }
   
 }
-
+const userInfo = useSelector(selectUser);
 export const updateAvatar = async (formData: FormData) => {
   const res = await axiosAuth.post(`${baseURL}/api/me/avatar/`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
     withCredentials: true,
   });
 
-  const userInfo = store.getState().user.user;
     if(userInfo)
         store.dispatch(
             login({
