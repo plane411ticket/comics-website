@@ -34,7 +34,7 @@ const Genre: React.FC = () => {
                     genres.map((genre) => (
                     <div  id = "gernes"  key={genre._id}>
                         <button className=" bg-white text-black text-sm w-full  hover:bg-yellow-400">
-                                <a className="text-black hover:text-white" href={`/tim-truyen/${genre.name}`}>{genre.name}</a>
+                                <a className="text-black hover:text-white" href={`/avsearch?include_genres=${genre._id}`}>{genre.name}</a>
                         </button>
                     </div>
                     ))

@@ -105,12 +105,29 @@ export default function RegisterScreen() {
     return (
         <div className="bg-orange-200 text-white font-Nurito flex flex-col md:flex-row items-center justify-center min-h-screen px-4">
             {success ? (
-                <section>
-                    <h1>Success!</h1>
-                    <p>
-                        <Link to="/auth/login">Sign In</Link>
-                    </p>
-                </section>
+                
+                    <div className="text-center animate-fade-in transition-all duration-400">
+                        <Link to="/">
+                        <img
+                            src={bglogin}
+                            alt="Logo"
+                            className="w-100 h-70 mx-auto mb-6 object-contain"
+                        />
+                        </Link>
+                        <h2 className="text-5xl md:text-4xl font-extrabold mb-3 text-orange-700">
+                            Đăng ký thành công!
+                        </h2>
+                        <p className="text-base md:text-lg mb-6 text-gray-600">
+                            Chào mừng bạn đã đến thế giới comic.
+                        </p>
+                        <Link
+                            to="/auth/login"
+                            className="inline-block bg-orange-600 hover:bg-orange-500 text-white font-semibold py-2 px-6 rounded-full transition duration-300 shadow-md hover:shadow-lg"
+                        >
+                            Về trang đăng nhập
+                        </Link>
+                    </div>
+            
             ) : (
                 <>
                     {/* Left Column (Image) */}
