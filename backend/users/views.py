@@ -141,36 +141,91 @@ def RefreshTokenView(request):
 # ============================
 #  User ViewSets
 # ============================
+@api_view(["GET"])
 @authentication_classes([CookieJWTAuthentication])
-class ProfileViewSet(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    def get_queryset(self):
-        user = self.request.user
-        if(user.is_staff or user.is_superuser):
-            return User.objects.all().order_by('id')
-        print("Debug user: ",user.id)
-        return User.objects.filter(id=user.id).order_by('id')
-    def retrieve(self, request, *args, **kwargs):
-        username = self.kwargs.get("username")
-        user = get_object_or_404(User, username=username)
-        # Optional: chỉ cho chính chủ hoặc admin xem
-        if user.is_superuser:
-            return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_403_FORBIDDEN)
+def MyProfile(request):
+    user = request.user
+    if not user or not user.is_authenticated:
+        raise PermissionDenied("Vui lòng đăng nhập để có thông tin này.")
+    serializer = UserSerializer(user)
+    return Response(serializer.data)
 
-        serializer = self.get_serializer(user)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def OtherProfile(request, username):
+    target_user = get_object_or_404(User, username=username)
+    if(target_user.is_superuser):
+        return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_404_NOT_FOUND)
+    serializers = UserSerializer(target_user)
+    return Response(serializers.data, status=status.HTTP_200_OK)
+@api_view(["POST"])
+@authentication_classes([CookieJWTAuthentication])
+def DeleteProfile(request):
+    user = request.user
+    if not user or not user.is_authenticated:
+        return Response({"detail": "Bạn cần đăng nhập để xóa tài khoản."}, status=status.HTTP_401_UNAUTHORIZED)
+    elif(user.is_superuser):
+        return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_404_NOT_FOUND)
+    elif(user != request.user or not (request.user.is_staff or request.user.is_superuser)):
+        raise PermissionDenied("Bạn không có quyền xóa tài khoản này.")
 
-    def perform_destroy(self, instance):
-        user = self.request.user
-        if not (user.is_staff or user.is_superuser or instance == user):
-            raise PermissionDenied("Bạn không có quyền xóa tài khoản này.")
-        instance.delete()
-    def perform_update(self, serializer):
-        user = self.request.user
-        if not (user.is_staff or user.is_superuser or self.get_object() == user):
-            raise PermissionDenied("Bạn không có quyền cập nhật tài khoản này.")
-        serializer.save()
+    user.delete()
+    return Response({"detail": "Xóa tài khoản thành công."}, status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+@authentication_classes([CookieJWTAuthentication])
+def UpdateAvatar(request):
+    user = request.user
+
+    if not user or not user.is_authenticated:
+        return Response({"detail": "Bạn cần đăng nhập để cập nhật ảnh đại diện."}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    if user.is_superuser:
+        return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_403_FORBIDDEN)
+    
+    avatar = request.FILES.get("avatar", None)
+    if not avatar:
+        return Response({"detail": "Bạn cần cung cấp ảnh đại diện mới."}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.cover = avatar
+    user.save()
+
+    return Response({"detail": "Cập nhật ảnh đại diện thành công."}, status=status.HTTP_200_OK)
+@api_view(["POST"])
+@authentication_classes([CookieJWTAuthentication])
+def UpdateProfile(request):
+    user = request.user
+
+    if not user or not user.is_authenticated:
+        return Response({"detail": "Bạn cần đăng nhập để cập nhật thông tin."}, status=status.HTTP_401_UNAUTHORIZED)
+
+    if user.is_superuser:
+        return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_403_FORBIDDEN)
+
+    username = request.data.get("username")
+    email = request.data.get("email")
+    password = request.data.get("password")
+
+    if not (username or email or password):
+        return Response({"detail": "Bạn cần cung cấp ít nhất một thông tin để cập nhật."}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Kiểm tra username/email đã tồn tại chưa (ngoại trừ bản thân)
+    if username:
+        if User.objects.filter(username=username).exclude(id=user.id).exists():
+            return Response({"detail": "Tên người dùng đã tồn tại."}, status=status.HTTP_400_BAD_REQUEST)
+        user.username = username
+
+    if email:
+        if User.objects.filter(email=email).exclude(id=user.id).exists():
+            return Response({"detail": "Email đã tồn tại."}, status=status.HTTP_400_BAD_REQUEST)
+        user.email = email
+
+    if password:
+        user.set_password(password)
+
+    user.save()
+    return Response({"detail": "Cập nhật tài khoản thành công."}, status=status.HTTP_200_OK)
+
 
 @api_view(["POST"])
 @authentication_classes([CookieJWTAuthentication])
@@ -246,7 +301,7 @@ def ToggleFavorite(request):
 def FindFavorite(request):
     user = request.user
     type = request.query_params.get("type")
-    if not user:
+    if not user or not user.is_authenticated:
         return Response({"error": "Missing user ID"}, status=status.HTTP_400_BAD_REQUEST)
     if(type == "novel"):
         try:
