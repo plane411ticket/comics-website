@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { loginUser } from "../../actions/userAction";
 import { AppDispatch } from "../../store";
 import { useDispatch } from "react-redux";
-import { login } from "../../types/user/userSlice";
+// import { login } from "../../types/user/userSlice";
 export default function LoginScreen() {
     const userRef = useRef<HTMLInputElement | null>(null);
     const errRef = useRef<HTMLInputElement | null>(null);

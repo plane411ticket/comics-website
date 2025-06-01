@@ -11,7 +11,6 @@ const MangaList = () => {
 
   // tải dữ liệu khi page thay đổi nếu chưa có trong cache
   useEffect(() => {
-    let mounted = true;
     const loadMangas = async () => {
       if (mangasCache[page]) {
         // đã có cache, không fetch nữa
@@ -28,9 +27,7 @@ const MangaList = () => {
     };
 
     loadMangas();
-    return () => {
-      mounted = false;
-    };
+   
   }, [page]);
 
   

@@ -102,8 +102,10 @@ INSTALLED_APPS = [
     'novel',
     'audio',
     'genres',
+    'channels',
     'users',
     'forum',
+
 ]
 
 MIDDLEWARE = [
@@ -148,7 +150,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'server.wsgi.application'
-
+ASGI_APPLICATION = 'server.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -232,3 +234,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5174",
 ]
 AUTH_USER_MODEL = 'users.CustomUser'
+
+CHANNEL_LAYES = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        }
+    }
+}

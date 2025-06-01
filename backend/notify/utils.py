@@ -7,14 +7,14 @@ def sendNotify(chapter):
         title = item.title
         chapter_number = chapter.chapter_number
         _type = 'novel'
-        link = f"novel/{chapter.novel._id}"
+        link = f"novel/{item._id}"
     
     elif hasattr(chapter, 'manga'):
         item = chapter.manga
         title = item.title
         chapter_number = chapter.chapter_number
         _type = 'manga'
-        link = f"manga/{chapter.manga._id}"
+        link = f"manga/{item._id}"
 
     else:
         return

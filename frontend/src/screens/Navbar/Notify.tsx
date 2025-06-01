@@ -11,17 +11,32 @@ const Notify = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [showDropdown, setShowDropdown] = useState(false);
 
-    // Tự động fetch mỗi 15 giây
     useEffect(() => {
-        const fetchNotifications = async () => {
-            if (!userInfo) return;
+        if (!userInfo) return;
+        const ws = new WebSocket(`ws://localhost:8000/ws/notifications/${userInfo.id}/`);
+        
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            const newNotification: Notification = {
+                _id: data._id, // hoặc lấy từ backend nếu có
+                message: data.message,
+                link: data.link,
+                seen: false,
+                created_at: new Date().toISOString(),
+                user: data.user
+            };
+            setNotifications(prev => [newNotification, ...prev]);
+        };
+        ws.onclose = () => console.log("WebSocket closed");
+        ws.onerror = (err) => console.error("WebSocket error:", err);
 
+        
+        const fetchNotifications = async () => {
             try {
                 const config = {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true,
                 };
-
                 const response = await axios.get(`${baseURL}/api/notifications/`, config);
                 setNotifications(response.data.results);
             } catch (error) {
@@ -30,11 +45,34 @@ const Notify = () => {
         };
 
         fetchNotifications();
-
-        const interval = setInterval(fetchNotifications, 5000000); // 15 giây
-        return () => clearInterval(interval); // cleanup
+        return () => {
+            ws.close();
+        };
     }, [userInfo]);
-    
+
+    const handleNotificationClick = async (noti: Notification) => {
+        if (!noti.seen) {
+            try {
+                const config = {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                };
+                await axios.patch(`${baseURL}/api/notifications/${noti._id}/`, { seen: true }, config);
+                setNotifications(prev =>
+                    prev.map(n =>
+                        n._id === noti._id ? { ...n, seen: true } : n
+                    )
+                );
+            } catch (error) {
+                console.error("Error marking notification as seen:", error);
+            }
+        }
+
+        // Redirect sau khi xử lý
+        window.location.href = `/${noti.link}`;
+    };
+
+        
     const unreadCount = notifications.filter(n => !n.seen).length;
     return (
         <div className="relative">
@@ -55,8 +93,8 @@ const Notify = () => {
                         />
                     </svg>
                     {unreadCount > 0 && (
-                        <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
-                            {unreadCount}
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold rounded-full px-1.5">
+                            {unreadCount > 9 ? '9+' : unreadCount}
                         </span>
                     )}
                 </div> 
@@ -68,37 +106,15 @@ const Notify = () => {
                             <li
                                 key={noti._id}
                                 className={`p-2 hover:bg-gray-100 border-b ${noti.seen ? 'text-gray-500' : 'text-black'}`}
-                                onClick={async () => {
-                                    if (!noti.seen) {
-                                        try {
-                                            await axios.patch(
-                                                `${baseURL}/api/notifications/${noti._id}/`,
-                                                { seen: true },
-                                                {
-                                                    headers: { 'Content-Type': 'application/json' },
-                                                    withCredentials: true,
-                                                }
-                                            );
-
-                                            setNotifications(prev =>
-                                                prev.map(n =>
-                                                    n._id === noti._id ? { ...n, seen: true } : n
-                                                )
-                                            );
-                                        } catch (err) {
-                                            console.error("Failed to mark as seen", err);
-                                        }
-                                    }
-                                    window.location.href = `/${noti.link}`;
-                                }}
+                                onClick={() => handleNotificationClick(noti)}
                             >
                                 <span className="text-sm">{noti.message}</span>
                             </li>
                         ))}
                     </ul>
                 </div>
-                )}
-            </div>
+            )}
+        </div>
     );
 };
 export default Notify;

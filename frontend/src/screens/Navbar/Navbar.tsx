@@ -11,7 +11,7 @@ import SearchBar from "./SearchBar";
 import ThemeSwitcher from "./ThemeSwitcher";
 import UserMenu from "./UserMenu";
 import MobileMenu from "./MobileMenu";
-import Notify from "./Notify";
+// import Notify from "./Notify";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
