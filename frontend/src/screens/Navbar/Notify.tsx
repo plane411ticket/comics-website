@@ -31,7 +31,7 @@ const Notify = () => {
 
         fetchNotifications();
 
-        const interval = setInterval(fetchNotifications, 5000); // 15 giây
+        const interval = setInterval(fetchNotifications, 5000000); // 15 giây
         return () => clearInterval(interval); // cleanup
     }, [userInfo]);
     

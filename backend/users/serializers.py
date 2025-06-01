@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     cover = serializers.SerializerMethodField()
     class Meta:
         model = CustomUser
-        fields = ['id','email', 'first_name','cover','groups']
+        fields = ['id','email', 'username','cover','groups']
         read_only_fields = ['id']
     def get_cover(self, obj):
         request = self.context.get("request", None)
@@ -34,6 +34,7 @@ class CommentsSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField(read_only=True)
     target_model = serializers.CharField(write_only=True)
     target_object_id = serializers.UUIDField(write_only=True)
+
     class Meta:
         model = Comments
         fields = ['id', 'user', 'content','created_at', 'parent',
@@ -54,7 +55,11 @@ class CommentsSerializer(serializers.ModelSerializer):
             content_type = ContentType.objects.get(model=model_name)
         except ContentType.DoesNotExist:
             raise serializers.ValidationError({"target_model": "Invalid model name."})
+        model_class = content_type.model_class()
+        if not model_class.objects.filter(pk=object_id).exists():
+            raise serializers.ValidationError({"target_object_id": "Target object does not exist."})
 
+        # Tạo comment
         return Comments.objects.create(
             content_type=content_type,
             object_id=object_id,

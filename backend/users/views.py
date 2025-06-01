@@ -69,8 +69,15 @@ def LoginUser(request):
         if user is not None:
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
-            info = {"user":({"username":user.username},{"_id":user.id})}
-            response = HttpResponse({"message": "Đăng nhập thành công!"}, info)
+            response = Response({
+                "message": "Đăng nhập thành công!",
+                "user": {
+                    "email": user.email,
+                    "username": user.username,
+                    "id": user.id,
+                    "cover": user.cover.url if user.cover else None,
+                }
+            }, status=status.HTTP_200_OK)
             response.set_cookie(
                 key="access_token", value=access_token, httponly=True, secure=True, samesite="Lax"
             )
@@ -141,8 +148,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         if(user.is_staff or user.is_superuser):
-            return User.objects.all()
-        return User.objects.filter(id=user.id)
+            return User.objects.all().order_by('id')
+        print("Debug user: ",user.id)
+        return User.objects.filter(id=user.id).order_by('id')
     def retrieve(self, request, *args, **kwargs):
         username = self.kwargs.get("username")
         user = get_object_or_404(User, username=username)
@@ -262,22 +270,10 @@ class CommentViewSet(viewsets.ModelViewSet):
     authentication_classes = [CookieJWTAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_queryset(self):
-        chapter_type = self.request.query_params.get('chapter_type')
-        chapter_id = self.request.query_params.get('chapter_id')
         content_type = self.request.query_params.get('content_type')
         object_id = self.request.query_params.get('object_id')
-
-        if chapter_type and chapter_id:
-            try:
-                chapter_model = ContentType.objects.get(model=chapter_type.lower())
-                return Comments.objects.filter(
-                    chapter_content_type=chapter_model,
-                    chapter_object_id=chapter_id
-                ).order_by('-created_at')
-            except ContentType.DoesNotExist:
-                return Comments.objects.none()
-
-        elif content_type and object_id:
+    
+        if content_type and object_id:
             try:
                 post_model = ContentType.objects.get(model=content_type.lower())
                 return Comments.objects.filter(

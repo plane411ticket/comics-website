@@ -13,7 +13,7 @@ const handleClick = async () => {
 
     try {
         const config = {
-            headers: {'Content-Type': 'Application/json'},
+            headers: {'Content-Type': 'application/json'},
             withCredentials:true,
         };
         const response = await axios.get(

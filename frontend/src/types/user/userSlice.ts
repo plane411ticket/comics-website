@@ -1,29 +1,35 @@
-import { createSlice} from "@reduxjs/toolkit"
-export interface user{
-    _id:string,
-    name:string,
-    email:string,
-    islogin:false,
-    cover: string;
-    level: number;
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+export interface User {
+  id: string;
+  name: string;
+  first_name?: string;
+  email: string;
+  isLogin: boolean;
+  cover: string;
 }
 
-const initialState = {
-    user:null, // cannot directly change
+interface UserState {
+  user: User | null;
+}
+
+const initialState: UserState = {
+  user: null,
 };
 
 const userSlice = createSlice({
-    name: "user",
-    initialState,
-    reducers: {
-        login: (state,action) => {
-            state.user = action.payload;
-        },
-        logout:(state)=>{
-            state.user = null;
-        }
-    }
+  name: "user",
+  initialState,
+  reducers: {
+    login: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    },
+    logout: (state) => {
+      state.user = null;
+    },
+  },
 });
-export const {login,logout} = userSlice.actions;
-export const selectUser = (state: { user: { user: user | null } }) => state.user.user;
-export default userSlice.reducer; 
+
+export const { login, logout } = userSlice.actions;
+export const selectUser = (state: { user: UserState }) => state.user.user;
+export default userSlice.reducer;

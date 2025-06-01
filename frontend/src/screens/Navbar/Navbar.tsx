@@ -27,9 +27,7 @@ const Navbar = () => {
     <div className="flex-1 flex justify-center">
       <SearchBar isMobile = {false} />
     </div>
-    <div className="flex-shrink-0">
-      <Notify />
-    </div>
+    
     <div className="flex-shrink-0">
       <ThemeSwitcher />
     </div>

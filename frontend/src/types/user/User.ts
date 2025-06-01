@@ -1,8 +1,9 @@
 export interface User{
     id:number,
-    first_name:string,
+    username:string
+    first_name?:string,
     email:string,
-    cover?:string,
+    cover:string,
     group?:string,
     birthday?: string,
     status?: string,
@@ -30,8 +31,8 @@ export interface ListFavoriteProp {
 export interface Comment {
     id: number;
     user:User;
-    target_model: string;
-    target_object_id: string;
+    target_model?: string;
+    target_object_id?: string;
     content: string;
     parent?: number | null;
     created_at: Date;
