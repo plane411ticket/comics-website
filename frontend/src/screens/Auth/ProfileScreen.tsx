@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import {fetchProfile, updateAvatar} from "../../actions/userAction";
+import {fetchProfile} from "../../actions/userAction";
 import { User } from "../../types/user/User";
 import { FaEdit } from "react-icons/fa";
 import { useParams } from "react-router-dom";

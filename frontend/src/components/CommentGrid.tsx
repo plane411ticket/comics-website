@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { Comment, CommentFormProps, CommentItemProps, CommentListProps } from '../types/user/User';
 import { fetchComments, postComment } from '../actions/userAction';
 

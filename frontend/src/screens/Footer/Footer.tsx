@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const Footer = () => {
     const [showModal, setShowModal] = useState(false);
-    const [scrollTargetId, setScrollTargetId] = useState<string | null>(null);
+    const [, setScrollTargetId] = useState<string | null>(null);
 
     const handleOpenModal = (sectionId: string) => {
         setShowModal(true);
