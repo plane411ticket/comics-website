@@ -25,25 +25,25 @@ def genre_request(request):
 
 # views.py
 
-# import json
-# import os
-# from django.conf import settings
-# from django.http import HttpResponse
-# from genres.models import Genre
+import json
+import os
+from django.conf import settings
+from django.http import HttpResponse
+from genres.models import Genre
 
-# def import_genres_view(request):
-#     Genre.objects.all().delete()
-#     # Đường dẫn file JSON dựa trên BASE_DIR
-#     json_file_path = os.path.join(settings.BASE_DIR, 'genres', 'unique_genres.json')
+def import_genres_view(request):
+    Genre.objects.all().delete()
+    # Đường dẫn file JSON dựa trên BASE_DIR
+    json_file_path = os.path.join(settings.BASE_DIR, 'genres', 'unique_genres.json')
 
-#     if not os.path.exists(json_file_path):
-#         return HttpResponse(f"File not found: {json_file_path}", status=404)
+    if not os.path.exists(json_file_path):
+        return HttpResponse(f"File not found: {json_file_path}", status=404)
 
-#     Genre.objects.all().delete()
+    Genre.objects.all().delete()
 
-#     with open(json_file_path, encoding='utf-8') as f:
-#         data = json.load(f)
-#         for item in data:
-#             Genre.objects.get_or_create(name=item['name'])
+    with open(json_file_path, encoding='utf-8') as f:
+        data = json.load(f)
+        for item in data:
+            Genre.objects.get_or_create(name=item['name'])
 
-#     return HttpResponse("✅ Genres imported successfully!")
+    return HttpResponse("✅ Genres imported successfully!")
