@@ -13,7 +13,7 @@ const Notify = () => {
 
     useEffect(() => {
         if (!userInfo) return;
-        const ws = new WebSocket(`ws://localhost:8000/ws/notifications/${userInfo._id}/`);
+        const ws = new WebSocket(`ws://localhost:8000/ws/notifications/${userInfo.id}/`);
         
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
