@@ -119,9 +119,9 @@ const HomePage = () => {
    
 
           <p className="text-lg text-gray-300">
-            Là món ăn tinh thần không thể bỏ lỡ cho các fan chân chính!!!!
+            Là món ăn tinh thần không thể bỏ lỡ !!!!
             <br />
-            Nơi bạn có thể giải trí, tìm hiểu và khám phá thế giới Compytho
+            Nơi giải trí và khám phá thế giới Comic
           </p>
           <Link to="/avsearch" className="text-lg text-orange-500">
           <a href="#" className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg hover:opacity-80 transition">

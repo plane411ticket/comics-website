@@ -74,9 +74,7 @@ const Footer = () => {
                             <a href="https://www.facebook.com/profile.php?id=61576812846699" className="hover:text-blue-400 transition">
                                 <i className="fab fa-facebook-f"></i>
                             </a>
-                            <a href="#" className="hover:text-pink-400 transition">
-                                <i className="fab fa-instagram"></i>
-                            </a>
+                            
                             <a href="https://www.tiktok.com/@khai_ngokngek?is_from_webapp=1&sender_device=pc" className="hover:text-blue-300 transition">
                                 <i className="fab fa-tiktok"></i>
                             </a>
