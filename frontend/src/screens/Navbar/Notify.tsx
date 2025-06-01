@@ -13,7 +13,7 @@ const Notify = () => {
 
     useEffect(() => {
         if (!userInfo) return;
-        const ws = new WebSocket(`ws://localhost:8000/ws/notifications/${userInfo.id}/`);
+        const ws = new WebSocket(`ws://localhost:8000/ws/notifications/`);
         
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
@@ -38,6 +38,7 @@ const Notify = () => {
                     withCredentials: true,
                 };
                 const response = await axios.get(`${baseURL}/api/notifications/`, config);
+                console.log("Response", response)
                 setNotifications(response.data.results);
             } catch (error) {
                 console.error("Error fetching notifications:", error);
