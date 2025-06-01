@@ -373,52 +373,52 @@ class NotificationViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-@authentication_classes([CookieJWTAuthentication])
-class MarkAsSeenViewSet():
-    permission_classes = [IsAuthenticated]
+# @authentication_classes([CookieJWTAuthentication])
+# class MarkAsSeenViewSet():
+#     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        Notification.objects.filter(user=request.user, seen = False).update(seen=True)
-        return response({'status: 200 OK'}, status=200)
+#     def post(self, request):
+#         Notification.objects.filter(user=request.user, seen = False).update(seen=True)
+#         return response({'status: 200 OK'}, status=200)
 
-@authentication_classes([CookieJWTAuthentication])
-class NotificationDeleteViewSet():
-    permission_classes = [IsAuthenticated]
+# @authentication_classes([CookieJWTAuthentication])
+# class NotificationDeleteViewSet():
+#     permission_classes = [IsAuthenticated]
     
-    def perform_destroy(self, instance):
-        user = self.request.user
+#     def perform_destroy(self, instance):
+#         user = self.request.user
 
-        if not (user.is_staff or user.is_superuser or instance.user == user):
-            raise PermissionDenied("Bạn chỉ có thể xóa thông báo của chính mình.")
+#         if not (user.is_staff or user.is_superuser or instance.user == user):
+#             raise PermissionDenied("Bạn chỉ có thể xóa thông báo của chính mình.")
 
-        # Xoá thông báo
-        instance.delete()
+#         # Xoá thông báo
+#         instance.delete()
 
-# Leaderboard for top liked novels and mangas
-# @api_view(["GET"])
-# @permission_classes([AllowAny])
-# def TopLikedPosts(request):
-#     novels = Novel.objects.all().order_by("-numLikes")[:20]
-#     mangas = Manga.objects.all().order_by("-numLikes")[:20]
+# # Leaderboard for top liked novels and mangas
+# # @api_view(["GET"])
+# # @permission_classes([AllowAny])
+# # def TopLikedPosts(request):
+# #     novels = Novel.objects.all().order_by("-numLikes")[:20]
+# #     mangas = Manga.objects.all().order_by("-numLikes")[:20]
 
-#     data = []
-#     for novel in novels:
-#         data.append({
-#             "id": novel._id,
-#             "title": novel.title,
-#             "numLikes": novel.numLikes,
-#             "type": "novel",
-#             "cover": novel.cover.url if novel.cover else None
-#         })
-#     for manga in mangas:
-#         data.append({
-#             "id": manga._id,
-#             "title": manga.title,
-#             "numLikes": manga.numLikes,
-#             "type": "manga",
-#             "cover": manga.cover.url if manga.cover else None
-#         })
+# #     data = []
+# #     for novel in novels:
+# #         data.append({
+# #             "id": novel._id,
+# #             "title": novel.title,
+# #             "numLikes": novel.numLikes,
+# #             "type": "novel",
+# #             "cover": novel.cover.url if novel.cover else None
+# #         })
+# #     for manga in mangas:
+# #         data.append({
+# #             "id": manga._id,
+# #             "title": manga.title,
+# #             "numLikes": manga.numLikes,
+# #             "type": "manga",
+# #             "cover": manga.cover.url if manga.cover else None
+# #         })
 
-#     # Sắp xếp lại để lấy top 20 tổng hợp
-#     top_20 = sorted(data, key=lambda x: x["numLikes"], reverse=True)[:20]
-#     return Response(top_20, status=200)
+# #     # Sắp xếp lại để lấy top 20 tổng hợp
+# #     top_20 = sorted(data, key=lambda x: x["numLikes"], reverse=True)[:20]
+# #     return Response(top_20, status=200)
