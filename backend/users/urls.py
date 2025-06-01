@@ -17,6 +17,7 @@ urlpatterns = [
     path('register/',RegisterUser ,name='register'),
     path('logout/',LogoutUser ,name='logout'),    
     path('', include(router.urls)),
+    # path("leaderboard/top-likes/", LeaderboardTopLikes, name="leaderboard-top-likes"),
     # to be continued
     
 ]

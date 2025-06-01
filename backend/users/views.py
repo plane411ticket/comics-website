@@ -336,3 +336,32 @@ class NotificationDeleteViewSet():
 
         # Xoá thông báo
         instance.delete()
+
+# Leaderboard for top liked novels and mangas
+# @api_view(["GET"])
+# @permission_classes([AllowAny])
+# def TopLikedPosts(request):
+#     novels = Novel.objects.all().order_by("-numLikes")[:20]
+#     mangas = Manga.objects.all().order_by("-numLikes")[:20]
+
+#     data = []
+#     for novel in novels:
+#         data.append({
+#             "id": novel._id,
+#             "title": novel.title,
+#             "numLikes": novel.numLikes,
+#             "type": "novel",
+#             "cover": novel.cover.url if novel.cover else None
+#         })
+#     for manga in mangas:
+#         data.append({
+#             "id": manga._id,
+#             "title": manga.title,
+#             "numLikes": manga.numLikes,
+#             "type": "manga",
+#             "cover": manga.cover.url if manga.cover else None
+#         })
+
+#     # Sắp xếp lại để lấy top 20 tổng hợp
+#     top_20 = sorted(data, key=lambda x: x["numLikes"], reverse=True)[:20]
+#     return Response(top_20, status=200)
