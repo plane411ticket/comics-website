@@ -22,9 +22,8 @@ const StoryDetailPage = () => {
 
  
 
-  function getRandomNovels(n: number, novels?: Novel[], excludeId?: string) {
-    const novelList = Array.isArray(novels) ? novels : [];
-    const filtered = excludeId ? novelList.filter(nv => nv._id !== excludeId) : novelList;
+  function getRandomNovels(n: number, novels: Novel[], excludeId?: string) {
+    const filtered = excludeId ? novels.filter(nv => nv._id !== excludeId) : novels;
     const shuffled = [...filtered].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, n);
   }

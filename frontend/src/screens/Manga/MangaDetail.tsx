@@ -18,9 +18,8 @@ const StoryDetailPage = () => {
   const lastChapter = chapters[chapters.length - 1];
   const [allMangas, setAllMangas] = useState<Manga[]>([]);
 
-  function getRandomNovels(n: number, novels?: Manga[], excludeId?: string) {
-    const mangalList = Array.isArray(novels) ? novels : [];
-    const filtered = excludeId ? mangalList.filter(nv => nv._id !== excludeId) : mangalList;
+  function getRandomMangas(n: number, mangas: Manga[], excludeId?: string) {
+    const filtered = excludeId ? mangas.filter(nv => nv._id !== excludeId) : mangas;
     const shuffled = [...filtered].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, n);
   }
