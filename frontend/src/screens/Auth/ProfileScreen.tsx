@@ -35,9 +35,8 @@ export default function ProfileScreen() {
 
             const formData = new FormData();
             formData.append("avatar", file);
-
             try {
-                await updateAvatar(formData);
+                await updateAvatar(formData,userInfo);
                 const updatedProfile = await fetchProfile();
                 setEditProfile(updatedProfile);
                 console.log("Avatar updated successfully", updatedProfile?.cover);
