@@ -1,7 +1,8 @@
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny,IsAuthenticated
+from rest_framework.permissions import AllowAny,IsAuthenticated,IsAuthenticatedOrReadOnly
+from rest_framework.request import Request
 from django.contrib.auth import authenticate
 from .serializers import *
 from .models import Favorite
@@ -19,22 +20,30 @@ from rest_framework import permissions, viewsets
 from django.contrib.contenttypes.models import ContentType
 from .models import Comments
 from .serializers import CommentsSerializer
+from users.authentication import CookieJWTAuthentication
+from rest_framework.decorators import authentication_classes
+from django.shortcuts import get_object_or_404
+# from .models import Notification
+# from .serializers import NotificationSerializer
 User = get_user_model()
 # ============================
 # Authentication with user
 # ============================
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def registerUser(request):
+def RegisterUser(request):
     data = request.data
     try:
         if User.objects.filter(email=data["email"]).exists():
             return Response({"detail": "User with this email already exists"}, status=status.HTTP_400_BAD_REQUEST)
-        if not data['name'] or not data['password']:
+        if User.objects.filter(email=data["username"]).exists():
+            return Response({"detail": "User with this email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not data['username'] or not data['password']:
             return Response({"detail": "Email and password are required"}, status=status.HTTP_400_BAD_REQUEST)
         user = User.objects.create(
-            first_name = data['name'],
-            username = data['email'],
+            first_name = data['username'],
+            username = data['username'],
             email = data['email'],
             password = make_password(data['password']) # hash password for security
         )
@@ -49,13 +58,13 @@ def registerUser(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def loginUser(request):
+def LoginUser(request):
     data = request.data
     try:
-        email = data['email']
+        username = data['username']
         password = data['password']
         
-        user = authenticate(username=email, password=password)
+        user = authenticate(username=username, password=password)
 
         if user is not None:
             refresh = RefreshToken.for_user(user)
@@ -78,15 +87,14 @@ def loginUser(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def logoutUser(request):
-    response = HttpResponse({"message": "Đăng xuất thành công!"})
-    response.delete_cookie("access_token", path="/",domain="localhost")
-    response.delete_cookie("refresh_token", path="/",domain="localhost")
+def LogoutUser(request):
+    response = Response({"message": "Logged out successfully"}, status=200)
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
     return response
-
 @api_view(["POST"])
 @permission_classes([AllowAny])
-def refreshTokenView(request):
+def RefreshTokenView(request):
     refresh_token = request.COOKIES.get("refresh_token")
     access_token = request.COOKIES.get("access_token")
 
@@ -126,16 +134,25 @@ def refreshTokenView(request):
 # ============================
 #  User ViewSets
 # ============================
-
-
+@authentication_classes([CookieJWTAuthentication])
 class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get_queryset(self):
         user = self.request.user
         if(user.is_staff or user.is_superuser):
             return User.objects.all()
         return User.objects.filter(id=user.id)
+    def retrieve(self, request, *args, **kwargs):
+        username = self.kwargs.get("username")
+        user = get_object_or_404(User, username=username)
+        # Optional: chỉ cho chính chủ hoặc admin xem
+        if user.is_superuser:
+            return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = self.get_serializer(user)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
     def perform_destroy(self, instance):
         user = self.request.user
         if not (user.is_staff or user.is_superuser or instance == user):
@@ -148,7 +165,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         serializer.save()
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@authentication_classes([CookieJWTAuthentication])
 def ToggleLike(request):
     user = request.user
     type = request.data.get("type")
@@ -182,7 +199,7 @@ def ToggleLike(request):
         post.save(update_fields=['numLikes'])
         return Response({"status": "liked","numLikes":post.numLikes}, status=status.HTTP_201_CREATED)
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@authentication_classes([CookieJWTAuthentication])
 def ToggleFavorite(request):
     user = request.user
     type = request.data.get("type")
@@ -216,20 +233,34 @@ def ToggleFavorite(request):
         post.save(update_fields=['numFavorites'])
         return Response({"status": "favorite","numFavorites":post.numFavorites}, status=status.HTTP_201_CREATED)
 
+@api_view(["GET"])
+@authentication_classes([CookieJWTAuthentication])
+def FindFavorite(request):
+    user = request.user
+    type = request.query_params.get("type")
+    if not user:
+        return Response({"error": "Missing user ID"}, status=status.HTTP_400_BAD_REQUEST)
+    if(type == "novel"):
+        try:
+            fav = Favorite.objects.get(user=user.id, type="novel")
+        except Favorite.DoesNotExist:
+            return Response({"error": "Novel's favorite not found"}, status=status.HTTP_404_NOT_FOUND)
+    if(type == "manga"):
+        try:
+            fav = Favorite.objects.get(user=user.id, type="manga")
+        except Favorite.DoesNotExist:
+            return Response({"error": "Manga's favorite not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    if fav:
+        return Response({"favorite": fav}, status=status.HTTP_200_OK)
+    else:
+        return Response({"error": "Favorite not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comments.objects.all()
     serializer_class = CommentsSerializer
-
-    def get_permissions(self):
-        # Mặc định mọi người được xem
-        if self.action in ['list', 'retrieve']:
-            permission_classes = [permissions.AllowAny]
-        # Các action còn lại cần đăng nhập
-        else:
-            permission_classes = [permissions.IsAuthenticated]
-        return [permission() for permission in permission_classes]
-
+    authentication_classes = [CookieJWTAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_queryset(self):
         chapter_type = self.request.query_params.get('chapter_type')
         chapter_id = self.request.query_params.get('chapter_id')
@@ -259,8 +290,8 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Comments.objects.none()
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-        obj = serializer.validated_data['content_object']
+        comment = serializer.save(user=self.request.user)
+        obj = comment.content_object
         if hasattr(obj, 'numComments'):
             obj.numComments = getattr(obj, 'numComments', 0) + 1
             obj.save(update_fields=['numComments'])
@@ -276,3 +307,36 @@ class CommentViewSet(viewsets.ModelViewSet):
             obj.save(update_fields=['numComments'])
 
         instance.delete()
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    authentication_classes = [CookieJWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('created_at')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+# @authentication_classes([CookieJWTAuthentication])
+# class MarkAsSeenViewSet():
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request):
+#         Notification.objects.filter(user=request.user, seen = False).update(seen=True)
+#         return response({'status: 200 OK'}, status=200)
+
+# @authentication_classes([CookieJWTAuthentication])
+# class NotificationDeleteViewSet():
+#     permission_classes = [IsAuthenticated]
+    
+#     def perform_destroy(self, instance):
+#         user = self.request.user
+
+#         if not (user.is_staff or user.is_superuser or instance.user == user):
+#             raise PermissionDenied("Bạn chỉ có thể xóa thông báo của chính mình.")
+
+#         # Xoá thông báo
+#         instance.delete()

@@ -3,8 +3,8 @@ export interface user{
     _id:string,
     name:string,
     email:string,
-    Islogin:false,
-    avatar: string;
+    islogin:false,
+    cover: string;
     level: number;
 }
 

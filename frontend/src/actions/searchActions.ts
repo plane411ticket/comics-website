@@ -17,26 +17,60 @@ export const searchKeyword = async(query:string,type:string) =>{
     }
 
 }
-export const fetchAdvancedSearch = async (filters: AdvancedFilter,type:string): Promise<Novel[]> => {
-    try {
-        if(type != "manga" &&type != "audio"&&type != "novel")
-            console.error("Error type not available");
-        
-        const query = new URLSearchParams();
-        Object.entries(filters.genres).forEach(([genreId, state]) => {
-            if(state ===1) query.append("include_genres", genreId);
-            else if(state ===2) query.append("exclude_genres", genreId);
-        });
-        
-        if (filters.minChapters) query.set("min_chapters", filters.minChapters.toString());
-        if (filters.maxChapters) query.set("min_chapters", filters.maxChapters.toString());
-        if (filters.author) query.set("author", filters.author);
-        if (filters.status) query.set("status", filters.status);
-        const response = await axios.get(`${baseURL}/api/${type}/advanced-search?${query}`);
-        console.log("Advance search",response.data);
-        return response.data.results;
-    } catch (error) {
-        console.error("Failed to fetch advanced search results:", error);
-        return [];
-    }
-} 
+export const buildQueryFromFilters = (filters: AdvancedFilter): string => {
+  const params = new URLSearchParams();
+
+  Object.entries(filters.genres).forEach(([genreId, state]) => {
+    if (state === 1) params.append("include_genres", genreId);
+    else if (state === 2) params.append("exclude_genres", genreId);
+  });
+
+  if (filters.author) params.set("author", filters.author);
+  if (filters.status) params.set("status", filters.status);
+  if (filters.minChapters) params.set("minChapters", filters.minChapters.toString());
+  if (filters.maxChapters) params.set("maxChapters", filters.maxChapters.toString());
+
+  return params.toString();
+};
+export const parseQueryToFilters = (query: string): AdvancedFilter => {
+  const params = new URLSearchParams(query);
+  const genres: Record<string, GenreState> = {};
+
+  // Lặp qua các genres
+  params.getAll("include_genres").forEach(id => {
+    genres[id] = 1;
+  });
+
+  params.getAll("exclude_genres").forEach(id => {
+    genres[id] = 2;
+  });
+
+  return {
+    genres,
+    author: params.get("author") || undefined,
+    status: params.get("status") || undefined,
+    minChapters: params.get("minChapters") ? parseInt(params.get("minChapters")!) : undefined,
+    maxChapters: params.get("maxChapters") ? parseInt(params.get("maxChapters")!) : undefined,
+  };
+};
+export const fetchAdvancedSearch = async (
+  filters: AdvancedFilter,
+  type: string
+): Promise<Novel[]> => {
+  try {
+    if (type !== "manga" && type !== "audio" && type !== "novel")
+      throw new Error("Error type not available");
+
+    const queryString = buildQueryFromFilters(filters);
+
+    const response = await axios.get(
+      `${baseURL}/api/${type}/advanced-search?${queryString}`
+    );
+
+    console.log("Advance search", response.data);
+    return response.data.results;
+  } catch (error) {
+    console.error("Failed to fetch advanced search results:", error);
+    return [];
+  }
+};

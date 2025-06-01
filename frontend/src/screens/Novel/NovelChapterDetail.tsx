@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { NovelChapter } from '../../types/novel/novelChapters';
 import { fetchChapterDetail, fetchStoryChapters } from '../../actions/novelAction';
-import CommentSection from './CommentChapter';
 import AudioPlay from '../../components/AudioPlay';
-import { slugifyVietnamese } from '../../actions/audioAction';
+// Update the import path below to the correct relative path where CommentSection exists
+import CommentSection from './CommentChater'
 const ChapterDetailPage = () => {
   const { chapterId } = useParams();
   const navigate = useNavigate();
@@ -75,8 +75,8 @@ const ChapterDetailPage = () => {
     
     <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
       <div id="audio">
-        <AudioPlay audioContent={chapter.content} 
-              audioTitle={slugifyVietnamese(chapter._id+"-"+chapter.title)+".mp3"}
+        <AudioPlay 
+              audioTitle={chapter._id+".mp3"}
               nextAudio={chapter.nextChapterId} 
               preAudio={chapter.previousChapterId}/>
       </div>
@@ -155,10 +155,10 @@ const ChapterDetailPage = () => {
         Chương sau ➡
       </button>
       </div>
-      
-        {/* Bình luận chương */}
+      {/* Bình luận chương */}
         <CommentSection postId={chapter.novel._id} type="novel" />
         {/* <CommentSection/> */}
+
     </div>
     
   );

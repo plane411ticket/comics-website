@@ -36,7 +36,7 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "users.authentication.CookieJWTAuthentication",
-        
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": [
         # 'rest_framework.permissions.AllowAny',
@@ -238,7 +238,7 @@ print("BASE_DIR.parent:", BASE_DIR.parent)
 print("STATICFILES_DIRS after:", STATICFILES_DIRS)
 
 # Media files (Uploaded images, documents, etc.)
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type

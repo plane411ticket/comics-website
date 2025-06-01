@@ -1,10 +1,11 @@
 from django.db import models
-from manga.models import Manga
+from manga.models import Manga 
 from novel.models import Novel
 import uuid
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 import os
+from .notify import sendNotify
 def chapter_image_upload_path(instance, filename):
     """ Lưu ảnh vào thư mục `media/manga_images/id_chapter/` """
     filename = filename.replace(" ", "_")
@@ -19,6 +20,19 @@ class MangaChapter(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"{self.manga.title}-{self.title} - Chapter {self.chapter_number}"
+    def save(self, *args, **kwargs):
+        is_new = self._state.adding
+        if not self.pk:  # Chỉ chạy khi tạo mới, không chạy khi update
+            last_chapter = MangaChapter.objects.filter(manga=self.manga).order_by('-chapter_number').first()
+            if(last_chapter):
+                if(last_chapter.chapter_number):
+                    self.chapter_number = (last_chapter.chapter_number + 1) if last_chapter else 1
+                if(self.manga.numChapters):
+                    self.manga.numChapters += 1
+                self.manga.save()
+        super().save(*args, **kwargs)
+        if is_new:
+            sendNotify(self)
 class MangaChapterImage(models.Model):
     _id = models.UUIDField(default=uuid.uuid4,  unique=True,
                            primary_key=True, editable=False)
@@ -39,18 +53,26 @@ class NovelChapter(models.Model):
     def __str__(self):
         return f"{self.novel.title}-{self.title} - Chapter {self.chapter_number}"
     def save(self, *args, **kwargs):
+        is_new = self._state.adding
         if not self.pk:  # Chỉ chạy khi tạo mới, không chạy khi update
             last_chapter = NovelChapter.objects.filter(novel=self.novel).order_by('-chapter_number').first()
-            self.chapter_number = (last_chapter.chapter_number + 1) if last_chapter else 1
-            self.novel.numChapters += 1
-            self.novel.save()
+            if(last_chapter):
+                if(last_chapter.chapter_number):
+                    self.chapter_number = (last_chapter.chapter_number + 1) if last_chapter else 1
+                if(self.novel.numChapters):
+                    self.novel.numChapters += 1
+                self.novel.save()
         super().save(*args, **kwargs)
+        if is_new:
+            sendNotify(self)
+
     def delete(self, *args, **kwargs):
         # Lưu số chương hiện tại
         current_number = self.chapter_number
         
         # Giảm số chương của novel
-        self.novel.numChapters -= 1
+        if(self.novel.numChapters):
+            self.novel.numChapters -= 1
         self.novel.save()
 
         # Xóa chapter hiện tại
@@ -64,5 +86,5 @@ class NovelChapter(models.Model):
         ).order_by('chapter_number')
 
         for chapter in later_chapters:
-            chapter.chapter_number -= 1
+            if(chapter.chapter_number): chapter.chapter_number -= 1
             chapter.save()

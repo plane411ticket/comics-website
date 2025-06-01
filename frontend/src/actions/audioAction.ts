@@ -1,14 +1,13 @@
 import axios from 'axios';
-const baseURL = import.meta.env.VITE_BASE_URL;
-console.log("Base URL:", baseURL);
-export const audioText = async (text: string, nameFile: string) => {
+const baseURL = import.meta.env.VITE_ADMIN_URL;
+export const audioText = async (nameFile: string) => {
     try {
           const config = {
             headers: { 'Content-Type': 'audio/mpeg' },
             }
           const response = await axios.post(
               `${baseURL}/api/audio/tts/${nameFile}/`, 
-              {text:text}, 
+              {}, 
               config
           );
         console.log("Thông tin tải: ",response.headers); // Debug kết quả

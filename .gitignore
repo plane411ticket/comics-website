@@ -30,15 +30,22 @@ pnpm-lock.yaml
 
 # Static & Media Files
 staticfiles/
-media/
+# media/
 static/
+
+covers/
+managa_covers/
+managa_images/
+novel_covers/
 # *.png
 *.jpg
+!default.jpg
 *.mp3
-# *.jpeg
-# *.gif
-# *.svg
-# *.json
+
+*.jpeg
+*.gif
+*.svg
+*.json
 # Coverage & Testing
 .coverage
 htmlcov/

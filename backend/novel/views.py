@@ -77,41 +77,6 @@ class NovelViewSet(viewsets.ModelViewSet):
             )
         return queryset.filter(query).annotate(score=relevance).order_by('-score')
     
-@api_view(['PUT'])
-@permission_classes([AllowAny])
-def updateNumFavorite(request, pk):
-    try:
-        novel = Novel.objects.get(_id = pk)
-        novel.numFavorites = novel.numFavorites + 1
-        novel.save()
-        serialize = NovelSerializer(novel, many=False, context={'request': request})
-        return Response(serialize.data, status=status.HTTP_200_OK)
-        
-    except Exception as e:
-        print(f"[ERROR updateNumFavorite]: {e}")
-        return Response({'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-
-@api_view(['PUT'])
-@permission_classes([AllowAny])
-def updateNumComments(request, pk):
-    try:
-        # Lấy truyện theo ID
-        novel = Novel.objects.get(_id=pk)
-        
-        # Tăng số lượng bình luận
-        novel.numComments = novel.numComments + 1
-        novel.save()
-        
-        # Serialize và trả về dữ liệu
-        serialize = NovelSerializer(novel, many=False, context={'request': request})
-        return Response(serialize.data, status=status.HTTP_200_OK)
-        
-    except Exception as e:
-        print(f"[ERROR updateNumComments]: {e}")
-        return Response({'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-
 
 
 

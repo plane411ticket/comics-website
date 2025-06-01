@@ -3,12 +3,11 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import HomePage from "./screens/Home/HomePage";
-import Profiles from "./screens/Auth/ListProfiles";
 import Error from "./screens/Error";
 import UserProfilePage from "./screens/Auth/ProfileScreen";
 import MangaList from "./screens/Manga/MangaList.tsx";
 import NovelList from "./screens/Novel/NovelList.tsx";
-import Forum from "./screens/Forum/Forum";
+// import Forum from "./screens/Forum/Forum";
 import Genre from "./screens/Genre/Genre.tsx";
 import Leaderboard from "./screens/Leaderboard/Leaderboard";
 import AdvanceSearch from "./screens/Search/AdvanceSearch.tsx";
@@ -32,13 +31,12 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/home", element: <HomePage /> },
-      { path: "/profiles", element: <Profiles /> },
-      { path: "/profile", element: <UserProfilePage /> },
-      //{ path: "/profiles/:userId", element: <UserProfilePage /> },
+      { path: "/profile/me", element: <UserProfilePage /> },
+      { path: "/profiles/:username", element: <UserProfilePage /> },
       { path: "/manga", element: <MangaList /> },
       { path: "/novel", element: <NovelList /> },
       { path: "/leaderboard", element: <Leaderboard /> },
-      { path: "/forum", element: <Forum /> },
+      // { path: "/forum", element: <Forum /> },
       { path: "/genre", element: <Genre /> },
       { path: "/avsearch", element: <AdvanceSearch /> },
       { path: "/auth/*", element: <AuthRoutes /> },
