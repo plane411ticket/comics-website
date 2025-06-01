@@ -32,7 +32,7 @@ class Favorite(models.Model):
     ) # tăng tốc độ truy xuất 
     def __str__(self):
         return str(self.user)
-
+ 
 
 class Comments(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

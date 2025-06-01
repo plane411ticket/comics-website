@@ -105,6 +105,7 @@ INSTALLED_APPS = [
     'channels',
     'users',
     'forum',
+    'notify',
 
 ]
 
@@ -112,17 +113,17 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
-CACHE_MIDDLEWARE_SECONDS = 60
+CACHE_MIDDLEWARE_SECONDS = 10
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
@@ -235,11 +236,11 @@ CORS_ALLOWED_ORIGINS = [
 ]
 AUTH_USER_MODEL = 'users.CustomUser'
 
-CHANNEL_LAYES = {
+CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6379)],
-        }
-    }
+            "hosts": [('redis', 6379)],
+        },
+    },
 }

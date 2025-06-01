@@ -23,6 +23,7 @@ from .serializers import CommentsSerializer
 from users.authentication import CookieJWTAuthentication
 from rest_framework.decorators import authentication_classes
 from django.shortcuts import get_object_or_404
+from notify.utils import sendNotifyComment
 # from .models import Notification
 # from .serializers import NotificationSerializer
 User = get_user_model()
@@ -286,11 +287,12 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Comments.objects.none()
 
     def perform_create(self, serializer):
-        comment = serializer.save(user=self.request.user)
+        comment = serializer.save(user=self.request.user)        
         obj = comment.content_object
         if hasattr(obj, 'numComments'):
             obj.numComments = getattr(obj, 'numComments', 0) + 1
             obj.save(update_fields=['numComments'])
+        sendNotifyComment(comment)
 
     def perform_destroy(self, instance):
         user = self.request.user
