@@ -21,7 +21,11 @@ const MangaList = () => {
       setIsLoading(true);
       try {
         const data = await fetchManga(page);
-        setMangasCache(prev => ({ ...prev, [page]: data }));
+        if (Array.isArray(data)) {
+          setMangasCache(prev => ({ ...prev, [page]: data }));
+        } else {
+          console.error("API trả về không hợp lệ:", data);
+        }
       }
       catch (error) 
       {
@@ -29,19 +33,24 @@ const MangaList = () => {
           console.error("Lỗi tải truyện:", error);
         }
       }
-      if (mounted) {
-        setIsLoading(false);
+      finally
+      {
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
-  };
+      
+    };
 
     loadMangas();
    
-  }, [page]);
+    return () => { mounted = false; };
+  }, [page, mangasCache]);
 
   
 
   // Lấy dữ liệu để hiển thị của trang hiện tại từ cache
-  const mangas = mangasCache[page] || [];
+  const mangas: Manga[] = mangasCache[page] ?? [];
 
   // các hàm chuyển trang
   const handlePrevPage = () => {
@@ -49,8 +58,10 @@ const MangaList = () => {
   };
 
   const handleNextPage = () => {
-    if (mangas.length <= 0) setPage(page + 1);
-  };
+  if (!isLoading && mangas.length > 0) {
+    setPage(page + 1);
+  }
+};
 
   return (
     <div className="max-w-screen-lg mx-auto px-4 py-6">
