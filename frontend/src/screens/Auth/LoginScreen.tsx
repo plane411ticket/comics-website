@@ -4,8 +4,6 @@ import bglogin from "@/assets/Logo_real.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { loginUser } from "../../actions/userAction";
-import { AppDispatch } from "../../store";
-import { useDispatch } from "react-redux";
 export default function LoginScreen() {
     const userRef = useRef<HTMLInputElement | null>(null);
     const errRef = useRef<HTMLInputElement | null>(null);

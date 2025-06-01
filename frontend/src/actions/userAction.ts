@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../types/user/userSlice';
 import { login, logout } from '../types/user/userSlice';
 import { LikeProp, User } from '../types/user/User';
 import { Comment } from '../types/user/User';
