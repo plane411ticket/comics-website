@@ -1,11 +1,11 @@
-import axios from "axios";
-const baseURL = import.meta.env.VITE_ADMIN_URL;
+// import axios from "axios";
+// const baseURL = import.meta.env.VITE_ADMIN_URL;
 
-const API = axios.create({
-  baseURL: baseURL,
-  withCredentials: true, // cookie HttpOnly
-  headers: { "Content-Type": "application/json" },
-});
+// const API = axios.create({
+//   baseURL: baseURL,
+//   withCredentials: true, // cookie HttpOnly
+//   headers: { "Content-Type": "application/json" },
+// });
 
 // API.interceptors.response.use(
 //   (response) => response,

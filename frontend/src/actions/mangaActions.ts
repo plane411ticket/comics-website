@@ -93,14 +93,10 @@ export const updateNumberFavoriteManga  = async (novelid: string) => {
     throw error;
   }
 }
-<<<<<<< HEAD
-
-=======
 const API_BASE_URL = `${baseURL}/api/manga/`
->>>>>>> upstream/master
 export const fetchManga = async (page=1): Promise<Manga[]> => {
     try {
-            const response = await fetch(`${baseURL}/api/manga/?page=${page}`);
+            const response = await fetch(`${API_BASE_URL}?page=${page}`);
             console.log(response)
             console.log(`${baseURL}/api/manga/?page=${page}`)
             const data = await response.json()

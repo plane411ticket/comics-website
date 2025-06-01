@@ -2,18 +2,11 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { login } from '../types/user/userSlice';
-<<<<<<< HEAD
-import { CommentPayload, LikeProp} from '../types/user/User';
-const baseURL = import.meta.env.VITE_BASE_URL;
-    
-export const registerUser = async (name: string, email: string, password: string) => {
-=======
 import { LikeProp, User } from '../types/user/User';
 import { Comment } from '../types/user/User';
 const baseURL = import.meta.env.VITE_ADMIN_URL;
 
 export const registerUser = async (username: string, email: string, password: string) => {
->>>>>>> upstream/master
     try {
         const config = {
             headers: { 'Content-Type': 'Application/json' },
