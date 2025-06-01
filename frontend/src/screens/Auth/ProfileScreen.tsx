@@ -171,17 +171,25 @@ export default function ProfileScreen() {
                   />
 
                 {/* Nút đổi avatar */}
-                <label className="absolute bottom-2 right-2 bg-black bg-opacity-60 rounded-full p-2 cursor-pointer hover:bg-opacity-80 transition">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleAvatarChange}
-                    // disabled={uploading}
-                  />
-                  {/* <span className="text-white text-xs">{uploading ? "..." : "🖊️"}</span> */}
-                </label>
-              </div>
+                {editMode && (
+              <>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="avatar-upload"
+                  className="hidden"
+                  onChange={handleAvatarChange}
+                />
+                  <label
+                    htmlFor="avatar-upload"
+                    className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow cursor-pointer hover:bg-gray-200"
+                    title="Đổi ảnh đại diện"
+                  >
+                    <FaEdit size={20} className="text-gray-700" />
+                  </label>
+                  </>
+                        )}
+                      </div>
 
 
                 <h2 className="text-xl font-bold">{profile?.username}</h2>
@@ -203,7 +211,7 @@ export default function ProfileScreen() {
           </div>
 
           {/* Right column */}
-          <div className="col-span-4 sm:col-span-9 items-center">
+          <div className="col-span-4 justify-center sm:col-span-9 items-center">
             <div className="bg-white shadow rounded-lg p-6 h-full min-h-[400px] max-h-[400px] overflow-y-auto">
                 {/* Animated Tabs */}
                 <div className="relative inline-flex items-center bg-gray-100 rounded-lg p-1 space-x-1">
@@ -237,6 +245,9 @@ export default function ProfileScreen() {
                     <span className="capitalize">{tab}</span>
                     </a>
                 ))}
+
+
+                
                 </div>
 
                   {/* Content */}
@@ -253,49 +264,44 @@ export default function ProfileScreen() {
                         <FaEdit size={20} />
                       </button>
                     )}
-                    <form className="w-full max-w-lg flex flex-col gap-4 ">
-                      {/* Trạng thái */}
-                      <div className="flex flex-col sm:flex-row items-start gap-2 ">
-                        
-                        
-                      </div>
-                      {/* Tên đăng nhập */}
-                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
-                        <label className="block font-semibold min-w-[120px] text-gray-700 text-4xl" htmlFor="username">
-                          Tên đăng nhập:
-                        </label>
-                        {editMode ? (
-                          <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            value={editProfile?.username || ""}
-                            onChange={handleChange}
-                            className="border rounded px-2 py-1 flex-1 "
-                          />
-                        ) : (
-                          <span className="text-gray-800 text-4xl">{profile?.username}</span>
-                        )}
-                      </div>
+                    
                       
-                      {/* Email */}
-                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
-                        <label className="block font-semibold min-w-[120px] text-gray-700 text-4xl" htmlFor="email">
-                          Email:
-                        </label>
-                        {editMode ? (
-                          <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={editProfile?.email || ""}
-                            onChange={handleChange}
-                            className="border rounded px-2 py-1 flex-1"
-                          />
-                        ) : (
-                          <span className="text-gray-800 text-4xl">{profile?.email}</span>
-                        )}
-                      </div>
+                     {/* Tên đăng nhập */}
+<div className="flex flex-col items-center gap-2 w-full py-4">
+  <label className="block font-semibold text-gray-700 text-4xl text-center" htmlFor="username">
+    Tên đăng nhập:
+  </label>
+  {editMode ? (
+    <input
+      type="text"
+      id="username"
+      name="username"
+      value={editProfile?.username || ""}
+      onChange={handleChange}
+      className="border rounded px-2 py-1 text-center text-2xl w-full max-w-xs"
+    />
+  ) : (
+    <span className="text-gray-800 text-4xl text-center">{profile?.username}</span>
+  )}
+</div>
+{/* Email */}
+<div className="flex flex-col items-center gap-2 w-full py-4">
+  <label className="block font-semibold text-gray-700 text-4xl text-center" htmlFor="email">
+    Email:
+  </label>
+  {editMode ? (
+    <input
+      type="email"
+      id="email"
+      name="email"
+      value={editProfile?.email || ""}
+      onChange={handleChange}
+      className="border rounded px-2 py-1 text-center text-2xl w-full max-w-xs"
+    />
+  ) : (
+    <span className="text-gray-800 text-4xl text-center">{profile?.email}</span>
+  )}
+</div>
                       
                       {/* Nút lưu/hủy */}
                       {editMode && (
@@ -316,7 +322,7 @@ export default function ProfileScreen() {
                           </button>
                         </div>
                       )}
-                    </form>
+                 
                   </div>
                 ) : (
                   tabContent[activeTab]
