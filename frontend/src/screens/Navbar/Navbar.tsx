@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState} from "react";
+import { useState, useEffect} from "react";
 import { navbarItems } from "../../components/Navbarapi";
 import { FiMenu } from "react-icons/fi";
 import { useSelector } from "react-redux";
@@ -13,10 +13,13 @@ import UserMenu from "./UserMenu";
 import MobileMenu from "./MobileMenu";
 import Notify from "./Notify";
 
+import { autoLogin } from "../../actions/userAction";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userInfo = useSelector(selectUser);
-
+  useEffect(() => {
+    autoLogin();
+  }, []);
   return (
     <nav className="bg-white text-black font-Nurito" id="navtop">
       {/* Nav Top */}

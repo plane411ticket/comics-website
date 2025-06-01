@@ -13,7 +13,6 @@ const UserMenu = () => {
     await logoutUser();
     dispatch(logout());
   };
-  // const baseUrl = import.meta.env.VITE_ADMIN_URL;
   return (
     <div className="relative">
       <img src={userInfo?.cover} alt="Avatar" className="w-10 h-10 rounded-full cursor-pointer" onClick={() => setIsOpen(!isOpen)} />

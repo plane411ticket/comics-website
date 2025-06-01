@@ -6,10 +6,14 @@ router = DefaultRouter()
 router.register(r'comment', CommentViewSet, basename='comment')
 
 router.register(r'notifications', NotificationViewSet, basename='notification')
-router.register(r'me', ProfileViewSet, basename='me')
+
 
 urlpatterns = [
-    path('user/<str:username>/', ProfileViewSet.as_view({'get': 'retrieve'}), name='user-detail-by-username'),
+    path('me/', MyProfile, name='me'),
+    path('me/delete/', DeleteProfile, name='delete_profile'),
+    path('me/update/', UpdateProfile, name='update_profile'),
+    path('me/avatar/', UpdateAvatar, name='update_avatar'),
+    path('user/<str:username>/', OtherProfile, name='user-detail-by-username'),
     path('favorite/', ToggleFavorite, name='favorite'),
     path('like/',ToggleLike,name='like_post'),
     path('refresh/',RefreshTokenView,name='token_refresh'),
@@ -17,6 +21,7 @@ urlpatterns = [
     path('register/',RegisterUser ,name='register'),
     path('logout/',LogoutUser ,name='logout'),    
     path('', include(router.urls)),
+    # path("leaderboard/top-likes/", LeaderboardTopLikes, name="leaderboard-top-likes"),
     # to be continued
     
 ]

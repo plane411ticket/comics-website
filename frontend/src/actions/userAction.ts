@@ -1,6 +1,5 @@
 import axios from 'axios';
-// import { useDispatch } from 'react-redux';
-// import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { login, logout } from '../types/user/userSlice';
 import { LikeProp, User } from '../types/user/User';
 import { Comment } from '../types/user/User';
@@ -28,7 +27,7 @@ export const registerUser = async (username: string, email: string, password: st
     }
 };
 
-export const loginUser = async (username: string, password: string, dispatch: any) => {
+export const loginUser = async (username: string, password: string) => {
     try {
         const config = {
             headers: { 'Content-Type': 'Application/json' },
@@ -39,15 +38,16 @@ export const loginUser = async (username: string, password: string, dispatch: an
             config
         );
         const user = response.data.user;
-        dispatch(
-            login({
-                id: user.id,
-                email:user.email,
-                name: username,
-                cover: `${baseURL}${user.cover}`,
-                isLogin: true,
-            })
-        );
+        store.dispatch(
+                login({
+                    id: String(user.id),
+                    email: user.email,
+                    name: user.username,
+                    first_name: user.first_name,
+                    cover: `${baseURL}${user.cover}`,
+                    isLogin: true,
+                })
+            );
         console.log(response); // Debug kết quả
         return response
     } catch (error) {
@@ -65,6 +65,7 @@ export const logoutUser = async () => {
         {}, 
         config
     );
+    store.dispatch(logout());
     console.log("Logout",response); // Debug kết quả
 };
 
@@ -84,13 +85,25 @@ export const fetchProfile = async (username?:string): Promise<User | null> => {
             user = response.data;
         }
         else {
-            response = await axios.get(
+            response = await axiosAuth.get(
                 `${baseURL}/api/me/`,  
                 config
             );
-            user = response.data?.results?.[0];
+            user = response.data;
+            if(user.cover) user.cover = `${baseURL}${user.cover}`;
+            store.dispatch(
+                login({
+                    id: String(user.id),
+                    email: user.email,
+                    name: user.username,
+                    first_name: user.first_name,
+                    cover: user.cover,
+                    isLogin: true,
+                })
+            );
             console.log("Me:", response);
         }
+        
         console.log("User profile fetched:", user);
         return user ? (user as User) : null;
         
@@ -109,24 +122,9 @@ export const autoLogin = async () => {
         console.log("Refresh token thành công");
 
         // Bước 2: Gọi fetchProfile để lấy user info
-        const profile = await fetchProfile();
+        await fetchProfile();
         
-        if (profile) {
-            store.dispatch(
-                login({
-                    id: String(profile.id),
-                    email: profile.email,
-                    name: profile.username,
-                    first_name: profile.first_name,
-                    cover: profile.cover,
-                    isLogin: true,
-                })
-            );
-        } else {
-            store.dispatch(logout());
-            console.log("Không lấy được profile");
-        }
-
+        
     } catch (error) {
         console.error("Tự động đăng nhập thất bại:", error);
     }
@@ -233,10 +231,57 @@ export const updateFavorite  = async ({ post_id, type }: LikeProp) => {
   
 }
 
-
- export const updateAvatar = async (formData: FormData) => {
-  const res = await axios.post("/api/user/avatar", formData, {
+export const updateAvatar = async (formData: FormData) => {
+  const res = await axiosAuth.post(`${baseURL}/api/me/avatar/`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
+    withCredentials: true,
+  });
+
+  const userInfo = store.getState().user.user;
+    if(userInfo)
+        store.dispatch(
+            login({
+                id: userInfo.id,
+                email:userInfo.email,
+                name: userInfo.name,
+                cover: `${baseURL}${userInfo.cover}`,
+                isLogin: true,
+            })
+        );
+  return res;
+};
+export const updateProfile = async (user:User) => {
+  try{
+    const config ={
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  }
+    const res = await axiosAuth.post(`${baseURL}/api/me/update/`, {
+      email: user.email,
+      username: user.username,
+      password: user.password,
+    }, config);
+    const dispatch = useDispatch();
+     dispatch(
+            login({
+                id: String(user.id),
+                email:user.email,
+                name: user.username,
+                cover: `${baseURL}${user.cover}`,
+                isLogin: true,
+            })
+        );
+    console.log("Update profile:", res);
+  return res;
+  }
+  catch (error) {
+    console.error("Error updating profile:", error);
+    throw error;
+  }
+};
+export const deleteProfile = async () => {
+  const res = await axiosAuth.post(`${baseURL}/api/me/delete/`,{}, {
+    headers: { "Content-Type": "application/json" },
     withCredentials: true,
   });
   return res.data;
