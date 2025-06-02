@@ -9,7 +9,7 @@ export default function AuthRoutes()
     return (
         <Routes>
             <Route path='/login' element={<LoginScreen />} />
-            <Route path='/profile' element={<ProfileScreen />} />
+            <Route path='/profile/me' element={<ProfileScreen />} />
             <Route path='/register' element={<RegisterScreen />} />            
         </Routes>
     )
