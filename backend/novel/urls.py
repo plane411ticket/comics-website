@@ -7,7 +7,7 @@ router.register(r'novel', NovelViewSet)  # /api/manga/
 
 urlpatterns = [
     path('novel/advanced-search/', advanced_search, name='advanced_search'),
-    path('import/', import_novel_view, name='import_novel'),
+    path('import-novels/', import_novel_view, name='import_novel'),
     path('', include(router.urls)),
 ]
 
