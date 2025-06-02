@@ -24,7 +24,9 @@ export default function LoginScreen() {
     const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
         try{
-            const response = await loginUser(username, pwd);
+            const Inputusername = username.trim();
+            const Inputpassword = pwd.trim();
+            const response = await loginUser(Inputusername, Inputpassword);
             if(response?.status!==200) throw Error("Login Failed");
             setSuccess(true);
             setUsername('');
