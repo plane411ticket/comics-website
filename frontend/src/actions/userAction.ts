@@ -31,7 +31,7 @@ export const registerUser = async (username: string, email: string, password: st
 export const loginUser = async (username: string, password: string) => {
     try {
         const config = {
-            headers: { 'Content-Type': 'Application/json' },
+            headers: { 'Content-Type': 'application/json' },
             withCredentials:true,
         }
         const response = await axios.post(`${baseURL}/api/login/`, 
