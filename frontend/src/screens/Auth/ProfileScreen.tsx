@@ -100,7 +100,7 @@ export default function ProfileScreen() {
                   
                   console.log("Fetching profile for user:", username," userInfo:", userInfo);
                   
-                  if(!userInfo) setValid(false);
+                  if(!userInfo?.isLogin) setValid(false);
             
                   else {
                     setProfile(profileData);
