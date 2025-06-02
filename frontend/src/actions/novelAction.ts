@@ -65,6 +65,7 @@ export const fetchNovel = async (page=1): Promise<Novel[]> => {
     try {
             const response = await fetch(`${baseURL}/api/novel/?page=${page}`);
             console.log(response)
+            console.log("baseURL =", baseURL);
             console.log(`${baseURL}/api/novel/?page=${page}`)
             const data = await response.json();
             return Array.isArray(data.results) ? data.results : [];

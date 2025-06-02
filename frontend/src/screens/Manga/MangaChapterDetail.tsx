@@ -81,7 +81,7 @@ const ChapterMangaDetailPage = () => {
       </h1>
 
 
-      <div className="flex flex-col gap-4 items-center">
+      <div className="flex flex-col gap-0 items-center">
         {chapter.images && chapter.images.map( (img: any, index: number) => 
           (
             <img
