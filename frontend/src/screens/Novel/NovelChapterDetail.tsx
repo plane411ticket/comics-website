@@ -81,44 +81,45 @@ const ChapterDetailPage = () => {
               preAudio={chapter.previousChapterId}/>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-10">
-      <button
-        onClick={goToPrevious}
-        disabled={!chapter.previousChapterId}
-        className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
-          chapter.previousChapterId
-            ? "bg-orange-500 text-white hover:bg-orange-600"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-        }`}
-      >
-        ⬅ Chương trước
-      </button>
+      <div className="flex flex-row sm:flex-row justify-between items-center gap-3 mt-6">
+    <button
+      onClick={goToPrevious}
+      disabled={!chapter.previousChapterId}
+      className={`px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-full font-medium transition-all duration-200 ${
+        chapter.previousChapterId
+          ? "bg-orange-500 text-white hover:bg-orange-600"
+          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+      }`}
+    >
+      ⬅ Chương trước
+    </button>
 
-        <Link to={`/novel/${chapter.novel}`}>
-        <button className="px-6 py-3 rounded-full font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">
-          📚 Quay lại chi tiết
+    <Link to={`/novel/${chapter.novel}`}>
+      <button className="px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-full font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">
+        📚 Quay lại chi tiết
+      </button>
+    </Link>
+
+    <button
+      onClick={goToNext}
+      disabled={!chapter.nextChapterId}
+      className={`px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-full font-medium transition-all duration-200 ${
+        chapter.nextChapterId
+          ? "bg-orange-500 text-white hover:bg-orange-600"
+          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+      }`}
+        >
+          Chương sau ➡
         </button>
-        </Link>
-
-        <button
-        onClick={goToNext}
-        disabled={!chapter.nextChapterId}
-        className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
-          chapter.nextChapterId
-            ? "bg-orange-500 text-white hover:bg-orange-600"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-        }`}
-      >
-        Chương sau ➡
-      </button>
       </div>
-      <br/>
-      <h1 className="text-7xl sm:text-4xl font-bold text-center text-orange-600 mb-6">
+
+      <br />
+
+      <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-center text-orange-600 mb-6">
         Chương {chapter.chapter_number}: {chapter.title}
       </h1>
 
-
-      <div className="prose prose-2xl text-3xl lg:prose-3xl max-w-5xl mx-auto text-justify leading-relaxed whitespace-pre-wrap bg-amber-50 text-gray-900 p-10 sm:p-14 rounded-3xl shadow-xl">
+      <div className="prose text-base sm:prose-lg lg:prose-xl max-w-5xl mx-auto text-justify leading-relaxed whitespace-pre-wrap bg-amber-50 text-gray-900 p-5 sm:p-10 rounded-3xl shadow-xl">
         {chapter.content}
       </div>
 
