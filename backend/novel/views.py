@@ -105,8 +105,8 @@ def download_image_to_file(url):
         return None, None
 
 def import_novel_view(request):
-    base_path = os.path.join(settings.BASE_DIR, 'novel', 'truyen-save')
-    Novel.objects.all().delete()
+    base_path = os.path.join(settings.BASE_DIR, 'novel', 'truyen-save-2')
+    # Novel.objects.all().delete()
 
     for i in range(2):
         for j in range(26):
