@@ -76,19 +76,23 @@ const AdvancedSearch: React.FC = () => {
       <h2 className="text-xl font-semibold">Bộ lọc nâng cao</h2>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-        {allGenres.map(g => {
-          const state = filters.genres[g._id] ?? 0;
-          return (
-            <button
-              key={g._id}
-              onClick={() => toggleGenreState(g._id)}
-              className={`px-3 py-1 rounded ${genreColors[state]} hover:opacity-80 transition-all`}
-              title={genreStates[state]}
-            >
-              {g.name}
-            </button>
-          );
-        })}
+        {Array.isArray(allGenres) && allGenres.length > 0 ? (
+          allGenres.map(g => {
+            const state = filters.genres[g._id] ?? 0;
+            return (
+              <button
+                key={g._id}
+                onClick={() => toggleGenreState(g._id)}
+                className={`px-3 py-1 rounded ${genreColors[state]} hover:opacity-80 transition-all`}
+                title={genreStates[state]}
+              >
+                {g.name}
+              </button>
+            );
+          })
+        ) : (
+          <p>Không có thể loại nào!</p>
+        )}
       </div>
 
       <input

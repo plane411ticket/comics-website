@@ -30,16 +30,18 @@ const Genre: React.FC = () => {
         <div className="w-full max-w-screen-lg overflow-hidden relative"> 
             <h2 className="font-bold text-lg flex justify-center">🌟 THỂ LOẠI 🌟</h2>
             <div  className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 mx-auto items-center justify-center">
-                {genres.length > 0 ? (
-                    genres.map((genre) => (
-                    <div  id = "gernes"  key={genre._id}>
-                        <button className=" bg-white text-black text-sm w-full  hover:bg-yellow-400">
-                                <a className="text-black hover:text-white" href={`/avsearch?include_genres=${genre._id}`}>{genre.name}</a>
-                        </button>
+                {Array.isArray(genres) && genres.length > 0 ? (
+                  genres.map((genre) => (
+                    <div id="gernes" key={genre._id}>
+                      <button className="bg-white text-black text-sm w-full hover:bg-yellow-400">
+                        <a className="text-black hover:text-white" href={`/avsearch?include_genres=${genre._id}`}>
+                          {genre.name}
+                        </a>
+                      </button>
                     </div>
-                    ))
+                  ))
                 ) : (
-                    <p>Không có thể loại nào!</p>
+                  <p>Không có thể loại nào!</p>
                 )}
             </div>
         </div>
