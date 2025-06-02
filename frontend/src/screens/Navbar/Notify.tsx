@@ -74,7 +74,7 @@ const Notify = () => {
     };
 
         
-    const unreadCount = notifications.filter(n => !n.seen).length;
+    const unreadCount = (notifications||[]).filter(n => !n.seen).length;
     return (
         <div className="relative">
             <button onClick={() => setShowDropdown(!showDropdown)}>

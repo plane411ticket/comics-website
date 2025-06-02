@@ -368,7 +368,10 @@ class NotificationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Notification.objects.filter(user=self.request.user).order_by('created_at')
+        user = getattr(self.request, "user", None)
+        if user and user.is_authenticated:
+            return Notification.objects.filter(user=user).order_by('-created_at')
+        return Notification.objects.none()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

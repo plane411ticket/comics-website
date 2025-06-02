@@ -49,7 +49,7 @@ export default function CommentSection({ postId, type }: CommentSectionProps) {
       });
       console.log(res.data);
 
-      const allComments: Comment[] = res.data;
+      const allComments: Comment[] = Array.isArray(res.data) ? res.data : [];
 
       // Xử lý cấu trúc cha-con
       const topLevel = allComments.filter((c) => !c.parent);

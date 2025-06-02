@@ -4,7 +4,7 @@ export const useContentInfo = () => {
   const location = useLocation();
   const { postId, chapterId } = useParams();
 
-  const pathSegments = location.pathname.split("/").filter(Boolean); // lọc bỏ chuỗi rỗng
+  const pathSegments = location?.pathname?.split("/")?.filter(Boolean) || []; // lọc bỏ chuỗi rỗng
 
   let type = "";
   let objectId = postId || chapterId || "";

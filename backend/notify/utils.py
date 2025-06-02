@@ -19,14 +19,15 @@ def sendNotify(chapter):
     else:
         return
     
-    favs = Favorite.objects.filter(post_id = item._id, type=_type)
+    if item and item._id and _type:
+        favs = Favorite.objects.filter(post_id=item._id, type=_type)
 
-    for fav in favs:
-        Notification.objects.create(
-            user=fav.user,
-            message=f"Truyện {title} vừa cập nhật chương {chapter_number}",
-            link=link
-        )
+        for fav in favs:
+            Notification.objects.create(
+                user=fav.user,
+                message=f"Truyện {title} vừa cập nhật chương {chapter_number}",
+                link=link
+            )
 
 def sendNotifyComment(comment):
     user_comment = comment.user
