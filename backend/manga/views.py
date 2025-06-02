@@ -137,6 +137,7 @@ def import_json_file(filepath, uploader):
 from django.contrib.auth import get_user_model
 
 def import_all_manga(request):
+    Manga.objects.all().delete()  # Xóa tất cả truyện hiện có
     User = get_user_model()
     uploader_user = User.objects.filter(username="admin").first()
 
