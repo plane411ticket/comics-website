@@ -39,7 +39,8 @@ export const loginUser = async (username: string, password: string) => {
             config
         );
         const user = response.data.user;
-        store.dispatch(
+        if(user){
+          store.dispatch(
                 login({
                     id: String(user.id),
                     email: user.email,
@@ -49,9 +50,11 @@ export const loginUser = async (username: string, password: string) => {
                     isLogin: true,
                 })
             );
+        }
         console.log(response); // Debug kết quả
         return response
     } catch (error) {
+        store.dispatch(logout());
         console.error("Lỗi đăng nhập:", error);
     }
 };
@@ -92,6 +95,7 @@ export const fetchProfile = async (username?:string): Promise<User | null> => {
             );
             user = response.data;
             if(user.cover) user.cover = `${baseURL}${user.cover}`;
+            if(response.status === 200 && user) {
             store.dispatch(
                 login({
                     id: String(user.id),
@@ -103,12 +107,14 @@ export const fetchProfile = async (username?:string): Promise<User | null> => {
                 })
             );
             console.log("Me:", response);
+          }
         }
         
         console.log("User profile fetched:", user);
         return user ? (user as User) : null;
         
     } catch (error) {
+        store.dispatch(logout());
         console.error("Cần đăng nhập/đăng ký:", error);
         throw error;
     }
@@ -119,15 +125,16 @@ export const autoLogin = async () => {
     const config = { withCredentials: true };
     try {
         // Bước 1: Refresh token
-        await axios.post(`${baseURL}/api/refresh/`, {}, config);
-        console.log("Refresh token thành công");
-
-        // Bước 2: Gọi fetchProfile để lấy user info
-        await fetchProfile();
-        
-        
+        const response = await axios.post(`${baseURL}/api/refresh/`, {}, config);
+        if(response.status === 200) {
+          await fetchProfile();
+          console.log("Refresh token thành công");
+        }
+        else store.dispatch(logout());
     } catch (error) {
-        console.error("Tự động đăng nhập thất bại:", error);
+      store.dispatch(logout());
+      console.error("Tự động đăng nhập thất bại:", error);
+
     }
 };
 
@@ -238,7 +245,7 @@ export const updateAvatar = async (formData: FormData,userInfo:any) => {
     withCredentials: true,
   });
 
-    if(userInfo)
+    if(res.status === 200 && userInfo)
         store.dispatch(
             login({
                 id: userInfo.id,

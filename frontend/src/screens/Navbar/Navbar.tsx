@@ -13,13 +13,14 @@ import UserMenu from "./UserMenu";
 import MobileMenu from "./MobileMenu";
 import Notify from "./Notify";
 
-import { autoLogin } from "../../actions/userAction";
+// import { autoLogin } from "../../actions/userAction";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userInfo = useSelector(selectUser);
-  useEffect(() => {
-    autoLogin();
-  }, []);
+  // useEffect(() => {
+  //   console.log("Auto login check", userInfo);
+  //   autoLogin();
+  // }, []);
   return (
     <nav className="bg-white text-black font-Nurito" id="navtop">
       {/* Nav Top */}
@@ -40,7 +41,7 @@ const Navbar = () => {
 
         {/* Hiển thị UserMenu nếu đã đăng nhập */}
         <div className="hidden lg:flex items-center space-x-4">
-          {!userInfo ? (
+          {!userInfo?.isLogin ? (
             <>
               <Link to="/auth/login">
                 <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-yellow-400 transition duration-300">

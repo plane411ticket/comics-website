@@ -9,6 +9,7 @@ from .models import Favorite
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from django.http import HttpResponse
 from rest_framework.exceptions import PermissionDenied
 from novel.models import Novel
@@ -115,29 +116,33 @@ def RefreshTokenView(request):
 
             if exp and exp > int(time.time()):
                 print("Token chưa hạn")
-                return Response({"message": "Access token vẫn còn hiệu lực, không cần refresh."})
+                return Response({"message": "Access token vẫn còn hiệu lực, không cần refresh."},status = status.HTTP_200_OK)
         except jwt.DecodeError:
             pass  # token lỗi, sẽ xử lý bên dưới
     if not refresh_token:
         return Response({"error": "Không có refresh token!"}, status=status.HTTP_401_UNAUTHORIZED)
 
     # Nếu access token hết hạn hoặc lỗi → tạo token mới từ refresh
-    try:
-        refresh = RefreshToken(refresh_token)
-        new_access_token = str(refresh.access_token)
+    if(refresh_token):
+        try:
+            refresh = RefreshToken(refresh_token)
+            new_access_token = str(refresh.access_token)
 
-        response = HttpResponse({"message": "Đã tạo access token mới!"})
-        response.set_cookie(
-            key="access_token",
-            value=new_access_token,
-            httponly=True,
-            secure=True,
-            samesite="Lax",
-        )
-        return response
+            response = Response({"message": "Đã tạo access token mới!"},status = status.HTTP_200_OK)
+            response.set_cookie(
+                key="access_token",
+                value=new_access_token,
+                httponly=True,
+                secure=True,
+                samesite="Lax",
+            )
+            return response
 
-    except Exception:
-        return Response({"error": "Refresh token không hợp lệ!"}, status=status.HTTP_401_UNAUTHORIZED)
+        except (InvalidToken, TokenError):
+            response = Response({"error": "Refresh token hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại."}, status=status.HTTP_401_UNAUTHORIZED)
+            response.delete_cookie("access_token")
+            response.delete_cookie("refresh_token")
+            return response
 
 # ============================
 #  User ViewSets
@@ -147,9 +152,9 @@ def RefreshTokenView(request):
 def MyProfile(request):
     user = request.user
     if not user or not user.is_authenticated:
-        raise PermissionDenied("Vui lòng đăng nhập để có thông tin này.")
+        return Response({"detail": "Bạn cần đăng nhập để xem thông tin này."}, status=status.HTTP_401_UNAUTHORIZED)
     serializer = UserSerializer(user)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
@@ -159,6 +164,7 @@ def OtherProfile(request, username):
         return Response({"detail": "Không có quyền truy cập."}, status=status.HTTP_404_NOT_FOUND)
     serializers = UserSerializer(target_user)
     return Response(serializers.data, status=status.HTTP_200_OK)
+
 @api_view(["POST"])
 @authentication_classes([CookieJWTAuthentication])
 def DeleteProfile(request):

@@ -94,11 +94,13 @@ export default function ProfileScreen() {
           const fetchData = async () =>{
               try {
                 var profileData = null;
-                  console.log("Fetching profile for user:", username," userInfo:", userInfo);
                   if(username) 
                     profileData = await fetchProfile(username);
                   else profileData = await fetchProfile();
-                  if(profileData === null) setValid(false);
+                  
+                  console.log("Fetching profile for user:", username," userInfo:", userInfo);
+                  
+                  if(userInfo) setValid(false);
                   else {
                     setProfile(profileData);
                     setValid(true);
