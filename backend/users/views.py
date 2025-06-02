@@ -81,10 +81,10 @@ def LoginUser(request):
                 }
             }, status=status.HTTP_200_OK)
             response.set_cookie(
-                key="access_token", value=access_token, httponly=True, secure=True, samesite="Lax"
+                key="access_token", value=access_token, httponly=True, secure=True, samesite="None"
             )
             response.set_cookie(
-                key="refresh_token", value=str(refresh), httponly=True, secure=True, samesite="Lax"
+                key="refresh_token", value=str(refresh), httponly=True, secure=True, samesite="None"
             )
 
             return response
@@ -138,10 +138,8 @@ def RefreshTokenView(request):
             )
             return response
 
-        except (InvalidToken, TokenError):
+        except Exception:
             response = Response({"error": "Refresh token hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại."}, status=status.HTTP_401_UNAUTHORIZED)
-            response.delete_cookie("access_token")
-            response.delete_cookie("refresh_token")
             return response
 
 # ============================
