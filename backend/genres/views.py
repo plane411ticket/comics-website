@@ -32,7 +32,6 @@ from django.http import HttpResponse
 from genres.models import Genre
 
 def import_genres_view(request):
-    Genre.objects.all().delete()
     # Đường dẫn file JSON dựa trên BASE_DIR
     json_file_path = os.path.join(settings.BASE_DIR, 'genres', 'unique_genres.json')
 

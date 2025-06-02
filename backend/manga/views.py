@@ -138,7 +138,7 @@ from django.contrib.auth import get_user_model
 
 def import_all_manga(request):
     User = get_user_model()
-    uploader_user = User.objects.filter(username="upload").first()
+    uploader_user = User.objects.filter(username="admin").first()
 
     if not uploader_user:
         return JsonResponse({"error": "User 'upload' không tồn tại."}, status=400)
